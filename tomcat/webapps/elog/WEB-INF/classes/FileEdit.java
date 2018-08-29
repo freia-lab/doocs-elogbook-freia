@@ -1068,7 +1068,10 @@ public class FileEdit extends HttpServlet {
 					    contentType.equals("application/vnd.ms-excel") ||
 					    contentType.equals("application/vnd.ms-powerpoint") ||
 					    contentType.equals("application/x-zip-compressed") ||
-                                            contentType.equals("image/cmu-raster")){
+                                            contentType.equals("image/cmu-raster") ||
+                                            contentType.equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") ||
+                                            contentType.equals("application/vnd.openxmlformats-officedocument.presentationml.presentation") ||
+					    contentType.equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document")) {
                                             // Process a file upload
                                             File uploadedFile = new File(imageFullName);
                                             if (uploadedFile.exists()) uploadedFile.delete();

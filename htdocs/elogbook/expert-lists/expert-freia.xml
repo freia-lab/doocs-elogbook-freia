@@ -8,12 +8,6 @@
       <mail>allfreia@localhost</mail>
     </person>
     <person>
-      <l_name>Bhattacharyya</l_name>
-      <f_name>Anirban</f_name>
-      <expert>Physics, RF</expert>
-      <mail>anirban.bhattacharyya@physics.uu.se</mail>
-    </person>
-    <person>
       <l_name>Dancila</l_name>
       <f_name>Dragos</f_name>
       <expert>SSA, Microwaves</expert>
@@ -94,7 +88,7 @@
     <person>
       <l_name>Santiago Kern</l_name>
       <f_name>Rocio</f_name>
-      <expert>Electronics, vacuum</expert>
+      <expert>Cryo, electronics, vacuum</expert>
       <mail>rocio.santiago_kern@physics.uu.se</mail>
     </person>
     <person>
@@ -102,6 +96,12 @@
       <f_name>Rolf</f_name>
       <expert>RF, Power supplies</expert>
       <mail>Rolf.Wedberg@physics.uu.se</mail>
+    </person>
+    <person>
+      <l_name>Wiren</l_name>
+      <f_name>Anders</f_name>
+      <expert>Electronics, cryo</expert>
+      <mail>rocio.santiago_kern@physics.uu.se</mail>
     </person>
   </subject>
   <subject name="Cryogenics">
@@ -129,6 +129,12 @@
       <expert>Electronics, vacuum</expert>
       <mail>rocio.santiago_kern@physics.uu.se</mail>
     </person>
+    <person>
+      <l_name>Wedberg</l_name>
+      <f_name>Rolf</f_name>
+      <expert>RF, Power supplies</expert>
+      <mail>Rolf.Wedberg@physics.uu.se</mail>
+    </person>
   </subject>
   <subject name="RF Power">
     <person>
@@ -145,12 +151,6 @@
     </person>
   </subject>
   <subject name="LLRF">
-    <person>
-      <l_name>Bhattacharyya</l_name>
-      <f_name>Anirban</f_name>
-      <expert>Physics, RF</expert>
-      <mail>anirban.bhattacharyya@physics.uu.se</mail>
-    </person>
     <person>
       <l_name>Goryashko</l_name>
       <f_name>Vitaliy</f_name>

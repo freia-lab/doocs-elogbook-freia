@@ -1,0 +1,44 @@
+
+
+
+
+
+  #`mkdir $SERVER_DOCROOT/$ELOG_DIR`
+  #`cp -rp $ELOG_SOURCE/* $SERVER_DOCROOT/$ELOG_DIR`
+  cat $SERVER_DOCROOT/$ELOG_DIR/bin/search-index | sed s,TOMCAT_DIR,$CATALINA_HOME,g > $SERVER_DOCROOT/$ELOG_DIR/bin/search-index_tmp
+  cat $SERVER_DOCROOT/$ELOG_DIR/bin/search-index_tmp | sed s,JAVA_DIR,$JAVA_HOME,g > $SERVER_DOCROOT/$ELOG_DIR/bin/search-index_tmp2
+  cat $SERVER_DOCROOT/$ELOG_DIR/bin/search-index_tmp2 | sed s,HTDOCS_DIR,$SERVER_DOCROOT,g > $SERVER_DOCROOT/$ELOG_DIR/bin/search-index
+  `rm -f $SERVER_DOCROOT/$ELOG_DIR/bin/search-index_tmp*`
+
+
+
+
+  `ln -s $SERVER_DOCROOT/$ELOG_DIR/jsp $WEBAPP_DIR/$ELOG_DIR`
+    #`cd ../../../tomcat/common/lib; tar -cf - ./*.jar | (cd $SERVLET_COMMON; tar -xf -)`
+    #`cp -rp ../../../tomcat/webapps/elog $WEBAPP_DIR`
+    `cat ../../../tomcat/webapps/elog/WEB-INF/web.xml | sed s,DOCROOT,$SERVER_DOCROOT, > $WEBAPP_DIR/elog/WEB-INF/web.xml`
+    #`cp -rp ../../elogbook $SERVER_DOCROOT`
+    `cat $SERVER_DOCROOT/elogbook/bin/elogenv.sh | sed s,ELOGBINPATH,$SERVER_DOCROOT/elogbook/bin, > $SERVER_DOCROOT/elogbook/bin/elogenv.sh_tmp`
+    `cat $SERVER_DOCROOT/elogbook/bin/elogenv.sh_tmp | sed s,JAVA_DIR,$JAVA_HOME, > $SERVER_DOCROOT/elogbook/bin/elogenv.sh`
+    `rm $SERVER_DOCROOT/elogbook/bin/elogenv.sh_tmp`
+    `cat $SERVER_DOCROOT/elogbook/bin/GetXMLElement | sed s,SERVLETCOMMON,$SERVLET_COMMON, > $SERVER_DOCROOT/elogbook/bin/GetXMLElement_tmp`
+    `cat $SERVER_DOCROOT/elogbook/bin/GetXMLElement_tmp | sed s,JAVA_DIR,$JAVA_HOME, > $SERVER_DOCROOT/elogbook/bin/GetXMLElement`
+    `rm $SERVER_DOCROOT/elogbook/bin/GetXMLElement_tmp`
+  `cd $SERVER_DOCROOT/$ELOG_DIR; mknod ${ELOG_PRINTER} p; chmod go+w ${ELOG_PRINTER}; cd -`
+INDEX_HTML="<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\"><html><head><title>$ELOG_NAME</title></head><body><script language=\"javascript\">top.location.href=\"http://$ELOG_SERVER/$ELOG_DIR/index.jsp\"</script></body></html>"
+
+echo -en $INDEX_HTML > $SERVER_DOCROOT/$ELOG_DIR/index.html
+
+
+
+
+CONF_FILE="<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n<logbook>\n<!-- define version of this configuration file -->\n<version>1.3.1</version>\n\n<!-- define the root for the eLogBook application-->\n<docroot>$SERVER_DOCROOT</docroot>\n\n<!-- eLogBook specific variables -->\n<!-- define the name of the logbook, displayed on each page-->\n<name>$ELOG_NAME e-Logbook</name>\n\n<!-- base dir of logbook, relative to eLogBook root (docroot)-->\n<logroot>/$ELOG_DIR</logroot>\n\n<!-- base dir of logbook data as absolute dir path -->\n<datapath>/data</datapath>\n\n<!-- name of this host for http requests-->\n<host>http://$ELOG_SERVER</host>\n\n<!-- period to create a new shift -->\n<!-- formats are: Y = year, M = month, W = week, D = day, 3 = 3 shifts a day -->\n<new_shift>$ELOG_PERIODE</new_shift>\n\n<!-- language code, possible values: en, de -->\n<lang_code>$ELOG_LANG</lang_code>\n\n<!-- date formatting, posssible formats are: -->\n<!--date_fmt>MM/dd/yyyy</date_fmt-->\n<!--date_fmt>yyyy-MM-dd</date_fmt-->\n<date_fmt>$ELOG_DATEFMT</date_fmt>\n\n<!-- title string for each shift in strftime(3C) format -->\n<!-- Just use to override default settings -->\n<!--title_date>$ELOG_TITLESTR</title_date-->\n\n<!-- Shall text be 'above' or 'beside' the images -->\n<text_pos>above</text_pos>\n<!--text_pos>beside</text_pos-->\n\n<!-- Name of the printer to insert pictures into the logbook -->\n<printer>$ELOG_PRINTER</printer>\n\n<!-- rel. URL of the user feedback page-->\n<commentdir>/comments</commentdir>\n\n<!-- rel. URL of the news page -->\n<newsdir>/news</newsdir>\n\n<!-- URL of the common image dir. (rel. to docroot) -->\n<imagedir>/elogbook/images</imagedir>\n\n<!-- URL of the docu page (left frame Links) -->\n<docudir>http://tesla.desy.de/doocs/elogbook</docudir>\n\n<!-- Background color for overall style of the HTML pages (standard rgb notation) -->\n<bgcolor>$ELOG_COLOR</bgcolor>\n\n<!-- Variables for servlets, search engine and tree applet -->\n<!-- Servlet for view of eLogBook (rel. to servlet engine docroot!!) -->\n<view_servlet>/elog/servlet/XMLlist</view_servlet>\n\n<!-- Servlet for editing eLogBook entries (rel. to servlet engine docroot!!) -->\n<edit_servlet>/elog/servlet/FileEdit</edit_servlet>\n\n<!-- Servlet for PDF creation (rel. servlet engine docroot!!) -->\n<pdf_servlet>/elog/servlet/XMLlist</pdf_servlet>\n\n<!-- Defintion of the XSL files used for transformations -->\n<!-- XSL for main view (rel. to docroot) -->\n<view_xsl>/elogbook/xsl/elog.xsl</view_xsl>\n\n<!-- XSL for list view (rel. to docroot) -->\n<list_xsl>/elogbook/xsl/elog.xsl</list_xsl>\n\n<!-- XSL used for editing an entry (rel. to docroot) -->\n<edit_xsl>/elogbook/xsl/elog-fileform.xsl</edit_xsl>\n\n<!-- XSL used for search window (rel. to docroot) -->\n<search_xsl>/elogbook/xsl/search-lucene.xsl</search_xsl>\n\n<!-- XSL used for search window (rel. to docroot) -->\n<search2_xsl>/elogbook/xsl/search-lucene2.xsl</search2_xsl>\n\n<!-- XSL for trafo. to PDF (rel. to docroot) -->\n<pdf_xsl>/elogbook/xsl/elog2pdf.xsl</pdf_xsl>\n\n<!-- Reader for creation of the index file (rel. to docroot) -->\n\n<!-- Reader for creation of the index file for the tree applet (rel. to docroot) -->\n<tree_reader>/elogbook/applets/tree/reader_tree</tree_reader>\n\n<!--Location of the index for search engine-->\n<srch_index>/work/index</srch_index>\n\n<!-- Define elogbook specific keywords. The uppermost is the default-->\n<keyword_list>\n  <keyword>not set</keyword>\n</keyword_list>\n\n<!-- Define elogbook specific locations. Set enabled to false to switch of locations-->\n<location_list enabled=\"not_true\">\n  <location>not set</location>\n</location_list>\n\n<!-- To enable/disable the spellchecker tool -->\n<spellchecker enabled=\"true\"/>\n\n<!-- Activate mail to expert -->\n<mail2expert enabled=\"true\"/>\n\n<!-- Activate history view for entries -->\n<view_history enabled=\"true\"/>\n</logbook>\n"
+echo -en $CONF_FILE > $SERVER_DOCROOT/$ELOG_DIR/jsp/conf.xml
+
+
+init_logbook=y
+
+`sh $SERVER_DOCROOT/elogbook/bin/elogenv.sh && $SERVER_DOCROOT/$ELOG_DIR/bin/cronjob.sh 2>&1 > $SERVER_DOCROOT/$ELOG_DIR/log/cronjob.log`
+mkdir $SERVER_DOCROOT/$ELOG_DIR/work/index
+`sh $SERVER_DOCROOT/elogbook/bin/elogenv.sh && $SERVER_DOCROOT/$ELOG_DIR/bin/search-index start 2>&1 > $SERVER_DOCROOT/$ELOG_DIR/log/search.log`
+

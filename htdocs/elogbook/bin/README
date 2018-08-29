@@ -1,0 +1,18 @@
+Short description of the file in this directory:
+-------------------------------------------
+
+GENERAL PURPOSE:
+---------------
+This directory holds some scripts used for parsing XML data and configuring all 
+eLogBook components. So it is absolutely necessary to adjust all path
+statements etc. to fit to your environment!
+
+FILES:
+------
+GetXMLElement.class/java	Simple JAVA XML parser
+check_xml_in_dir		Script for checking XML wellformedness
+clean_entries			Script for deletion of DELETE marked entries
+elogenv.sh/csh			Script to set proper (library) paths
+thumb_jpeg			Converting script (creates thumbnail)
+mkelog				Script for cloning the template (create new elogs)
+mkelogfolder			Script for creation of folders in doc tree

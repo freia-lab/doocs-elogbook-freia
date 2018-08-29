@@ -1,0 +1,54 @@
+#!/bin/sh
+#
+# Shell script for removing entries with "severity" equal "DELETE".
+#
+# Author: R. Kammering	Date: 2003-08-20
+# 
+# $Id: clean_entries 7 2013-03-13 13:38:23Z konrad $
+#
+
+RM=/bin/rm
+
+DATE=`date`
+echo "$DATE: Starting clean up of directory: $1"
+
+DIRNAME=`dirname $0`
+
+# File patterns to search for
+PATTERN="*.xml"
+
+# Change to work directory
+cd $1
+
+# Get environment settings for elogbook
+. $DIRNAME/elogenv.sh
+
+# Get list of files to be deleted
+DELLIST=`rgrep -l  --include "$PATTERN" "<severity>DELETE</severity>" $1`
+
+COUNT=0
+# Remove them
+for i in $DELLIST; do
+    echo "Processing file $i"
+	NBYTES=`echo $i | wc -c | bc`
+	# cut off "00.xml"
+	CALC=`printf "(%s-6)" "$NBYTES"`
+	NBYTES=`echo "$CALC"|bc`
+	FILENAME=`echo "$i" | cut -b1-$NBYTES`
+	DELFILES=`ls "$FILENAME"*.*`
+	for j in $DELFILES; do
+	    echo " Removing $j"
+	    ${RM} $j > /dev/null
+	    COUNT=$COUNT+1
+	    COUNT=`echo $COUNT | bc`
+	done
+done
+
+if [ $COUNT -ne 0 ]; then
+    echo "Files removed: $COUNT"
+fi
+DATE=`date`
+
+# This is the end
+echo "$DATE: Done with clean up!"
+

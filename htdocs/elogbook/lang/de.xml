@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<language>
+
+	<!-- ***************************************************************************-->
+	<!--	Text used in the File Edit or Entry Edit Form				-->
+	<!-- ***************************************************************************-->
+	<fe_header>eLogBook Eintrag:</fe_header>	
+	<fe_spellchecker>Rechtschreibpruefung</fe_spellchecker>	
+	<fe_save_entry>Eintrag Speichern</fe_save_entry>	
+	<fe_spellchecker_opt>Rechtschreibpruefung Optionen</fe_spellchecker_opt>		
+	<fe_file_upload>Datei hochladen</fe_file_upload>	
+	<fe_image_fn>Bildateiname:</fe_image_fn>	
+	<fe_choose_im_file>Waehle Bilddatei:</fe_choose_im_file>	
+	<fe_mail_experts>Mail an Experten</fe_mail_experts>	
+	<fe_topic>Thema:</fe_topic>	
+	<fe_experts>Experten:</fe_experts>	
+	<fe_clear>Leeren</fe_clear>	
+	<fe_wiki_head>Wiki Markup Hilfe:</fe_wiki_head>	
+	<fe_wiki_body> */# = unnummerierte/nummerierte Liste; | = Tabelle/Spalte; __/'' = fett/kursiv; !/!! = Ueberschrift 1/2; ---- = hor. Linie; http:, https:, file:, mailto: = URLs</fe_wiki_body>	
+	<fe_lexicon1>sscege.tlx,url,t</fe_lexicon1>	
+	<fe_lexicon2>sscege2.clx,url,c</fe_lexicon2>	
+	<fe_author>Autor:</fe_author>	
+	<fe_date>Datum:</fe_date>	
+	<fe_time>Zeit:</fe_time>	
+	<fe_keyword>Schluesselwort:</fe_keyword>	
+	<fe_location>Ort:</fe_location>	
+	<fe_title>Titel:</fe_title>	
+	<fe_text>Text:</fe_text>	
+	<fe_severity>Bedeutung:</fe_severity>	
+	
+	<!-- ***************************************************************************-->
+	<!--	Text used for the title attribute in html tags				-->
+	<!-- ***************************************************************************-->		
+	<t_new_entry>Neuen Eintrag erstellen</t_new_entry>	
+	<t_print_pdf_with_p>Seite als PDF drucken (mit Bildern)</t_print_pdf_with_p>	
+	<t_print_pdf_without_p>Seite als PDF drucken (ohne Bilder)</t_print_pdf_without_p>	
+	<t_goto_next>Weiter zur naechsten Schicht</t_goto_next>	
+	<t_goto_prev>Zurueck zur vorherigen Schicht</t_goto_prev>	
+	<t_create_new_folder>Neuen Ordner erstellen</t_create_new_folder>	
+	<t_back_to_lb>Zurueck zum Logbuch</t_back_to_lb>	
+	<t_edit_entry>Diesen Eintrag aendern</t_edit_entry>	
+	<t_history>Den Verlauf dieses Eintrages anzeigen</t_history>		
+	<t_date>Mit rechter Maustaste 'Verknuepfung kopieren' koennen Sie diesen Eintrag referenzieren</t_date>	
+	
+	<!-- ***************************************************************************-->
+	<!--	Text used for the title tags of the severity icons			-->	
+	<!-- ***************************************************************************-->
+	<s_fatal>Fataler Fehler</s_fatal>
+	<s_error>Fehler</s_error>
+	<s_warn>Warnung</s_warn>
+	<s_info>Info</s_info>
+	<s_idea>Idee</s_idea>
+	<s_docu>Dokumentation</s_docu>
+	<s_measure>Messung</s_measure>
+	<s_todo>Noch zu erledigen</s_todo>
+	<s_done>Erledigt</s_done>
+	<s_fixed>Repariert</s_fixed>
+	<s_news>Neuigkeit</s_news>
+	<s_wow>WOW</s_wow>
+	
+	<!-- ***************************************************************************-->
+	<!--	Text used for the history view                         			-->	
+	<!-- ***************************************************************************-->
+	<history_of>Verlauf von </history_of>
+	<history_last_modified>Zuletzt geaendert: </history_last_modified>	
+	
+</language>

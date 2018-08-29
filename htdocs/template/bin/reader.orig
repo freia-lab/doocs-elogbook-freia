@@ -1,0 +1,16 @@
+#!/bin/sh
+CLASSPATH=TOMCAT_DIR/webapps/elog/WEB-INF/lib/lucene.jar:JAVA_DIR/jre/lib:JAVA_DIR/lib:HTDOCS_DIR/elogbook/lucene_search:HTDOCS_DIR/elogbook/lucene_search/html:$CLASSPATH
+export CLASSPATH
+PATH=JAVA_DIR/bin:HTDOCS_DIR/elogbook/bin:$PATH
+export PATH
+
+WORKDIR=`dirname $0`
+cd $WORKDIR
+
+# Parse values from config file 
+DOCROOT=`../../elogbook/bin/GetXMLElement docroot ../jsp/conf.xml`
+LOGROOT=`../../elogbook/bin/GetXMLElement logroot ../jsp/conf.xml`
+DATAPATH=`../../elogbook/bin/GetXMLElement datapath ../jsp/conf.xml`
+
+# Create index for navigation tree 
+${JAVA_HOME}/bin/java -jar ../../elogbook/reader/javaReader.jar ${DOCROOT}${LOGROOT}${DATAPATH} ${DOCROOT}${LOGROOT}/jsp -d -n -de

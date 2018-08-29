@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<dictionary>
+  <bundle language="en">
+    <term key="LabelDate">Date Time</term>
+    <term key="LabelAuthor">Author</term>
+    <term key="LabelKeyword">Keyword</term>
+    <term key="LabelSeverity">Severity</term>
+    <term key="LabelText">Text</term>
+    <term key="LabelTitle">Title</term>
+    <term key="LabelLocation">Location</term>
+    
+    <term key="LabelEntry">eLogBook entry</term>
+    <term key="LabelSaveEntry">Save entry</term>
+    
+    <term key="LabelUpload">File upload</term>
+    <term key="LabelImgName">Attached image name:</term>
+    <term key="LabelChooseImgKey">Choose image file</term>
+    <term key="LabelChooseImgKeyComment">(standard image types like: jpg, ps, png, ...)</term>
+    <term key="LabelSpellcheckOption">Spellchecker Options</term>
+
+    <term key="LabelMarkupHelp">Wiki markup help</term>
+    
+    <term key="LabelMailToExpert">Mail to expert</term>
+    <term key="LabelMailToExpertTopic">Topic:</term>
+    <term key="LabelMailToExpertExperts">Experts:</term>
+
+    <term key="NextShift">Goto next shift:</term>
+    <term key="PrevShift">Goto previous shift:</term>
+  </bundle>    
+
+  <bundle language="de">
+    <term key="LabelDate">Datum Zeit</term>
+    <term key="LabelAuthor">Autor</term>
+    <term key="LabelKeyword">Rubrik</term>
+    <term key="LabelSeverity">Kennung</term>
+    <term key="LabelText">Text</term>
+    <term key="LabelTitle">Titel</term>
+    <term key="LabelLocation">Ortsangabe</term>
+    
+    <term key="LabelEntry">eLogBook Eintrag</term>
+    <term key="LabelSaveEntry">Eintrag speichern</term>
+    
+    <term key="LabelUpload">Datei upload</term>
+    <term key="LabelImgName">Angehangenes Bild:</term>
+    <term key="LabelChooseImgKey">Waehle Bilddatei</term>
+    <term key="LabelChooseImgKeyComment">(standard Bidtypen wie: jpg, ps, png, ...)</term>
+    <term key="LabelSpellcheckOption">Rechtschreibpruefung Optionen</term>
+
+    <term key="LabelMarkupHelp">Wiki Formatierung Hilfe</term>
+    
+    <term key="LabelMailToExpert">Mail an Experten</term>
+    <term key="LabelMailToExpertTopic">Bereich:</term>
+    <term key="LabelMailToExpertExperts">Experten:</term>
+
+    <term key="NextShift">Gehe zur naechsten Schicht:</term>
+    <term key="PrevShift">Gehe zur vorherigen Schicht:</term>
+  </bundle>
+
+</dictionary>

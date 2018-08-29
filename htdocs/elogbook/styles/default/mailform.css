@@ -1,0 +1,22 @@
+BODY {
+	margin-left: 1px;
+	margin-top: 2px;
+	margin-right:2px;
+	margin-bottom:2px;	
+	font-family: Helvetica,sans-serif;
+	font-size:12px;
+	background-color: #f0e0d0;
+}
+
+table,tr,td,p,input {
+	font-family: Helvetica,sans-serif;
+	font-size:12px;
+}
+
+textarea {
+	font-family: Courier;
+	font-size: 12px;
+	max-width: 600px;
+}
+
+

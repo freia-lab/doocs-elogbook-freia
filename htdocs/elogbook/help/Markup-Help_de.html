@@ -1,0 +1,131 @@
+<html>
+  <head>
+    <title>Elogbook Markup</title>
+    <style type="text/css">
+      <!--
+           .MainTable 
+           {
+           border-width:0px;
+           border-style:solid;
+           border-color:black;
+           font-size:small;
+           width:100%;
+           }
+           .FirstLineElements
+           {		
+           padding-bottom:2px;
+           border-style:solid;
+           border-color:black;
+           border-width:0 0 2px 0;
+           }
+           .FirstLine
+           {
+           text-align:center;
+           font-size:large;
+           }
+           .LightLine
+           {
+           background-color:#FFFFFF;
+           }
+           .DarkLine
+           {
+           background-color:#e5e7f6;
+           }
+           -->
+    </style>
+  </head>
+  <body style="background-color:#FFFFFF;">
+  
+  <table class="MainTable">
+    <tr class="FirstLine">
+      <td class="FirstLineElements">Beispiel:</td>
+      <td class="FirstLineElements">Vorschau:</td>
+      <td class="FirstLineElements">Beschreibung:</td>
+    </tr>
+    <tr class="LightLine">
+      <td>| 1 | 2</br>| 3 | 4</td>
+      <td>
+        <table style="font-size:12px; border:1px solid ; background-color:#e0e0e0; cellpadding:4;">
+          <tr style="">
+            <td style="border:1px solid;">1</td>
+            <td style="border:1px solid;">2</td>
+          </tr>
+          <tr style="">
+            <td style="border:1px solid;">3</td>
+            <td style="border:1px solid;">4</td>
+          </tr>
+        </table>
+      </td>
+      <td id="table">Eine Tabelle erstellen.</td>
+    </tr>
+    <tr class="DarkLine">
+      <td>*Level1</br>&nbsp*Level2</br>&nbsp&nbsp*Level3</td>
+      <td><ul><li>Level1</li><ul><li>Level2</li><ul><li>Level3</li></ul></ul></ul></td>
+      <td id="list1">Eine nicht nummerierte Aufzaehlung mit 3 Tiefen erstellen.</td>
+    </tr>
+    <tr class="LightLine">
+      <td>#Level1</br>&nbsp#Level2A</br>&nbsp#Level2B</br>&nbsp&nbsp#Level3</td>
+      <td><ol><li>Level1</li><ol><li>Level2A</li><li>Level2B</li><ol><li>Level3</li></ol></ol></ol></td>
+      <td id="list2">Eine nummerierte Aufzaehlung mit 3 Tiefen erstellen.</td>
+    </tr>
+    <tr class="DarkLine">
+      <td>Normal __Bold__ Normal</td>
+      <td>Normal <b>Bold</b> Normal</td>
+      <td id="bold">Text in Fettschrift darstellen.</td>
+    </tr>
+    <tr class="LightLine">
+      <td>Normal ``Italic`` Normal</td>
+      <td>Normal <i>Italic</i> Normal</td>
+      <td id="italic">Text in Kursivschrift darstellen.</td>
+    </tr>
+    <tr class="DarkLine">
+      <td>Normal _`Fett und Kursiv_` Normal</td>
+      <td>Normal <b><i>Fett und Kursiv</i></b> Normal</td>
+      <td id="bolditalic">Text in Fett- und Kursivschrift darstellen.</td>
+    </tr>
+    <tr class="LightLine">
+      <td>!Text</td>
+      <td><h1>Text</h1></td>
+      <td id="h1">Text als erste Ueberschrift auszeichnen.</td>
+    </tr>
+    <tr class="DarkLine">
+      <td>!!Text</td>
+      <td><h2>Text</h2></td>
+      <td id="h2">Text als zweite Ueberschrift auszeichnen.</td>
+    </tr>
+    <tr class="LightLine">
+      <td>http://www.google.de</td>
+      <td><a href="http://www.google.de">http://www.google.de</a></td>
+      <td id="link">Einen Link erstellen.</td>
+    </tr>
+    <tr class="DarkLine">
+      <td>https://banking.postbank.de/app/welcome.do</td>
+      <td><a href="https://banking.postbank.de/app/welcome.do">https://banking.postbank.de/app/welcome.do</a></td>
+      <td id="slink">Einen gesicherten Link erstellen.</td>
+    </tr>
+    <tr class="LightLine">
+      <td>mailto:Bill.Gates@Microsoft.com</td>
+      <td><a href="mailto:Bill.Gates@microsoft.com">mailto:Bill.Gates@Microsoft.com</a></td>
+      <td id="email">Einen E-Mail Empfaenger auszeichnen.</td>
+    </tr>
+    <tr class="DarkLine">
+      <td>file:anyfile.txt</td>
+      <td><a href="file:anyfile.txt">file:anyfile.txt</a></td>
+      <td id="file">Einen Link zu einer Datei erstellen.</td>
+    </tr>
+    <tr class="LightLine">
+      <td>----</td>
+      <td><hr /></td>
+      <td id="file">Eine horizontale Linie ueber die gesamte Breite erstellen.</td>
+    </tr>
+    <tr class="DarkLine">
+      <td>{{Sourcecode line 1</br>Sourcecode line 2</br>}}</td>
+      <td><span onclick="SwitchSourceCodeVisibility(SCID);">Show Sourcecode<span>
+        <div style="overflow: hidden; width:100px; height:0px; background-color:#f0f0e9; border:3px solid #CCCCe0; margin-left: 1em; margin-right: 1em; font-size:80%;" id="SCID">Sourcecode line 1<br/>Sourcecode line 2</br></div>
+      </td>
+      <td id="sourcecode">Eine Anzeigeflaeche fuer Quelltext erstellen.</td>
+    </tr>
+  </table>
+  
+</body>
+<html>

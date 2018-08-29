@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- The keywords used in the logbook -->
+<keywords>
+  <keyword>
+	<name>not_set</name>
+	<short>not_set</short>
+ 	 <value>not_set</value>
+  </keyword>
+  <keyword>
+	<name>elogbooks</name>
+	<short>elogbooks</short>
+ 	 <value>elogbooks</value>
+  </keyword>
+  <keyword>
+	<name>web</name>
+	<short>web</short>
+  	<value>web</value>
+  </keyword>
+  <keyword>
+	<name>Software</name>
+	<short>Software</short>
+  	<value>Software</value>
+  </keyword>
+  <keyword>
+  	<name>System</name>
+	<short>System</short>
+	<value>System</value>
+  </keyword>
+  <keyword>
+  	<name>Server</name>
+	<short>Server</short>
+	<value>Server</value>
+  </keyword>
+  <keyword>
+  	<name>DAQ</name>
+	<short>DAQ</short>
+	<value>DAQ</value>
+  </keyword>
+  <keyword>
+	<name>MATLAB</name>
+	<short>MATLAB</short>
+  	<value>MATLAB</value>
+  </keyword>
+  <keyword>
+	<name>Java</name>
+	<short>Java</short>
+  	<value>Java</value>
+  </keyword>
+  <keyword>
+	<name>Help</name>
+	<short>Help</short>
+  	<value>Help</value>
+  </keyword>
+</keywords>

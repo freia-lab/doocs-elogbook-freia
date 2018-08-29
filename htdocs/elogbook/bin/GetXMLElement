@@ -1,0 +1,28 @@
+#!/bin/sh
+#
+# Wrapper script to start GetXMLElement
+#
+
+JAVA_HOME=JAVA_DIR
+
+if [ "$JAVA_HOME" = "" ] ; then
+  echo "Error: JAVA_HOME must be set"
+  exit 1;
+fi
+
+PWD=`dirname $0`
+CLASSPATH=SERVLETCOMMON/xercesImpl.jar
+CLASSPATH=$CLASSPATH:SERVLETCOMMON/xml-apis.jar
+CLASSPATH=$CLASSPATH:$PWD
+
+export CLASSPATH
+
+if [ "$1" = "" ] ; then
+   echo "ERROR: You must specify a XML element to be searched for! (exit)"
+   exit 1;
+elif [ "$2" = "" ] ; then
+   echo "ERROR: You must specify a XML file to be parsed! (exit)"
+   exit 1;
+fi
+
+$JAVA_HOME/bin/java GetXMLElement -e $1 $2 

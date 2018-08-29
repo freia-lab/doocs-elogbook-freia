@@ -1,0 +1,207 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+
+	<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-2">
+   <meta http-equiv="content-type" content="text/html;charset=ISO-8859-2">
+   <title>Logbook help</title>
+</head>
+
+	<body bgcolor="#cccccc">
+		<h2><img src="/elogbook/images/online.gif"> Help</h2>
+		How to <b>navigate</b>:
+		<ol>
+			<li>select a folder&nbsp;<img src="/elogbook/images/Folder95C.gif"> with the year from the tree view on the left side
+			<li>then select a folder&nbsp;<img src="/elogbook/images/Folder95C.gif"> with the week
+			<li>finally select one shift&nbsp;<img src="/elogbook/images/BookC.gif"> from the tree view
+		</ol>
+		<ul>
+			<li>the three shifts per day are named with the date (MM.DD_) and
+			<ul>
+				<li>M: Morning
+				<li>A: Afternoon
+				<li>N: Night
+			</ul>
+			<li>if the actual shift does not appear in the list: press SHIFT + Reload button (force a reload of the cache)
+		</ul>
+		How to<b> insert and change</b> an item:
+		<ol>
+			<li>select the&nbsp;<img src="/elogbook/images/ins_new.gif"> icon to insert a new text
+			
+			<li>or select the&nbsp;<img src="/elogbook/images/meta.gif"> icon to change a text or meta info of a picture
+			
+			<li>fill the form: add your name, set the severity, keywords and type the text in the text field
+			<li>set the date and time field: the logbook entries are sorted by this date and time
+			<li>the time should be specified like: <b>08:12</b> (the leading zero is important for the search!)
+			<li>do a spell check if needed
+			<li>click the &quot;SAVE the file&quot; button
+			<li>click on the shift icon&nbsp;<img src="/elogbook/images/BookC.gif"> in the tree view to refresh the page
+			<li>rules for the SEVERITY selection in the form:
+		</ol>
+		<table border cellspacing=2 width="100%" NOSAVE>
+			<tr NOSAVE>
+				<td align=CENTER NOSAVE><img src="/elogbook/images/null.gif" height=15 width=20></td>
+				<td>NONE</td>
+				<td>for normal logbook entries</td>
+			</tr>
+			<tr>
+				<td align=CENTER><img src="/elogbook/images/fatal.gif" height=15 width=33></td>
+				<td>FATAL</td>
+				<td>for failures that prevent from operation of the machine for more than one hour</td>
+			</tr>
+			<tr>
+				<td align=CENTER><img src="/elogbook/images/error.gif" height=18 width=26></td>
+				<td>ERROR</td>
+				<td>for errors in a device/subsystem/program etc.</td>
+			</tr>
+			<tr>
+				<td align=CENTER><img src="/elogbook/images/fixed.gif"></td>
+				<td>FIXED</td>
+				<td>error that has been fixed</td>
+			</tr>
+			<tr>
+				<td align=CENTER><img src="/elogbook/images/warn.gif" align=CENTER></td>
+				<td>WARN</td>
+				<td>for warnings to other users or operators (don't forget, check this...)</td>
+			</tr>
+			<tr>
+				<td align=CENTER><img src="/elogbook/images/info.gif" height=15 width=26></td>
+				<td>INFO</td>
+				<td>for hints to other users or operators</td>
+			</tr>
+			<tr>
+				<td align=CENTER><img src="/elogbook/images/measure.gif" height=15 width=33></td>
+				<td>MEASURE</td>
+				<td>message about a measurement (beam parameter, radiation ..)</td>
+			</tr>
+			<tr>
+				<td align=CENTER><img src="/elogbook/images/idea.gif" height=15 width=33></td>
+				<td>IDEA</td>
+				<td>extra ideas and communication (&quot;would be nice to have&quot;..)</td>
+			</tr>
+			<tr>
+				<td align=CENTER><img src="/elogbook/images/book.gif" height=16 width=16></td>
+				<td>DOCU</td>
+				<td>documentation of some subsystem</td>
+			</tr>
+			<tr>
+				<td align=CENTER><img src="/elogbook/images/todo.gif"></td>
+				<td>TODO</td>
+				<td>work to be done</td>
+			</tr>
+			<tr>
+				<td align=CENTER><img src="/elogbook/images/done.gif"></td>
+				<td>DONE</td>
+				<td>work that has been done</td>
+			</tr>
+			<tr>
+				<td align=CENTER><img src="/elogbook/images/delete.gif"></td>
+				<td>DELETE</td>
+				<td>marks an entry as deleted: the item is then no more visible in the eLogBook</td>
+			</tr>
+			<tr>
+				<td align=CENTER><img src="/elogbook/images/super.gif"></td>
+				<td>WOW</td>
+				<td>to announce some (big) success</td>
+			</tr>
+		</table>
+		<p>How to <b>insert a graphic or picture</b>:</p>
+		<ol>
+			<li>create a your graphic with any program
+			<li>print the graphic to the printer named &quot;xxxlog&quot; as Postscript
+			<li>if possible use Postscript vector graphics and not raster files converted into Postscript
+			<li>e.g. in ddd use the print command and not snapshot (sometimes snapshot is better)
+			<li>wait a few seconds for the print to be processed and to appear in the logbook directory
+			<li>do a refresh of the page by clicking on the shift icon&nbsp;<img src="/elogbook/images/BookO.gif" height=16 width=16> in the tree view
+			<li>click on the&nbsp;<img src="/elogbook/images/meta.gif"> icon below the picture to add info that explains your graphic
+		</ol>
+		<ul>
+			<li>all programs from all computers/users are allowed to print (for the moment)
+			<li>the print is inserted into the actual shift
+			<li>select the printer named &quot;<font color="#CC0066">xxxlogprev</font>&quot; to add items to the previous shift log
+			<li>example text inserted from UNIX: echo &quot;my text&quot; | lp -d ttflog
+		</ul>
+		<a name="getgraphic"></a>How to <b>get a graphic or picture</b> to your local hard disk:
+		<ul>
+			<li>to get the orignal <b>Postscript</b> graphics (as it has been send to the logbook printer), simply click (left button) on the graphics. This will (mostly) result in two different behaviours depending to your local browser settings:
+				<ol>
+					<li>You are asked to select a option from a menu (including &quot;Save as&quot;).
+					<li>The picture is shown in a Postscript viewer. To save it choose &quot;Save as&quot; from the viewers &quot;File&quot; menu.
+				</ol>
+			<li>To get the <b>JPEG</b> graphics that is shown in the browser, just do a right click on that graphic and choose &quot;Save Image as&quot; (Netscape) or &quot;Save Picture as&quot; (IExplorer).
+		</ul>
+		<a name="addstyle"></a>How to<b> add style</b> to the an entry:
+		<p>The elogbook supports the use of &quot;Wiki style&quot;&nbsp;markup. This means that one can use some simple markup to e.g. let a word appear in bold letters. The following table lists all possible markup supported by the elogbook.</p>
+		<table width="100%" border rules="all" cellspacing="2">
+			<tbody>
+				<tr>
+					<td><b>Function</b></td>
+					<td><b>Markup</b></td>
+				</tr>
+				<tr>
+					<td>unnumbered list</td>
+					<td>* as the first character of a line</td>
+				</tr>
+				<tr>
+					<td>numbered list</td>
+					<td># as the first character of a line</td>
+				</tr>
+				<tr>
+					<td>table</td>
+					<td>| as the first character of a line and before a new column</td>
+				</tr>
+				<tr>
+					<td>bold</td>
+					<td>two times _ before and after the bold string</td>
+				</tr>
+				<tr>
+					<td>italic</td>
+					<td>two times ` before and after the italic string</td>
+				</tr>
+				<tr>
+					<td>heading 1</td>
+					<td>! as the first character of a line</td>
+				</tr>
+				<tr>
+					<td>heading 2</td>
+					<td>!! as the first character of a line</td>
+				</tr>
+				<tr>
+					<td>horizontal line</td>
+					<td>---- at the beginning of a line</td>
+				</tr>
+				<tr>
+					<td>URLs</td>
+					<td>strings starting with: <a href="http:">http:</a> ,<a href="https:">https:</a> ,<a href="file:">file:</a> ,<a href="mailto:">mailto:</a></td>
+				</tr>
+			</tbody>
+		</table>
+		<p><b>Rules for the logbook</b>:</p>
+		<ul>
+			<li>never delete a message (add corrections only)
+			<li>graphics and text items can be deleted from the logbook by the administrator only
+		</ul>
+		<b>Some explanations of the technology used for the logbook:</b>
+		<p>The user programs:</p>
+		<ul>
+			<li>any program that allows to print PostScript as the source for the logbook entries
+			<li>a standard browser (e.g.Netscape) to display the logbook
+			<li>an applet for the dynamic tree view of the shifts
+			<li>an applet to do the spell checking
+		</ul>
+		The server:
+		<ul>
+			<li>a daemon (shell script) that listens to the print queues
+			<li>the UNIX file system to store the entries (one file per entry)
+			<li>Apache web server with XALAN and XERCES runnning in a tomcat engine
+			<li>JAVA servlets to create the dynamic HTML pages
+			<li>XML files to store the meta information
+			<li>XSL files to define the translation of the dynamic content into the HTML pages
+			<li>JAVA server pages are used as a further step to display dynamic content in HTML pages
+			<li>JAVA taglibs are used to take the parameters from configuration files
+		</ul>
+		<img src="logbook_architecture.jpg"><br>
+		The <a href="mailto:doocsweb@sun52a.desy.de">DOOCS team</a>, <a href="http://www.desy.de">DESY</a> -MVP-
+	</body>
+
+</html>

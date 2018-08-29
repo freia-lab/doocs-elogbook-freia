@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+  <subject name="Area A experts">
+    <person>
+      <l_name>Mustermann</l_name>
+      <f_name>Michael</f_name>
+      <expert>Good in doing XYZ</expert>
+      <mail>Michael.Mustermann@desy.de</mail>
+    </person>
+    <person>
+      <l_name>Kammering</l_name>
+      <f_name>Raimund</f_name>
+      <expert>eLogbook</expert>
+      <mail>Raimund.Kammering@desy.de</mail>
+    </person>
+  </subject>
+  <subject name="Area B experts">
+    <person>
+      <l_name>Doe</l_name>
+      <f_name>John</f_name>
+      <expert>Good in doing nothing</expert>
+      <mail>John,Doe@foobar.org</mail>
+    </person>
+    <person>
+      <l_name>Mustermann</l_name>
+      <f_name>Michaela</f_name>
+      <expert>Good in doing UVW</expert>
+      <mail>Michaela.Mustermann@desy.de</mail>
+    </person>
+  </subject>
+</list>

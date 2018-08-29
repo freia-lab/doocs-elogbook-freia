@@ -1,0 +1,43 @@
+ul#Navigation
+{
+  width: 128px;
+  margin: 0; padding: 0;
+  }
+* html ul#Navigation
+{  /* Korrekturen fuer IE 5.x */
+  width: 11.6em;
+  w\idth: 10em;
+  padding-left: 0;
+  padd\ing-left: 0.8em;
+  }
+ul#Navigation li
+{
+  list-style: none;
+  margin: 5px; padding: 0;
+  }
+ul#Printer
+{
+  display: block;
+  font-weight: bold;
+  background-color: #bbb;
+  font-size : 10;
+  }
+ul#Navigation a
+{
+  display:block;
+  padding: 0.1em;
+  text-decoration: none;
+  font-family:arial, sans-serif;
+  font-weight: bold;
+  font-size : 12;
+  color: black;
+  }
+* html ul#Navigation a
+{  /* Breitenangaben nur fuer IE */
+  width: 100%;
+  w\idth: 8.8em;
+  }
+ul#Navigation a:hover
+{
+  color: grey; background-color: #fff;
+  }

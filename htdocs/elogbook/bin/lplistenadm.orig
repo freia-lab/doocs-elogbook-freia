@@ -1,0 +1,60 @@
+#!/sbin/sh
+#
+# Script for starting and stopping lplisten (also lplisten-prev)
+# for the logbook given in arg2. Arg1 is command to be run
+# (start, stop or restart)
+#
+
+LOGBOOK_HOME=/export/web/htdocs
+LOGBOOKS=$2
+export LOGBOOK_HOME LOGBOOKS
+
+if [ "x$2" = "x" ] ; then
+  echo "Usage: $0 {start|stop|restart} <logbook>"
+  exit 1
+fi
+
+# To allow lplisten and lplisten-prev start
+PROG=`basename $0 | sed s/adm//g`
+
+case "$1" in
+start)
+	echo "Starting $PROG for: $LOGBOOKS"
+	for LOGBOOK in ${LOGBOOKS}; do
+	  if test -f ${LOGBOOK_HOME}/${LOGBOOKS}/log/$PROG.pid ; then
+	    echo " ERROR: $PROG seams to run already for $LOGBOOK (exit)"
+	    exit 1
+	  else
+	    . ${LOGBOOK_HOME}/elogbook/bin/elogenv.sh && ${LOGBOOK_HOME}/${LOGBOOK}/$PROG >> ${LOGBOOK_HOME}/${LOGBOOK}/log/$PROG.log&
+	  fi
+	done
+	echo "done!"
+	;;
+restart)
+	$0 stop
+	sleep 1
+	$0 start
+	;;
+stop)
+	echo "Stopping $PROG for: $LOGBOOKS"
+	for LOGBOOK in ${LOGBOOKS}; do
+	  if test -f ${LOGBOOK_HOME}/${LOGBOOKS}/log/$PROG.pid ; then
+	    PID1=`cat ${LOGBOOK_HOME}/${LOGBOOKS}/log/$PROG.pid`
+	    PID2=`echo $PID1 | awk '{print $0+1}'`
+	    kill -9 $PID1 $PID2
+	    rm -f ${LOGBOOK_HOME}/${LOGBOOKS}/log/$PROG.pid
+	  else
+	    echo " ERROR: $PROG not running for $LOGBOOK (skipped)."
+	  fi
+	done
+	echo "done!"
+	;;
+*)
+	echo "Usage: $0 {start|stop|restart} <logbook>"
+	exit 1
+	;;
+esac
+
+exit 0
+
+

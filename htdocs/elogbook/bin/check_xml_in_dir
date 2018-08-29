@@ -1,0 +1,60 @@
+#!/bin/sh
+#
+
+#LD_LIBRARY_PATH=/local/lib:/usr/lib:$LD_LIBRARY_PATH
+#export LD_LIBRARY_PATH
+
+#ldd `which xmllint`
+
+cd `dirname $0`
+DIR=$1
+
+
+DATE=`date '+%d.%m.%y_%H:%M:%S'`
+DATE2=$DATE'_2'
+DATE3=$DATE'_3'
+
+tmpfile=/tmp/$DATE.xml
+tmpfile2=/tmp/$DATE2.xml
+tmpfile3=/tmp/$DATE3.xml
+endfile=/tmp/$DATE'_res.xml'
+
+
+COUNT=`ls $DIR | grep ".xml" | wc -l`
+
+ls $DIR | grep ".xml"  > $tmpfile
+
+i=1
+
+until [ $i -gt $COUNT ]
+do
+   tail -$i $tmpfile > $tmpfile2
+   FILE=`head -n 1 $tmpfile2`
+
+   ISXML=`grep "<?xml" ${DIR}/$FILE`
+
+   if [ "$ISXML" != "" ] ; then
+	# has xml header
+   	xmllint --noout ${DIR}/$FILE 2>$tmpfile3
+	RES=`/usr/bin/cat $tmpfile3`
+
+   else 
+   	echo "<entry>" > $endfile
+   	cat >>$endfile < ${DIR}/$FILE 
+   	echo "</entry>" >> $endfile
+   	xmllint --noout $endfile 2>$tmpfile3
+	RES=`/usr/bin/cat $tmpfile3`
+   fi
+
+   if [ "$RES" != "" ] ; then 
+	echo ERROR: ${DIR}/$FILE is not well-formed
+#	mv ${DIR}/$FILE ../bad_files/${FILE}_invalid
+	echo ERROR in FILE= ${FILE}
+   fi
+
+   i=`expr $i + 1`
+
+done 
+
+echo  /bin/rm $tmpfile $tmpfile2 $tmpfile3 $endfile
+

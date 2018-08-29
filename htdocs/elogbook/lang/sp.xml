@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<language>
+
+	<!-- ***************************************************************************-->
+	<!--	Text used in the File Edit or Entry Edit Form				-->
+	<!-- ***************************************************************************-->
+	<fe_header>eLogBook entrada:</fe_header>	
+	<fe_spellchecker>Checke deletreo</fe_spellchecker>	
+	<fe_save_entry>Salvar entrada</fe_save_entry>	
+	<fe_spellchecker_opt>Optiones para checke deletreo</fe_spellchecker_opt>	
+	<fe_file_upload>Cargar fichero</fe_file_upload>	
+	<fe_image_fn>Nombre del imagen:</fe_image_fn>	
+	<fe_choose_im_file>Elige und imagen:</fe_choose_im_file>	
+	<fe_mail_experts>Mail a los expertos</fe_mail_experts>	
+	<fe_topic>Asunto:</fe_topic>	
+	<fe_experts>Expertos:</fe_experts>	
+	<fe_clear>Quitar</fe_clear>	
+	<fe_wiki_head>Wiki markup ayuda:</fe_wiki_head>	
+	<fe_wiki_body> */# = lista no-numerada/numerada; | = tabla/columna; __/'' = gordo/italic; !/!! = titulo1/titulo2; ---- = linea hor.; http:, https:, file:, mailto: = URLs</fe_wiki_body>	
+	<fe_lexicon1>am.tlx,url,t</fe_lexicon1>	
+	<fe_lexicon2>am100k2.clx,url,c</fe_lexicon2>	
+	<fe_author>Autor:</fe_author>	
+	<fe_date>Fecha:</fe_date>	
+	<fe_time>Hora:</fe_time>	
+	<fe_keyword>Palabra clave:</fe_keyword>	
+	<fe_location>Lugar:</fe_location>	
+	<fe_title>Titulo:</fe_title>	
+	<fe_text>Texto:</fe_text>	
+	<fe_severity>Severidad:</fe_severity>	
+		
+	<!-- ***************************************************************************-->
+	<!--	Text used for the title attribute in html tags				-->
+	<!-- ***************************************************************************-->	
+	<t_new_entry>Crear nueva entrada</t_new_entry>	
+	<t_print_pdf_with_p>Publicar como PDF (con imagenes)</t_print_pdf_with_p>	
+	<t_print_pdf_without_p>Publicar como PDF (sin imagenes)</t_print_pdf_without_p>	
+	<t_goto_next>Ir al proximo turno</t_goto_next>	
+	<t_goto_prev>Ir al turno anterior</t_goto_prev>	
+	<t_create_new_folder>Crear nueva carpeta</t_create_new_folder>	
+	<t_back_to_lb>Regresar al Logbook</t_back_to_lb>	
+	<t_edit_entry>Cambiar esta entrada</t_edit_entry>	
+	<t_history>Enseñar la historia de esta entrada</t_history>	
+	<t_date>Usa botón derecho del ratón 'copy link location' para referenciar a esta entrada</t_date>
+	
+	<!-- ***************************************************************************-->
+	<!--	Text used for the title tags of the severity icons			-->	
+	<!-- ***************************************************************************-->
+	<s_fatal>Error fatal</s_fatal>	
+	<s_error>Error</s_error>	
+	<s_warn>Advertencia</s_warn>
+	<s_info>Info</s_info>
+	<s_idea>Idea</s_idea>
+	<s_docu>Documentación</s_docu>
+	<s_measure>Medición</s_measure>
+	<s_todo>Para hacer</s_todo>
+	<s_done>Terminado</s_done>
+	<s_fixed>Arreglado</s_fixed>
+	<s_news>Noticias</s_news>
+	<s_wow>WOW</s_wow>
+	
+	<!-- ***************************************************************************-->
+	<!--	Text used for the history view                         			-->	
+	<!-- ***************************************************************************-->
+	<history_of>Historia de </history_of>	
+	<history_last_modified>Ultimo cambio: </history_last_modified>
+	
+</language>

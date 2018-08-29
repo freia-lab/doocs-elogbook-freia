@@ -1,0 +1,129 @@
+BODY {
+	margin-left: 2px;
+	margin-top: 2px;
+	margin-right:2px;
+	margin-bottom:2px;	
+	font-family: Helvetica,sans-serif;
+	font-size:12px;
+	background-color: #f0ece0;
+}
+
+tr.header {
+	background-color: #f0ece0;
+	font-family: Helvetica,sans-serif;
+	font-size:12px;
+}
+
+A:link {
+        color: #2020a0;
+        text-decoration: none;
+}
+
+A:visited {
+        color: #2020a0;
+        text-decoration: none;
+}
+
+A:active {
+        color: red;
+        text-decoration: none;
+}
+
+A:hover {
+        color: #a0a020;
+        text-decoration: underline;
+}
+
+table.top {
+	font-family: Helvetica, sans-serif;
+	font-size: 10px;
+	padding:1px;
+	margin:0px;
+}
+
+tr.top {
+	font-family: Helvetica, sans-serif;
+	font-size: 10px;
+	padding:0px;
+	margin:0px;
+}
+
+td.top {
+	font-family: Helvetica, sans-serif;
+	font-size: 10px;
+	padding:0px;
+	margin:0px;
+}
+
+th.top {
+	color: #ffffff;
+	font-family: Helvetica,sans-serif;
+	font-size:12px;
+	padding: 2px;
+	padding-left: 8px;
+}
+
+form.top {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	border: 0px;
+	padding: 0px;
+}
+
+select.top {
+	font-family: Helvetica,sans-serif;
+	font-size: 10px;
+}
+
+table {
+	font-family: Helvetica, sans-serif;
+	font-size: 12px;
+	border-style:none;
+	padding:1px;
+}
+
+tr { 
+	vertical-align:top; 
+}
+
+td { 
+	vertical-align:top; 
+}
+
+form {
+	font-family: Helvetica,sans-serif;
+	font-size: 12px;
+}
+
+a {
+	font-family: Helvetica,sans-serif;
+	font-size: 12px;
+}
+
+input {
+	font-family: Helvetica,sans-serif;
+	font-size: 12px;
+}
+
+select {
+	font-family: Helvetica,sans-serif;
+	font-size: 12px;
+}
+
+textarea {
+	font-family: Courier,sans-serif;
+	font-size: 12px;
+}
+
+body.result {
+	margin-left: 2px;
+	margin-top: 2px;
+	margin-right:2px;
+	margin-bottom:2px;	
+	font-family: Helvetica,sans-serif;
+	font-size:12px;
+	background-color: #e0e0e0;
+}
+

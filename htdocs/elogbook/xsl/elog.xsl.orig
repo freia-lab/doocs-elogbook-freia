@@ -1,0 +1,295 @@
+<?xml version="1.0"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+  <!-- ******************************************************** -->
+  <!-- Main stylesheet for display of the all eLogBook pages.   -->
+  <!--                                                          -->
+  <!-- Templates defined:                                       -->
+  <!--                                          list            -->
+  <!--                                          file            -->
+  <!--                                          entry           -->
+  <!-- Variables needed:                                        -->
+  <!--                                          name            -->
+  <!--                                                          -->
+  <!-- ******************************************************** -->
+
+  <!-- ******************************************************** -->
+  <!-- Import the overall layout for all eLogBook pages         -->
+  <xsl:import href="elog-master.xsl"/>
+
+  <!-- ******************************************************** -->
+  <!-- Import definitions for shiftsummary                      -->
+  <!--xsl:import href="shiftsum.xsl"/-->
+
+  <!-- ******************************************************** -->
+  <!-- Defines rules for the root element                       -->
+  <xsl:template match="list">
+    <html>
+      <head>
+        <meta http-equiv="expires" content="0"/>
+        <meta http-equiv="Pragma" content="no-cache"/>
+        <meta name="description" content="{$name}"/>
+	<link href="{$logroot}/images/Icon.ico" rel="shortcut icon"></link>
+        <title><xsl:value-of select="$name"/></title> 
+	<style type="text/css">
+          h1 { font-weight:bold; font-size:large;}
+          h2 { font-weight:bold; font-size:medium; } 	 
+	  pre { font-size:12px; }
+	  .cb { background-color:#f0f0e9; border:1px solid #CCCCe0; margin-left: 1em; margin-right: 1em; font-size:80%;}
+	  ol { margin-bottom:0px; margin-top:0px; }
+	  ul { margin-bottom:0px; margin-top:0px; }
+	  .ut { font-size:12px; border:1px solid ; background-color:#e0e0e0; border-spacing:4px; }
+	  .tc { border:1px solid ;  }
+	</style>
+	<script src="/elogbook/javascript/treeConnection.js" type="text/javascript"></script>
+      </head>
+      <body bgcolor="#cccccc">
+        <table>
+          <tr>
+            <td width="210"><h2><xsl:value-of select="$name"/><xsl:text> </xsl:text></h2></td><xsl:call-template name="title"/></tr>
+          </table>
+        <xsl:if test="$shiftsummary_enable='true'">
+          <xsl:apply-templates select="entry/shiftsum"/>
+        </xsl:if>
+        <xsl:variable name="this_shift" select="substring-after($url_base,'/data')"/>
+        <xsl:variable name="next_shift" select="entry/next_shift"/>
+        <xsl:if test="$shiftsummary_enable='true'">
+          <xsl:if test="not(entry/shiftsum/isodate) and ($this_shift=$act_dir or $act_dir=$next_shift)">
+          <form name="shiftsum_form">
+            <input type="button" name="newshiftsum" value="New Shift Summary" onClick="self.location.href='{$host}/elog/servlet/ShiftForm?file={$url_base}'"/></form>
+          </xsl:if>
+        </xsl:if>
+
+	<xsl:variable name="documentorder">
+	  <xsl:choose>
+	    <xsl:when test="$list_ascending='true'">ascending</xsl:when>
+	    <xsl:otherwise>descending</xsl:otherwise>
+	  </xsl:choose>
+	</xsl:variable>
+        <TABLE><xsl:call-template name="new_insert"/></TABLE>
+        <TABLE cellspacing="0">
+              <xsl:apply-templates select="entry">
+                <xsl:sort order="{$documentorder}" select="category='DIR'"/>
+                <xsl:sort order="{$documentorder}" select="isodate"/>
+                <xsl:sort order="{$documentorder}" select="time"/>
+              </xsl:apply-templates>
+        </TABLE>
+              <TABLE>
+                <xsl:call-template name="new_insert"/>
+                <xsl:call-template name="footer"/>
+              </TABLE>
+      </body>
+    </html>
+  </xsl:template>
+
+  <!-- ******************************************************** -->
+  <!-- Select the processing for the file tag		        -->
+  <xsl:template name="processImgs">
+    <xsl:choose>
+      <xsl:when test="file">
+        <!-- Detect if file is rel. to docroot or plain filename  -->
+        <xsl:variable name="filepath">
+          <xsl:choose>
+            <!-- if file starts with IFS it is path rel. to docroot -->
+            <xsl:when test="starts-with(file, $fileseparatorChar)">
+              <!-- Dummy to allocate variable for sure -->
+            </xsl:when>
+            <!-- else it is file in local elog -->
+            <xsl:otherwise>
+              <xsl:value-of select="concat(../url_base, $fileseparatorChar)"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <!-- Detect if link is rel. to docroot or plain filename  -->
+        <xsl:variable name="linkname">
+          <xsl:choose>
+            <!-- if link starts with IFS it is path rel. to docroot -->
+            <xsl:when test="starts-with(link, $fileseparatorChar)">
+              <xsl:value-of select="link"/>
+            </xsl:when>
+            <!-- else it is file in local elog -->
+            <xsl:otherwise>
+              <xsl:value-of select="concat(../url_base, $fileseparatorChar, link)"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        
+        <TD BGCOLOR="#ffffff" colspan="3">
+          <TABLE>
+            <xsl:choose>
+              <!-- Show picture? -->
+              <xsl:when test="$picture='true'">
+                <!-- Build up groups of five pictures (starting at 0) -->
+                <xsl:for-each select="file[(position() + 4) mod 5 = 0]">
+                  <TR>
+                    <TD>
+                      <xsl:if test=". !=''">
+                        <xsl:choose>
+                          <xsl:when test="../link">
+                            <a href="{$linkname}" target="list_frame"><img src="{$filepath}{.}"/></a>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <img src="{$filepath}{.}"/>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:if>
+                    </TD>
+                    <TD>
+                      <xsl:if test="following-sibling::file[1] !=''">
+                        <xsl:choose>
+                          <xsl:when test="../link">
+                            <a href="{$linkname}" target="list_frame"><img src="{$filepath}{following-sibling::file[1]}"/></a>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <img src="{$filepath}{following-sibling::file[1]}"/>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:if>
+                    </TD>
+                    <TD>
+                      <xsl:if test="following-sibling::file[2] !=''">
+                        <xsl:choose>
+                          <xsl:when test="../link">
+                            <a href="{$linkname}" target="list_frame"><img src="{$filepath}{following-sibling::file[2]}"/></a>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <img src="{$filepath}{following-sibling::file[2]}"/>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:if>
+                    </TD>
+                    <TD>
+                      <xsl:if test="following-sibling::file[3] !=''">
+                        <xsl:choose>
+                          <xsl:when test="../link">
+                            <a href="{$linkname}" target="list_frame"><img src="{$filepath}{following-sibling::file[3]}"/></a>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <img src="{$filepath}{following-sibling::file[3]}"/>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:if>
+                    </TD>
+                    <TD>
+                      <xsl:if test="following-sibling::file[4] !=''">
+                        <xsl:choose>
+                          <xsl:when test="../link">
+                            <a href="{$linkname}" target="list_frame"><img src="{$filepath}{following-sibling::file[4]}"/></a>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <img src="{$filepath}{following-sibling::file[4]}"/>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:if>
+                    </TD>
+                  </TR>
+                </xsl:for-each>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:choose>
+                  <xsl:when test="../link">
+                    <a href="{$linkname}" target="list_frame"><xsl:value-of select="$linkname"/></a>
+                    <xsl:text> or </xsl:text>
+                    <a href="{$filepath}{file}" target="list_frame"><xsl:value-of select="concat($filepath, file)"/></a>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <a href="{$filepath}{file}" target="list_frame"><xsl:value-of select="concat($filepath, file)"/></a>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:otherwise>
+            </xsl:choose>
+          </TABLE>
+        </TD>
+      </xsl:when>
+      <xsl:otherwise>
+        <TD></TD><TD></TD>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <!-- ******************************************************** -->
+  <!-- Defines formating for the entry                          -->
+  <xsl:template match="entry">
+    <xsl:if test="severity!='DELETE' and category!='DIR'">
+      <TR>
+        <xsl:apply-templates select="category"/>
+        <xsl:apply-templates select="severity"/>
+        <TD BGCOLOR="#99ffff">
+          <!-- Anchor in ISO8601 format -->
+          <a name="{isodate}T{time}"></a>
+          <xsl:call-template name="date">
+            <xsl:with-param name="isodate" select="isodate"/>
+          </xsl:call-template>
+          <xsl:text> </xsl:text>
+          <xsl:value-of select="substring(time,1,5)"/>
+        </TD>
+        <xsl:apply-templates select="author"/>
+        <xsl:apply-templates select="title"/>
+      </TR>
+      <!-- Defines if text is 'above' or 'beside' the images in the doument part -->
+      <xsl:choose>
+        <xsl:when test="contains(../url_base,'data/doc')">
+          <xsl:choose>
+            <!-- Layout according to value of the conf file -->
+            <xsl:when test="$text_pos='beside'">
+              <TR colspan="3">
+                <xsl:call-template name="processImgs"/>
+                <xsl:apply-templates select="text"/>
+              </TR>
+              <TR>
+                <TD></TD><TD></TD>
+              </TR>
+            </xsl:when>
+            <xsl:when test="$text_pos='above'">
+              <TR>
+                <TD></TD><TD></TD>
+                <xsl:apply-templates select="text"/>
+              </TR>
+              <TR>
+                <TD></TD><TD></TD>
+                <xsl:call-template name="processImgs"/>
+              </TR>
+              <TR>
+                <TD colspan="5"></TD>
+              </TR>
+            </xsl:when>
+          </xsl:choose>
+        </xsl:when>
+        <!-- Default layout is text above image -->
+        <xsl:otherwise>
+          <TR>
+            <TD></TD><TD></TD>
+            <xsl:apply-templates select="text"/>
+          </TR>
+          <TR>
+            <TD></TD><TD></TD>
+          </TR>
+          <TR>
+            <TD></TD><TD></TD>
+            <xsl:call-template name="processImgs"/>
+          </TR>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:if>
+    <!-- It's a directory link - don't show file -->
+    <xsl:if test="category='DIR' and severity!='DELETE'">
+      <TR valign="middle" bgcolor="#bbbbbb">
+        <xsl:apply-templates select="category"/>
+        <TD>
+          <!-- Anchor in ISO8601 format -->
+          <a name="{isodate}T{time}"></a>
+        </TD>
+        <xsl:apply-templates select="title"/>
+	<TD><xsl:apply-templates select="thumb"/></TD>
+        <TD colspan="2">  <xsl:value-of select="text"/></TD>
+      </TR>
+    </xsl:if>
+  </xsl:template>
+  
+  <!-- ******************************************************** -->
+  <!-- Defines displaying thumbnails for DIRs                   -->
+  <xsl:template match="thumb">
+    <img src="{../url_base}/{.}"/><xsl:text> </xsl:text>
+  </xsl:template>
+
+</xsl:stylesheet>

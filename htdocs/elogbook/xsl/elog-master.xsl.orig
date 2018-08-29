@@ -1,0 +1,903 @@
+<?xml version="1.0"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+  <!-- ******************************************************** -->
+  <!-- Master stylesheet for all eLogBook stylesheets.          -->
+  <!--                                                          -->
+  <!-- Templates defined:                                       -->
+  <!--                                        new_insert        -->
+  <!--                                        category          -->
+  <!--                                        title             -->
+  <!--                                        author            -->
+  <!--                                        time              -->
+  <!--                                        date              -->
+  <!--                                        text              -->
+  <!--                                        add-link          -->
+  <!--                                        severity          -->
+  <!--                                        include           -->
+  <!-- Variables defined:                                       -->
+  <!--                                        xml_uri           -->
+  <!--                                                          -->
+  <!-- NOTE:                                                    -->
+  <!-- The param xml_uri is passed to this stylesheet by pass-  -->
+  <!-- ing it as an external parameter to the transformer.      -->
+  <!--                                                          -->
+  <!-- ******************************************************** -->
+
+
+  <!-- ******************************************************** -->
+  <!-- Global parameter pointing to the location of 'conf.xml'. -->
+  <xsl:param name="xml_uri"/>
+
+  <!-- ******************************************************** -->
+  <!-- Switch for display of pictures (only used for FO trafo.) -->
+  <xsl:param name="picture"/>
+
+  <!-- ******************************************************** -->
+  <!-- Ascending order (Used for XMLlist and FO trafo.) -->
+  <xsl:param name="list_ascending" select="false" />
+
+  <!-- ******************************************************** -->
+  <!-- Transform xml_uri the full path to work.xml              -->
+  <xsl:param name="work_file">
+    <xsl:variable name="tmp_str" select="substring-before($xml_uri, '/data')"/>
+    <xsl:value-of select="concat('file:', $tmp_str, '/jsp/', 'work.xml')"/>
+  </xsl:param>
+
+  <!-- ******************************************************** -->
+  <!-- Param pointing to the current work directory             -->
+  <xsl:param name="act_dir">
+    <xsl:value-of select="document($work_file)/work/act_dir"/>
+  </xsl:param>
+  
+  <!-- ******************************************************** -->
+  <!-- Transform xml_uri to the full path to conf.xml           -->
+  <xsl:param name="conf_file">
+    <xsl:variable name="tmp_str" select="substring-before($xml_uri, '/data')"/>
+    <xsl:value-of select="concat('file:', $tmp_str, '/jsp/', 'conf.xml')"/>
+  </xsl:param>
+
+  <!-- ******************************************************** -->
+  <!-- Param holding the literal logbook name			-->
+  <xsl:param name="name">
+    <xsl:value-of select="document($conf_file)/logbook/name"/>
+  </xsl:param>
+  
+  <!-- ******************************************************** -->
+  <!-- Import for determination of the absolut path             -->
+  <xsl:param name="docroot">
+    <xsl:value-of select="document($conf_file)/logbook/docroot"/>
+  </xsl:param>
+
+  <!-- ******************************************************** -->
+  <!-- Import for determination of eLogBook root dir            -->
+  <xsl:param name="logroot">
+    <xsl:value-of select="document($conf_file)/logbook/logroot"/>
+  </xsl:param>
+
+  <!-- ******************************************************** -->
+  <!-- Pointing to elog's data directory                        -->
+  <xsl:param name="datapath">
+    <xsl:value-of select="document($conf_file)/logbook/datapath"/>
+  </xsl:param>
+
+  <!-- ******************************************************** -->
+  <!-- Import for determination of the host name                -->
+  <xsl:param name="host">
+    <xsl:value-of select="document($conf_file)/logbook/host"/>
+  </xsl:param>
+
+  <!-- ******************************************************** -->
+  <!-- Param defining the used language ('en' or 'de')          -->
+  <xsl:param name="lang_code">
+    <xsl:value-of select="document($conf_file)/logbook/lang_code"/>
+  </xsl:param>
+ 
+  <!-- ******************************************************** -->
+  <!-- Param defining the used language ('en' or 'de')          -->
+  <xsl:param name="date_fmt">
+    <xsl:value-of select="document($conf_file)/logbook/date_fmt"/>
+  </xsl:param>
+ 
+  <!-- ******************************************************** -->
+  <!-- Define if entry text is 'above' or 'beside' images       -->
+  <xsl:param name="text_pos">
+    <xsl:value-of select="document($conf_file)/logbook/text_pos"/>
+  </xsl:param>
+ 
+  <!-- ******************************************************** -->
+  <!-- Param defining used printer                              -->
+  <xsl:param name="printer">
+    <xsl:value-of select="document($conf_file)/logbook/printer"/>
+  </xsl:param>
+ 
+  <!-- ******************************************************** -->
+  <!-- Import for determination of eLogBook root dir            -->
+  <xsl:param name="commentdir">
+    <xsl:value-of select="document($conf_file)/logbook/commentdir"/>
+  </xsl:param>
+
+  <!-- ******************************************************** -->
+  <!-- Import for determination of eLogBook documentation dir   -->
+  <xsl:param name="docudir">
+    <xsl:value-of select="document($conf_file)/logbook/docudir"/>
+  </xsl:param>
+ 
+  <!-- ******************************************************** -->
+  <!-- Import for determination of eLogBook image dir           -->
+  <xsl:param name="imagedir">
+    <xsl:value-of select="document($conf_file)/logbook/imagedir"/>
+  </xsl:param>
+ 
+  <!-- ******************************************************** -->
+  <!-- Path to and name of view servlet                         -->
+  <xsl:param name="view_servlet">
+    <xsl:value-of select="document($conf_file)/logbook/view_servlet"/>
+  </xsl:param>
+ 
+  <!-- ******************************************************** -->
+  <!-- Path to and name of edit servlet                         -->
+  <xsl:param name="edit_servlet">
+    <xsl:value-of select="document($conf_file)/logbook/edit_servlet"/>
+  </xsl:param>
+ 
+  <!-- ******************************************************** -->
+  <!-- Path to and name of search servlet                       -->
+  <xsl:param name="srch_servlet">
+    <xsl:value-of select="document($conf_file)/logbook/srch_servlet"/>
+  </xsl:param>
+
+  <!-- ******************************************************** -->
+  <!-- Path to and name of the view XSL file                    -->
+  <xsl:param name="view_xsl">
+    <xsl:value-of select="document($conf_file)/logbook/view_xsl"/>
+  </xsl:param>
+
+  <!-- ******************************************************** -->
+  <!-- Path to and name of the edit XSL file                    -->
+  <xsl:param name="edit_xsl">
+    <xsl:value-of select="document($conf_file)/logbook/edit_xsl"/>
+  </xsl:param>
+
+  <!-- ******************************************************** -->
+  <!-- Path to and name of the search XSL file                  -->
+  <xsl:param name="search_xsl">
+    <xsl:value-of select="document($conf_file)/logbook/search_xsl"/>
+  </xsl:param>
+
+  <!-- ******************************************************** -->
+  <!-- Path to and name of the search2 XSL file                 -->
+  <xsl:param name="search2_xsl">
+    <xsl:value-of select="document($conf_file)/logbook/search2_xsl"/>
+  </xsl:param>
+
+  <!-- ******************************************************** -->
+  <!-- Path to and name of elog to PDF XSL file                 -->
+  <xsl:param name="pdf_xsl">
+    <xsl:value-of select="document($conf_file)/logbook/pdf_xsl"/>
+  </xsl:param>
+ 
+  <!-- ******************************************************** -->
+  <!-- Path search index                                        -->
+  <xsl:param name="srch_index">
+    <xsl:value-of select="document($conf_file)/logbook/srch_index"/>
+  </xsl:param>
+ 
+  <!-- ******************************************************** -->
+  <!-- List of <keyword> elements                               -->
+  <xsl:param name="keyword_list">
+    <xsl:value-of select="document($conf_file)/logbook/keyword_list"/>
+  </xsl:param>
+ 
+  <!-- ******************************************************** -->
+  <!-- List of <location> elements                              -->
+  <xsl:param name="location_list">
+    <xsl:value-of select="document($conf_file)/logbook/location_list"/>
+  </xsl:param>
+ 
+  <!-- ******************************************************** -->
+  <!-- Use location: true/false                                 -->
+  <xsl:param name="location_enable">
+    <xsl:choose>
+      <xsl:when test="document($conf_file)/logbook/location_list/@enabled='true'">
+        <xsl:value-of select="'true'"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="'false'"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+ 
+  <!-- ******************************************************** -->
+  <!-- Mail to expert: if true = listname                       -->
+  <xsl:param name="mail2expert">
+    <xsl:choose>
+      <xsl:when test="document($conf_file)/logbook/mail2expert/@enabled='true'">
+        <xsl:value-of select="document($conf_file)/logbook/mail2expert/list/@name"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="'false'"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+
+  <!-- ******************************************************** -->
+  <!-- Additional List - name is taken from attr                -->
+  <xsl:param name="additional_list">
+    <xsl:value-of select="document($conf_file)/logbook/additional_list"/>
+  </xsl:param>
+ 
+  <!-- ******************************************************** -->
+  <!-- Use additional_list: true/false                          -->
+  <xsl:param name="additional_list_enable">
+    <xsl:choose>
+      <xsl:when test="document($conf_file)/logbook/additional_list/@enabled='true'">
+        <xsl:value-of select="'true'"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="'false'"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+ 
+  <!-- ******************************************************** -->
+  <!-- Name of the additional list                              -->
+  <xsl:param name="additional_list_name">
+    <xsl:value-of select="document($conf_file)/logbook/additional_list/@items"/>
+  </xsl:param>
+ 
+  <!-- ******************************************************** -->
+  <!-- Use spellchecker: true/false                             -->
+  <xsl:param name="spellchecker_enable">
+    <xsl:choose>
+      <xsl:when test="document($conf_file)/logbook/spellchecker/@enabled='true'">
+        <xsl:value-of select="'true'"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="'false'"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+ 
+  <!-- ******************************************************** -->
+  <!-- Use spellchecker: true/false                             -->
+  <xsl:param name="shiftsummary_enable">
+    <xsl:choose>
+      <xsl:when test="document($conf_file)/logbook/shiftsummary/@enabled='true'">
+        <xsl:value-of select="'true'"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="'false'"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+ 
+  <!-- ******************************************************** -->
+  <!-- Show history of entries: true/false			-->
+  <xsl:param name="view_history">
+    <xsl:choose>
+      <xsl:when test="document($conf_file)/logbook/view_history/@enabled='true'">
+        <xsl:value-of select="'true'"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="'false'"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+
+  <!-- ******************************************************** -->
+  <!-- Define a param holding the base dir name.                -->
+  <xsl:param name="url_base">
+    <xsl:value-of select="/list/url_base"/>
+  </xsl:param>
+
+  <!-- ******************************************************** -->
+  <!-- General error text                                       -->
+  <xsl:param name="error_msg">
+    <xsl:text>Error in XSL transformation!</xsl:text>
+  </xsl:param>
+
+  <!-- ******************************************************** -->
+  <!-- Path separator character (JAVA: file.separatorChar)      -->
+  <xsl:param name="fileseparatorChar">/</xsl:param>
+
+  <!-- ******************************************************** -->
+  <!-- Inserts one newline                                      -->
+  <xsl:param name="newline">
+    <xsl:text>
+    </xsl:text>
+  </xsl:param>
+
+  <!-- ******************************************************** -->
+  <!-- End of 'global parameter' section. Don not insert any    -->
+  <!-- non-param values above this line                         -->
+  <!-- ******************************************************** -->
+
+  <!-- ******************************************************** -->
+  <!-- This template returns the title for the current page     -->
+  <xsl:template name="title">
+    <td width="290"><h2><xsl:value-of select="/list/entry/pagetitle"/></h2></td>
+    <td>
+      <xsl:if test="/list/entry/prev_shift">
+        <img  border="0" src="{$imagedir}/null.gif"/>
+	<a href="javascript:jumpTo('{$host}{$view_servlet}?file={$logroot}{$datapath}{/list/entry/prev_shift}&amp;xsl={$view_xsl}&amp;picture=true');"><img border="0" src="{$imagedir}/back.png" alt="" title="$dictionary/term[@key='PrevShift']"/></a>
+      </xsl:if>
+      <xsl:if test="/list/entry/next_shift">
+        <img  border="0" src="{$imagedir}/null.gif"/>
+	<a href="javascript:jumpTo('{$host}{$view_servlet}?file={$logroot}{$datapath}{/list/entry/next_shift}&amp;xsl={$view_xsl}&amp;picture=true');"><img border="0" src="{$imagedir}/forward.png" alt="" title="$dictionary/term[@key='NextShift']"/></a>
+      </xsl:if>
+    </td>
+  </xsl:template>
+
+  <!-- ******************************************************** -->
+  <!-- Footer contains prev next navigation arrows              -->
+  <xsl:template name="footer">
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>
+      <xsl:if test="/list/entry/prev_shift">
+        <img  border="0" src="{$imagedir}/null.gif"/>
+	<a href="javascript:jumpTo('{$host}{$view_servlet}?file={$logroot}{$datapath}{/list/entry/prev_shift}&amp;xsl={$view_xsl}&amp;picture=true');"><img border="0" src="{$imagedir}/back.png" alt="" title="$dictionary/term[@key='PrevShift']"/></a>
+      </xsl:if>
+      <xsl:if test="/list/entry/next_shift">
+        <img  border="0" src="{$imagedir}/null.gif"/>
+	<a href="javascript:jumpTo('{$host}{$view_servlet}?file={$logroot}{$datapath}{/list/entry/next_shift}&amp;xsl={$view_xsl}&amp;picture=true');"><img border="0" src="{$imagedir}/forward.png" alt="" title="$dictionary/term[@key='NextShift']"/></a>
+      </xsl:if>
+    </td>
+  </xsl:template>
+      
+  <!-- ******************************************************** -->
+  <!-- Defines template for the keyword node                    -->
+  <xsl:template match="keywords">
+    <td>
+      <select size="1" name="keywords" style="width: 100%">
+        <xsl:choose>
+          <xsl:when test=".=''">
+            <option selected="0"><xsl:value-of select="document($conf_file)/logbook/keyword_list/keyword[1]"/></option>
+            <xsl:call-template name="processList">
+              <xsl:with-param name="List" select="document($conf_file)/logbook/keyword_list/keyword"/>
+              <xsl:with-param name="selected" select="document($conf_file)/logbook/keyword_list/keyword[1]"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <option selected="0"><xsl:value-of select="."/></option>
+            <xsl:call-template name="processList">
+              <xsl:with-param name="List" select="document($conf_file)/logbook/keyword_list/keyword"/>
+              <xsl:with-param name="selected" select="."/>
+            </xsl:call-template>
+          </xsl:otherwise>
+        </xsl:choose>
+      </select>
+    </td>
+  </xsl:template>
+
+  <!-- ******************************************************** -->
+  <!-- Defines template for the location node                    -->
+  <xsl:template match="location">
+    <td>
+      <select size="1" name="location" style="width: 100%">
+        <xsl:choose>
+          <xsl:when test=".=''">
+            <option selected="0"><xsl:value-of select="document($conf_file)/logbook/location_list/location[1]"/></option>
+            <xsl:call-template name="processList">
+              <xsl:with-param name="List" select="document($conf_file)/logbook/location_list/location"/>
+              <xsl:with-param name="selected" select="document($conf_file)/logbook/location_list/location[1]"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <option selected="0"><xsl:value-of select="."/></option>
+            <xsl:call-template name="processList">
+              <xsl:with-param name="List" select="document($conf_file)/logbook/location_list/location"/>
+              <xsl:with-param name="selected" select="."/>
+            </xsl:call-template>
+          </xsl:otherwise>
+        </xsl:choose>
+      </select>
+    </td>
+  </xsl:template>
+
+  <!-- ******************************************************** -->
+  <!-- Iterates over the list "List" and select value           -->
+  <xsl:template name="processList">
+    <xsl:param name="List"/>
+    <xsl:param name="selected"/>
+    <xsl:for-each select="$List">
+      <xsl:if test="$selected!=."><option><xsl:value-of select="."/></option></xsl:if>
+    </xsl:for-each>
+  </xsl:template>
+
+  <!-- ******************************************************** -->
+  <!-- Used for adding a new entry                              -->
+  <!--                                                          -->
+  <!-- Needs: $lang_code                                        -->
+  <xsl:template name="new_insert">
+    <xsl:choose>
+      <xsl:when test="$lang_code='en'">
+        <TR><td  colspan="5"><table><tr>
+          <TD>
+            <a href="{$host}{$edit_servlet}?file={url_base}&amp;xsl={$edit_xsl}&amp;mode=create">
+               <img  border="0" src="{$imagedir}/ins_new.gif" alt="" title="Insert a new logbook entry"/>
+            </a>
+          </TD>
+	  <TD width="50"></TD>
+	  <TD>
+		Sorting
+		<a  href="{$host}{$view_servlet}?file={url_base}&amp;xsl={$view_xsl}&amp;ascending=true">
+                  <img border="0" src="{$imagedir}/down.png" title="Ascending Order"/>
+		</a>
+		<a  href="{$host}{$view_servlet}?file={url_base}&amp;xsl={$view_xsl}&amp;ascending=false">
+		<img border="0" src="{$imagedir}/up.png"  title="Descending Order"/>
+		</a>
+	  </TD>
+		  <td>
+  <!-- ********************* new ******************************* -->
+            <xsl:if test="/list/entry/pagetitle='news'">
+		      <a href="{$host}/FCKeditor/Edit.jsp?elog={$logroot}&amp;file={url_base}&amp;mode=create"><img border="0" src="/images/html.gif" alt="" title="create a new HTML logbook entry"/></a>
+			  <td valign="middle">Print this Page:</td>
+            </xsl:if>
+		  </td>
+  <!-- ******************************************************** -->
+          <TD align="center">
+            <a href="{$host}{$view_servlet}?file={url_base}&amp;xsl={$pdf_xsl}&amp;picture=true&amp;format=PDF&amp;dummy=dummy.pdf">
+              <!--img  border="0" src="{$imagedir}/printer_img.gif" alt="" title="Print page as PDF (with pictures)"/-->
+              <img  border="0" src="{$imagedir}/pdfdoc_img.gif" alt="" title="Print page as PDF (with pictures)"/>
+            </a>
+            <a href="{$host}{$view_servlet}?file={url_base}&amp;xsl={$pdf_xsl}&amp;format=PDF&amp;dummy=dummy.pdf">
+              <!--img  border="0" src="{$imagedir}/printer.gif" alt="" title="Print page as PDF (without pictures)"/-->
+              <img  border="0" src="{$imagedir}/pdfdoc.gif" alt="" title="Print page as PDF (without pictures)"/>
+            </a>
+          </TD>
+	      <TD align="left">
+            <xsl:if test="/list/entry/allow='subdir'">
+	        <a href="{$host}{$logroot}/new_dir.jsp?dir={$url_base}" ><img  border="0"
+	          src="{$imagedir}/newdir.gif" title="Create New Folder"/></a>
+            </xsl:if>
+          </TD>
+        </tr></table></td></TR>
+      </xsl:when>
+      <xsl:when test="$lang_code='de'">
+        <TR>
+          <TD colspan="3">
+            <a href="{$host}{$edit_servlet}?file={url_base}&amp;xsl={$edit_xsl}&amp;mode=create">
+              <img  border="0" src="{$imagedir}/ins_new.gif" alt="" title="Einen neuen Eintrag erstellen"/>
+            </a>
+          </TD>
+	  <TD width="50"></TD>
+	  <TD>
+		Sortierung
+		<a  href="{$host}{$view_servlet}?file={url_base}&amp;xsl={$view_xsl}&amp;picture={$picture}&amp;ascending=true">
+		<img border="0" src="{$imagedir}/down.png"  title="Aufsteigende Sortierreihenfolge"/>
+		</a>
+		<a  href="{$host}{$view_servlet}?file={url_base}&amp;xsl={$view_xsl}&amp;picture={$picture}&amp;ascending=false">
+		<img border="0" src="{$imagedir}/up.png"  title="Absteigende Sortierreihenfolge"/>
+		</a>
+	  </TD>
+
+
+          <TD align="center">
+            <a href="{$host}{$view_servlet}?file={url_base}&amp;xsl={$pdf_xsl}&amp;picture=true&amp;dummy=dummy.pdf&amp;format=PDF">
+              <img  border="0" src="{$imagedir}/pdfdoc_img.gif" alt="" title="Drucke Seite als PDF mit Bildern"/>
+            </a>
+            <a href="{$host}{$view_servlet}?file={url_base}&amp;xsl={$pdf_xsl}&amp;dummy=dummy.pdf&amp;format=PDF">
+              <img  border="0" src="{$imagedir}/pdfdoc.gif" alt="" title="Drucke Seite als PDF ohne Bilder"/>
+            </a>
+          </TD>
+          <TD align="left"></TD>
+	  <TD align="left">
+            <xsl:if test="/list/entry/allow='subdir'">
+	     <a href="{$host}{$logroot}/new_dir.jsp?dir={$url_base}" ><img  border="0"
+	     src="{$imagedir}/newdir.gif" title="Neuen Folder erzeugen"/></a>
+            </xsl:if>
+          </TD>
+ 
+        </TR>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="XSL_Error">
+          <xsl:with-param name="error_code" select="$error_msg"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  <!-- ******************************************************** -->
+  <!-- Selects an icon matching the category                    -->
+  <!--                                                          -->
+  <!-- Needs: $lang_code                                        -->
+  <xsl:template match="category">
+    <!-- Detect if metainfo is rel. to docroot or plain filename  -->
+    <xsl:variable name="metaname">
+      <xsl:choose>
+        <!-- if metainfo starts with IFS it is path rel. to docroot -->
+        <xsl:when test="starts-with(../metainfo, $fileseparatorChar)">
+          <xsl:value-of select="../metainfo"/>
+        </xsl:when>
+        <!-- else it is file in local elog -->
+        <xsl:otherwise>
+          <xsl:value-of select="concat($url_base, $fileseparatorChar, ../metainfo)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <!-- Detect if file is rel. to docroot or plain filename  -->
+    <xsl:variable name="filename">
+      <xsl:choose>
+        <!-- if metainfo starts with IFS it is path rel. to docroot -->
+        <xsl:when test="starts-with(../file, $fileseparatorChar)">
+          <xsl:value-of select="../file"/>
+        </xsl:when>
+        <!-- else it is file in local elog -->
+        <xsl:otherwise>
+          <xsl:value-of select="concat($url_base, $fileseparatorChar, ../file)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:choose>
+      <xsl:when test="$lang_code='en'">
+        <xsl:choose>
+          <xsl:when test=".='SYSLOG'">
+            <TD><img src="{$imagedir}/log.gif"/></TD>
+          </xsl:when>
+          <xsl:when test=".='USERLOG'">
+            <TD>
+              <a href="{$host}{$edit_servlet}?file={$metaname}&amp;xsl={$edit_xsl}&amp;mode=edit">
+                <img border="0" src="{$imagedir}/meta.gif" alt="" title="change this entry"/>
+              </a>
+            </TD>
+          </xsl:when>
+          <xsl:when test=".='HELP'">
+            <TD>
+              <a href="{$host}{$edit_servlet}?file={$metaname}&amp;xsl={$edit_xsl}&amp;mode=edit" target="list_frame">
+                <img border="0" src="{$imagedir}/help.gif" alt="" title="change this entry"/>
+              </a>
+            </TD>
+          </xsl:when>
+          <xsl:when test=".='UNKNOWN'">
+            <TD>
+              <a href="{$host}{$edit_servlet}?file={$metaname}&amp;xsl={$edit_xsl}&amp;mode=edit" target="list_frame">
+                <img border="0" src="{$imagedir}/unknown.gif" alt="" title="change this entry"/>
+              </a>
+            </TD>
+          </xsl:when>
+          <xsl:when test=".='DIR'">
+            <TD><a href="{$host}{$view_servlet}?file={$filename}&amp;xsl={$view_xsl}&amp;picture=true" target="list_frame"><img src="{$imagedir}/dir.gif" border="0"/></a></TD>
+          </xsl:when>
+          <xsl:when test=".='IMAGE'">
+            <TD><img border="0" src="{$imagedir}/null.gif"/></TD>
+          </xsl:when>
+          <xsl:when test=".='IMAGE_HAS_PS'">
+            <TD><img border="0" src="{$imagedir}/null.gif"/></TD>
+          </xsl:when>
+          <xsl:when test=".='ERROR'">
+            <TD>
+              <a href="{$host}{$edit_servlet}?file={$metaname}&amp;xsl={$edit_xsl}&amp;mode=edit" target="list_frame">
+                <img border="0" src="/images/error.gif" alt="" title="change this entry"/>
+              </a>
+            </TD>
+          </xsl:when>
+          <xsl:when test=".='HTMLLOG'">
+            <TD>
+              <a href="{$host}/FCKeditor/Edit.jsp?elog={$logroot}&amp;file={$metaname}&amp;xsl={$edit_xsl}&amp;mode=edit">
+                <img border="0" src="{$imagedir}/meta.gif" alt="" title="change this HTML entry"/>
+              </a>
+            </TD>
+          </xsl:when>
+          <xsl:otherwise>
+            <TD BGCOLOR="#c0c0c0">?<xsl:value-of select="."/>?</TD>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:when test="$lang_code='de'">
+        <xsl:choose>
+          <xsl:when test=".='SYSLOG'">
+            <TD><img src="{$imagedir}/log.gif"/></TD>
+          </xsl:when>
+          <xsl:when test=".='USERLOG'">
+            <TD>
+              <a href="{$host}{$edit_servlet}?file={$metaname}&amp;xsl={$edit_xsl}&amp;mode=edit">
+                <img border="0" src="{$imagedir}/meta.gif" alt="" title="Diesen Eintrag aendern"/>
+              </a>
+            </TD>
+          </xsl:when>
+          <xsl:when test=".='HELP'">
+            <TD>
+              <a href="{$host}{$edit_servlet}?file={$metaname}&amp;xsl={$edit_xsl}&amp;mode=edit" target="list_frame">
+                <img border="0" src="{$imagedir}/help.gif" alt="" title="Diesen Eintrag aendern"/>
+              </a>
+            </TD>
+          </xsl:when>
+          <xsl:when test=".='UNKNOWN'">
+            <TD>
+              <a href="{$host}{$edit_servlet}?file={$metaname}&amp;xsl={$edit_xsl}&amp;mode=edit" target="list_frame">
+                <img border="0" src="{$imagedir}/unknown.gif" alt="" title="Diesen Eintrag aendern"/>
+              </a>
+            </TD>
+          </xsl:when>
+          <xsl:when test=".='DIR'">
+            <TD><img src="{$imagedir}/dir.gif"/></TD>
+          </xsl:when>
+          <xsl:when test=".='IMAGE'">
+            <TD><img border="0" src="{$imagedir}/null.gif"/></TD>
+          </xsl:when>
+          <xsl:when test=".='IMAGE_HAS_PS'">
+            <TD><img border="0" src="{$imagedir}/null.gif"/></TD>
+          </xsl:when>
+          <xsl:when test=".='ERROR'">
+            <TD>
+              <a href="{$host}{$edit_servlet}?file={$metaname}&amp;xsl={$edit_xsl}&amp;mode=edit" target="list_frame">
+                <img border="0" src="{$imagedir}/error.gif" alt="" title="Diesen Eintrag aendern"/>
+              </a>
+            </TD>
+          </xsl:when>
+          <xsl:when test=".='HTMLLOG'">
+            <TD>
+              <a href="{$host}/FCKeditor/Edit.jsp?elog={$logroot}&amp;file={$metaname}&amp;xsl={$edit_xsl}&amp;mode=edit">
+                <img border="0" src="{$imagedir}/meta.gif" alt="" title="Diesen Eintrag aendern"/>
+              </a>
+            </TD>
+          </xsl:when>
+          <xsl:otherwise>
+            <TD BGCOLOR="#c0c0c0">?<xsl:value-of select="."/>?</TD>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="XSL_Error">
+          <xsl:with-param name="error_code" select="$error_msg"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <!-- ******************************************************** -->
+  <!-- Select the processing concerning the category            -->
+  <xsl:template match="title">
+    <!-- Detect if metainfo is rel. to docroot or plain filename  -->
+    <xsl:variable name="filename">
+      <xsl:choose>
+        <!-- if metainfo starts with IFS it is path rel. to docroot -->
+        <xsl:when test="starts-with(../file, $fileseparatorChar)">
+          <xsl:value-of select="../file"/>
+        </xsl:when>
+        <!-- else it is file in local elog -->
+        <xsl:otherwise>
+          <xsl:value-of select="concat($url_base, $fileseparatorChar, ../file)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <TD>
+      <xsl:choose>
+        <xsl:when test="../category='DIR'">
+          <a href="{$host}{$view_servlet}?file={$filename}&amp;xsl={$view_xsl}&amp;picture=true" target="list_frame">
+            <xsl:value-of select="."/>
+          </a>
+        </xsl:when>
+        <xsl:when test="../category='IMAGE'">
+          <a href="{$host}{$view_servlet}?file={$filename}" target="list_frame">
+            <img src="{$filename}"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <b><xsl:value-of select="."/></b>
+        </xsl:otherwise>
+      </xsl:choose>
+    </TD>
+  </xsl:template>
+
+  <!-- ******************************************************** -->
+  <!-- Used to print an error message (language mismatch).      -->
+  <xsl:template name="XSL_Error">
+    <xsl:param name="error_code"/>
+    <xsl:text>ERROR: </xsl:text><xsl:value-of select="$error_code"/>
+  </xsl:template>
+
+  <!-- ******************************************************** -->
+  <!-- Define style for author                                  -->
+  <xsl:template match="author">
+    <TD BGCOLOR="#99ffff">
+      <xsl:value-of select="."/>
+    </TD>
+  </xsl:template>
+
+  <!-- ******************************************************** -->
+  <!-- Defines style for date                                   -->
+  <xsl:template name="date">
+    <xsl:param name="isodate"/>
+    <xsl:variable name="day" select="substring($isodate, 9, 2)"/>
+    <xsl:variable name="month" select="substring($isodate, 6, 2)"/>
+    <xsl:variable name="year" select="substring($isodate, 1, 4)"/>
+    <xsl:variable name="linkdir" select="substring-after(substring-after($url_base, $logroot), $datapath)"/>
+    <xsl:choose>
+      <xsl:when test="$date_fmt='MM/dd/yyyy'">
+        <a target="_top" title="Use right mouse 'copy link location' for ref. to this entry" href="{$host}{$logroot}/show.jsp?dir={$linkdir}&amp;pos={$isodate}T{time}"><xsl:value-of select="concat($month, '/', $day, '/', $year)"/></a>
+      </xsl:when>
+      <xsl:when test="$date_fmt='dd.MM.yyyy'">
+        <a target="_top" title="Use right mouse 'copy link location' for ref. to this entry" href="{$host}{$logroot}/show.jsp?dir={$linkdir}&amp;pos={$isodate}T{time}"><xsl:value-of select="concat($day, '.', $month, '.', $year)"/></a>
+      </xsl:when>
+      <xsl:when test="$date_fmt='yyyy-MM-dd'">
+        <a target="_top" title="Use right mouse 'copy link location' for ref. to this entry" href="{$host}{$logroot}/show.jsp?dir={$linkdir}&amp;pos={$isodate}T{time}"><xsl:value-of select="$isodate"/></a>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="XSL_Error">
+          <xsl:with-param name="error_code" select="$error_msg"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  <!-- ******************************************************** -->
+  <!-- Defines style for time                                   -->
+  <xsl:template match="time">
+    <TD BGCOLOR="#99ffff">
+      <xsl:value-of select="substring(.,1,5)"/>
+    </TD>
+  </xsl:template>
+
+  <!-- ******************************************************** -->
+  <!-- Define style for text                                    -->
+  <xsl:template match="text">
+    <TD BGCOLOR="#ffffff" colspan="3">
+      		<!-- We need this preformating to conserve the CR etc. -->
+		<xsl:if test="../category='HTMLLOG'">
+		  <iframe src="{$url_base}/{../link}" width="100%" height="300">Error: your browser has no IFRAMES</iframe>
+		</xsl:if>
+   		<PRE>
+	          <xsl:apply-templates/>
+		</PRE>
+    </TD>
+  </xsl:template>
+  
+  <!-- ******************************************************** -->
+  <!-- Template for conversation to a link                      -->
+  <xsl:template name="add-link">
+    <xsl:param name="string"/>
+    <xsl:choose>
+      <xsl:when test="contains($string, 'https://')">
+        <!-- add links to the string *before* the 'http://' -->
+        <xsl:call-template name="add-link">
+          <xsl:with-param name="string" select="substring-before($string, 'https://')"/>
+        </xsl:call-template>
+        <xsl:variable name="rest" select="substring-after($string, 'https://')"/>
+        <xsl:variable name="URL">
+          <xsl:choose>
+            <!-- Search for SPACE character terminating the link -->
+            <xsl:when test="substring-before($rest, ' ')!=''">
+              <xsl:value-of select="concat('https://', substring-before($rest, ' '))"/>
+            </xsl:when>
+            <!-- Search for LINEFEED character terminating the link -->
+            <xsl:when test="substring-before($rest, '')!=''">
+              <xsl:value-of select="concat('https://', substring-before($rest, ' '))"/>
+            </xsl:when>
+            <!-- Could not detect end of link statement (exit) -->
+            <xsl:otherwise>
+              <xsl:value-of select="concat('https://', $rest)"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <!-- create the link -->
+        <a href="{$URL}"><xsl:value-of select="$URL"/></a><xsl:text> </xsl:text>
+        <!-- process the string after the link -->
+        <xsl:call-template name="add-link">
+          <xsl:with-param name="string" select="substring-after($rest, ' ')"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="contains($string, 'http://')">
+        <!-- add links to the string *before* the 'http://' -->
+        <xsl:call-template name="add-link">
+          <xsl:with-param name="string" select="substring-before($string, 'http://')"/>
+        </xsl:call-template>
+        <xsl:variable name="rest" select="substring-after($string, 'http://')"/>
+        <xsl:variable name="URL">
+          <xsl:choose>
+            <!-- Search for SPACE character terminating the link -->
+            <xsl:when test="substring-before($rest, ' ')!=''">
+              <xsl:value-of select="concat('http://', substring-before($rest, ' '))"/>
+            </xsl:when>
+            <!-- Search for LINEFEED character terminating the link -->
+            <xsl:when test="substring-before($rest, '')!=''">
+              <xsl:value-of select="concat('http://', substring-before($rest, ' '))"/>
+            </xsl:when>
+            <!-- Could not detect end of link statement (exit) -->
+            <xsl:otherwise>
+              <xsl:value-of select="concat('http://', $rest)"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <!-- create the link -->
+        <a href="{$URL}"><xsl:value-of select="$URL"/></a><xsl:text> </xsl:text>
+        <!-- process the string after the link -->
+        <xsl:call-template name="add-link">
+          <xsl:with-param name="string" select="substring-after($rest, ' ')"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="contains($string, 'file:/')">
+        <!-- give the value of the string before the 'file:/' -
+             it can't contain 'http://' or 'file:/' -->
+        <xsl:value-of select="substring-before($string, 'file:/')"/>
+        <xsl:variable name="rest" select="substring-after($string, 'file:/')"/>
+        <xsl:variable name="URL" select="concat('file:/', substring-before($rest, ' '))"/>
+        <!-- create the link -->
+        <a href="{$URL}"><xsl:value-of select="$URL"/></a><xsl:text> </xsl:text>
+        <!-- process the string after the link -->
+        <xsl:call-template name="add-link">
+          <xsl:with-param name="string" select="substring-after($rest, ' ')"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$string"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <!-- ******************************************************** -->
+  <!-- Select icon for severity                                 -->
+  <xsl:template match="severity">
+    <xsl:choose>
+      <xsl:when test=".='FATAL'"><TD><img src="{$imagedir}/fatal.gif"/></TD></xsl:when>
+      <xsl:when test=".='ERROR'"><TD><img src="{$imagedir}/error.gif"/></TD></xsl:when>
+      <xsl:when test=".='WARN'"><TD><img src="{$imagedir}/warn.gif"/></TD></xsl:when>
+      <xsl:when test=".='INFO'"><TD><img src="{$imagedir}/info.gif"/></TD></xsl:when>
+      <xsl:when test=".='UNKNOWN'"><TD><img src="{$imagedir}/none.gif"/></TD></xsl:when>
+      <xsl:when test=".='IDEA'"><TD><img src="{$imagedir}/idea.gif"/></TD></xsl:when>
+      <xsl:when test=".='DOCU'"><TD><img src="{$imagedir}/book.gif"/></TD></xsl:when>
+      <xsl:when test=".='MEASURE'"><TD><img src="{$imagedir}/measure.gif"/></TD></xsl:when>
+      <xsl:when test=".='TODO'"><TD><img src="{$imagedir}/todo.gif"/></TD></xsl:when>
+      <xsl:when test=".='DONE'"><TD><img src="{$imagedir}/done.gif"/></TD></xsl:when>
+      <xsl:when test=".='FIXED'"><TD><img src="{$imagedir}/fixed.gif"/></TD></xsl:when>
+      <xsl:when test=".='NONE'"><TD><img src="{$imagedir}/null.gif"/></TD></xsl:when>
+      <xsl:when test=".='CHRIS'"><TD><img src="{$imagedir}/christree.gif"/></TD></xsl:when>
+      <xsl:when test=".='NEWS'"><TD><img src="{$imagedir}/news.gif"/></TD></xsl:when>
+      <xsl:when test=".='WOW'"><TD><img src="{$imagedir}/super.gif"/></TD></xsl:when>
+      <xsl:when test=".='DELETE'"><TD><img src="{$imagedir}/null.gif"/></TD></xsl:when>
+      <xsl:otherwise><TD BGCOLOR="#c0c0c0">?<xsl:value-of select="."/>?</TD></xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <!-- ******************************************************** -->
+  <!-- Defines formating for external html files                -->
+  <xsl:template match="include">
+    <IFRAME src="{.}" width="100%" height="300">
+      <ILAYER src="{.}"></ILAYER>
+    </IFRAME>
+  </xsl:template>
+  
+  <!-- ******************************************************** -->
+  <!-- Default to copy html tags                                -->
+   <xsl:template match="*">
+     <xsl:text disable-output-escaping="yes">&lt;</xsl:text><xsl:value-of select="name()"/>
+     <xsl:for-each select="@*">
+       <xsl:text> </xsl:text><xsl:value-of select="name()"/><xsl:text>=</xsl:text><xsl:text>"</xsl:text><xsl:value-of select="."/><xsl:text>"</xsl:text>
+     </xsl:for-each>
+     <xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+     <xsl:apply-templates/>
+     <xsl:text disable-output-escaping="yes">&lt;/</xsl:text><xsl:value-of select="name()"/><xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+   </xsl:template>
+   
+   <!-- ******************************************************** -->
+   <!-- Tables in text fields                                    -->
+   <xsl:template match="table">
+	<xsl:text disable-output-escaping="yes">&lt;table class="ut" rules="all"&gt;</xsl:text><xsl:apply-templates/><xsl:text disable-output-escaping="yes">&lt;/table&gt;</xsl:text>
+   </xsl:template>
+
+   <!-- ******************************************************** -->
+   <!-- Table cells in text fields                                    -->
+   <xsl:template match="td">
+	<xsl:text disable-output-escaping="yes">&lt;td class="tc"&gt;</xsl:text><xsl:apply-templates/><xsl:text disable-output-escaping="yes">&lt;/td&gt;</xsl:text>
+   </xsl:template>
+
+   <!-- ******************************************************** -->
+   <!-- handle URLs                                              -->
+   <xsl:template match="a">
+	<xsl:text disable-output-escaping="yes">&lt;a target="_top" href="</xsl:text><xsl:value-of select='.'/><xsl:text disable-output-escaping="yes">"&gt;</xsl:text><xsl:value-of select='.'/><xsl:text disable-output-escaping="yes">&lt;/a&gt;</xsl:text>
+   </xsl:template>
+
+  <!-- ******************************************************** -->
+  <!-- handle line breaks                                              -->
+   <xsl:template match="br">
+	<xsl:text disable-output-escaping="yes">&lt;br/&gt;</xsl:text>
+   </xsl:template>
+
+
+</xsl:stylesheet>

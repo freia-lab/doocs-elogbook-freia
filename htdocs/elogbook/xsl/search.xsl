@@ -1,0 +1,581 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+  <!-- ******************************************************** -->
+  <!-- This stylesheet defines templates for the following      -->
+  <!-- tags:                                                    -->
+  <!--                                        list              -->
+  <!--                                        entry             -->
+  <!--                                        text              -->
+  <!--                                        psfile            -->
+  <!--                                        jpgfile           -->
+  <!--                                        category          -->
+  <!--                                        title             -->
+  <!--                                                          -->
+  <!-- The text, category and title tag are overriden.          -->
+  <!--                                                          -->
+  <!-- ******************************************************** -->
+
+  <!-- ******************************************************** -->
+  <!-- Import the overall layout for all pages              -->
+  <xsl:import href="elog-master.xsl"/>
+
+
+  <!-- ******************************************************** -->
+  <!-- Defines rules for the root element                       -->
+  <xsl:template match="list">
+    <html>
+      <head>
+        <meta http-equiv="expires" content="0"/>
+        <META name="description" CONTENT="{$name}"/>
+        <META HTTP-EQUIV="Pragma" CONTENT="no-cache"/>
+        <META HTTP-EQUIV="expires" CONTENT="0"/>
+        <link rel="stylesheet" type="text/css" href="/elogbook/styles/list-blue.css" title="Blue"></link>
+        <TITLE><xsl:value-of select="$name"/></TITLE> 
+      </head>
+      <body class="main_body">
+        <h3>Search results: <xsl:value-of select="./total"/>  match(es) for
+
+	  <xsl:if test="req_text"> text or title = <font color="#3300FF"><xsl:value-of select="req_text"/></font></xsl:if>
+	  <xsl:if test="req_all"> text or title  = <font color="#3300FF"><xsl:value-of select="req_all"/></font></xsl:if>
+	  <xsl:if test="req_phr"> phrase <font color="#3300FF">"<xsl:value-of select="req_phr"/>"</font></xsl:if>
+	  <xsl:if test="req_or">  some of words : <font color="#3300FF"><xsl:value-of select="req_or"/></font></xsl:if>
+	  <xsl:if test="req_not"> text without words  <font color="#3300FF"><xsl:value-of select="req_not"/></font></xsl:if>	  	  	  
+	  <xsl:if test="keywds">  keyword = <font color="#3300FF"><xsl:value-of select="keywds"/> </font></xsl:if>
+	  <xsl:if test="auth">  author = <font color="#3300FF"><xsl:value-of select="auth"/> </font></xsl:if>
+	  <xsl:if test="loc">  location = <font color="#3300FF"><xsl:value-of select="loc"/> </font></xsl:if>
+	  <xsl:if test="sev">  severity = <font color="#3300FF"><xsl:value-of select="sev"/> </font></xsl:if>
+	  <xsl:if test="yr1"> start year = <font color="#3300FF"><xsl:value-of select="yr1"/> </font></xsl:if>
+	  <xsl:if test="mon1"> start month = <font color="#3300FF"><xsl:value-of select="mon1"/> </font></xsl:if>
+	  <xsl:if test="yr2"> end year = <font color="#3300FF"><xsl:value-of select="yr2"/> </font></xsl:if>
+	  <xsl:if test="mon2"> end month = <font color="#3300FF"><xsl:value-of select="mon2"/> </font></xsl:if>
+
+          <!-- We need to cut out the xsl argument since it's search.xsl not elog2pdf.xsl -->
+          <xsl:variable name="sparam">
+            <xsl:value-of select="concat(substring-before(/list/sparam, '&amp;xsl='), substring-after(/list/sparam, '.xsl'))"/>
+          </xsl:variable>
+
+	  <xsl:variable name="strt">
+	   <xsl:value-of select="./start"/>
+	  </xsl:variable>
+
+          <!-- PDF generation buttons -->
+          <xsl:choose>
+            <xsl:when test="$lang_code='en'">
+              <xsl:text> </xsl:text>
+			  <a href="{$host}/elog/results.jsp?{$sparam}&amp;xsl={$pdf_xsl}&amp;start={$strt}&amp;format=PDF&amp;picture=true&amp;dummy=dummy.pdf">
+                <img border="0" src="{$imagedir}/pdfdoc_img.gif" alt="" title="Print page as PDF (with pictures)"/>
+              </a>
+            </xsl:when>
+            <xsl:when test="$lang_code='de'">
+              <xsl:text> </xsl:text>
+			  <a href="{$host}/elog/results.jsp?{$sparam}&amp;xsl={$pdf_xsl}&amp;start={$strt}&amp;format=PDF&amp;picture=true&amp;dummy=dummy.pdf">
+                <img border="0" src="{$imagedir}/pdfdoc_img.gif" alt="" title="Drucke Seite als PDF mit Bildern"/>
+              </a>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:call-template name="XSL_Error">
+                <xsl:with-param name="error_code" select="$error_msg"/>
+              </xsl:call-template>
+            </xsl:otherwise>
+          </xsl:choose>
+        </h3>
+
+  	<xsl:variable name="adr1" select="concat($host, '/elog/results.jsp?')"/>
+
+	<xsl:variable name="epp" select="entries"/>
+	<xsl:variable name="np" select="start + $epp"/>
+
+	<xsl:variable name="pp" select="start - $epp"/>
+
+	<xsl:variable name="parm" select="sparam"/>
+
+        <!-- Call the counting for loop -->
+       <TABLE cellspacing="0">
+	<tr>
+      	 <xsl:if test="$pp &gt;= 0">
+      	    <td width="16" align="center">
+      	    	<a href="{$adr1}{$parm}&amp;start={$pp}" target="_self">Previous</a>
+      	    </td>
+      	 </xsl:if>
+
+	<xsl:variable name="cur"  select="start div $epp"/>
+	<xsl:variable name="pagecount" select="total div $epp"/>
+
+      <xsl:choose>
+	<xsl:when test="($cur - 5 ) &gt;= 0">
+	   <xsl:variable name="s1"   select="$cur - 5"/>
+	   <xsl:choose>
+	   	<xsl:when test="($s1 + 10) &lt; $pagecount">
+			<xsl:variable name="end"   select="$s1 + 10"/>
+         		<xsl:call-template name="for-loop">
+           			<xsl:with-param name="testValue" select="$end"/>
+           			<xsl:with-param name="i" select="$s1"/>
+           			<xsl:with-param name="k" select="$s1 * $epp"/>
+         		</xsl:call-template>
+	   	</xsl:when>
+	   	<xsl:otherwise>
+			<xsl:variable name="end"   select="$pagecount"/>
+
+         		<xsl:call-template name="for-loop">
+           			<xsl:with-param name="testValue" select="$end"/>
+           			<xsl:with-param name="i" select="$s1"/>
+           			<xsl:with-param name="k" select="$s1 * $epp"/>
+         		</xsl:call-template>
+	   	</xsl:otherwise>
+	   </xsl:choose>
+	</xsl:when>
+	<xsl:otherwise>
+	     <xsl:variable name="s1"   select="0"/>
+	     <xsl:variable name="end"  select="$pagecount"/>
+	     <xsl:choose>
+	        <xsl:when test="($s1+10) &lt; $pagecount">
+		   <xsl:variable name="end" select="$s1+10"/>
+         	   <xsl:call-template name="for-loop">
+           		<xsl:with-param name="testValue" select="$end"/>
+           		<xsl:with-param name="i" select="$s1"/>
+           		<xsl:with-param name="k" select="$s1 * $epp"/>
+         	   </xsl:call-template>
+	        </xsl:when>
+	        <xsl:otherwise>
+		   <xsl:if test="$pagecount &gt; 1">
+         	      <xsl:call-template name="for-loop">
+           		<xsl:with-param name="testValue" select="$end"/>
+           		<xsl:with-param name="i" select="$s1"/>
+           		<xsl:with-param name="k" select="$s1 * $epp"/>
+         	      </xsl:call-template>
+		   </xsl:if>
+	        </xsl:otherwise>
+	     </xsl:choose>
+	</xsl:otherwise>
+     </xsl:choose>
+
+      	 <xsl:if test="$np &lt; total">
+      	    <td width="16" align="center">
+      	    	<a href="{$adr1}{$parm}&amp;start={$np}" target="_self">Next</a>
+      	    </td>
+      	 </xsl:if> 	
+ 	</tr>
+      </TABLE>
+
+        <TABLE cellspacing="0">
+          <xsl:apply-templates select="entry">
+            <xsl:sort order="descending" select="isodate"/>
+            <xsl:sort order="descending" select="time"/>
+          </xsl:apply-templates>
+        </TABLE>
+      </body> 
+    </html>
+  </xsl:template>
+
+  <!-- ******************************************************** -->
+  <!-- Select the processing for the file tag		        -->
+  <xsl:template name="processImgs">
+    <xsl:if test="file">
+    <!-- Detect if file is rel. to docroot or plain filename  -->
+    <xsl:variable name="filepath">
+      <xsl:choose>
+        <!-- if file starts with IFS it is path rel. to docroot -->
+        <xsl:when test="starts-with(file, $fileseparatorChar)">
+          <!-- Dummy to allocate variable for sure -->
+        </xsl:when>
+        <!-- else it is file in local elog -->
+        <xsl:otherwise>
+          <xsl:value-of select="concat(dirpath, $fileseparatorChar)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <!-- Detect if link is rel. to docroot or plain filename  -->
+    <xsl:variable name="linkname">
+      <xsl:choose>
+        <!-- if link starts with IFS it is path rel. to docroot -->
+        <xsl:when test="starts-with(link, $fileseparatorChar)">
+          <xsl:value-of select="link"/>
+        </xsl:when>
+        <!-- else it is file in local elog -->
+        <xsl:otherwise>
+          <xsl:value-of select="concat(dirpath, $fileseparatorChar, link)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <TD BGCOLOR="#ffffff" colspan="3">
+      <TABLE>
+        <xsl:choose>
+          <!-- Is there a picture? -->
+          <xsl:when test="file">
+            <!-- Build up groups of five pictures (starting at 0) -->
+            <xsl:for-each select="file[(position() + 4) mod 5 = 0]">
+              <TR>
+                <TD>
+                  <xsl:if test=". !=''">
+                    <xsl:choose>
+                      <xsl:when test="../link">
+                        <a href="{$linkname}" target="list_frame"><img src="{$filepath}{.}"/></a>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <img src="{$filepath}{.}"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:if>
+                </TD>
+                <TD>
+                  <xsl:if test="following-sibling::file[1] !=''">
+                    <xsl:choose>
+                      <xsl:when test="../link">
+                        <a href="{$linkname}" target="list_frame"><img src="{$filepath}{following-sibling::file[1]}"/></a>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <img src="{$filepath}{following-sibling::file[1]}"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:if>
+                </TD>
+                <TD>
+                  <xsl:if test="following-sibling::file[2] !=''">
+                    <xsl:choose>
+                      <xsl:when test="link">
+                        <a href="{$linkname}" target="list_frame"><img src="{$filepath}{following-sibling::file[2]}"/></a>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <img src="{$filepath}{following-sibling::file[2]}"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:if>
+                </TD>
+                <TD>
+                  <xsl:if test="following-sibling::file[3] !=''">
+                    <xsl:choose>
+                      <xsl:when test="link">
+                        <a href="{$linkname}" target="list_frame"><img src="{$filepath}{following-sibling::file[3]}"/></a>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <img src="{$filepath}{following-sibling::file[3]}"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:if>
+                </TD>
+                <TD>
+                  <xsl:if test="following-sibling::file[4] !=''">
+                    <xsl:choose>
+                      <xsl:when test="link">
+                        <a href="{$linkname}" target="list_frame"><img src="{$filepath}{following-sibling::file[4]}"/></a>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <img src="{$filepath}{following-sibling::file[4]}"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:if>
+                </TD>
+              </TR>
+            </xsl:for-each>
+          </xsl:when>
+        </xsl:choose>
+      </TABLE>
+    </TD>
+  </xsl:if>
+  </xsl:template>
+
+  <!-- ******************************************************** -->
+  <!-- Defines formating for the entry                          -->
+  <xsl:template match="entry">
+    <xsl:if test="severity!='DELETE' and category!='DIR'">
+      <xsl:if test="../historyof">
+        <xsl:apply-templates select="lastmodified"/>
+      </xsl:if>
+
+	<!-- the entry header is 1 tablerow with several parts-->
+      <table class="header_table">
+      
+        <tr >      
+	
+	  <!-- CATEGORY -->
+	  <td class="header_category">
+	    <xsl:apply-templates select="category"/>
+	  </td>  
+	  
+          <!-- SEVERITY -->
+	  <xsl:if test="severity!='unmoeglich?'">
+	    <td class="header_severity">
+	      <xsl:apply-templates select="severity"/>
+	    </td>
+	  </xsl:if>
+	  
+	  <!-- DATE -->
+	  <td class="header_date">
+	    <xsl:call-template name="date">
+	    <xsl:with-param name="isodate" select="isodate"/>
+	    </xsl:call-template>
+	  </td>	
+	  
+	  <!-- TIME -->
+	  <td class="header_time"><xsl:value-of select="substring(time,1,5)"/></td>
+	  <!--<td><a name="{isodate}T{time}">hallo?</a></td>-->
+	  
+	  <!-- AUTHOR -->
+	  <xsl:if test="author!='unmoeglich?!?'">
+	    <td class="header_author">
+	      <nobr><xsl:apply-templates select="author"/></nobr>
+	    </td>
+	  </xsl:if>
+	  
+	  <!-- TITLE -->
+	  <xsl:if test="title!='unmoeglich?!?'">
+            <td class="header_title">
+	      <nobr><xsl:apply-templates select="title"/></nobr>
+	    </td>	
+	  </xsl:if>
+	  
+	  <!-- Link to elog entry -->
+          <td class="header_search">
+            <nobr><a href="{$host}{$view_servlet}?file={dirpath}&amp;xsl={$view_xsl}&amp;picture=true#{isodate}T{time}">Go to entry</a></nobr>
+          </td>
+
+	  <!-- SPACER -->
+	  <!--<td class="spacer"></td>-->
+  
+
+	  <!-- HISTORY -->  
+          <td class="header_hist"><xsl:apply-templates select="hist"/></td>	  
+	  
+        </tr>      
+	
+      </table><!-- header table end -->
+       
+  <!-- the entry body displayed as a table with 2 rows and no columns -->
+      <table class="content_table">
+  
+        <xsl:choose>
+          <!-- when documents folder and config setup is "beside" then a special layout is displayed -->
+          <xsl:when test="contains(../url_base,'data/doc') and $text_pos='beside'">            
+	    <tc><td class="content_image"><xsl:call-template name="processImgs"/></td></tc> 
+	    <tc><td class="content_text"><pre><xsl:apply-templates select="text"/></pre></td></tc>
+	    <tc><td class="spacer" ></td></tc>
+	  </xsl:when>
+	  <!-- here is the normal layout for the logbook : first the text and below the image -->
+	  <xsl:otherwise>
+	    <xsl:if test="text!=''">
+            <tr><td class="content_text"> <pre> <xsl:apply-templates select="text"/> </pre> </td><td class="spacer" ></td></tr>
+	    </xsl:if>
+	    <xsl:if test="image!=''">
+            <tr><td class="content_image"> <xsl:call-template name="processImgs"/> </td><td class="spacer" ></td></tr>
+	    </xsl:if>
+          </xsl:otherwise>
+	</xsl:choose> 
+      </table>
+    </xsl:if>
+    
+    <!-- It's a directory link - don't show file -->
+    <xsl:if test="category='DIR' and severity!='DELETE'">
+    <table>
+    <xsl:text>DEBUG elog entry if dir and not delete</xsl:text>
+      <TR valign="middle" bgcolor="#bbbbbb">
+        <xsl:apply-templates select="category"/>
+        <!--xsl:apply-templates select="severity"/-->
+        <TD>
+          <!-- Anchor in ISO8601 format -->
+          <a name="{isodate}T{time}"></a>
+        </TD>
+        <!--xsl:value-of select="substring(time,1,5)"/-->
+        <xsl:apply-templates select="title"/>
+        <!--xsl:apply-templates select="author"/>
+        <xsl:call-template name="date">
+          <xsl:with-param name="isodate" select="isodate"/>
+        </xsl:call-template>
+        <xsl:text> </xsl:text-->
+	<TD><xsl:apply-templates select="thumb"/></TD>
+        <TD colspan="2">  <xsl:value-of select="text"/></TD>
+      </TR>
+      <!--TR><TD></TD><TD></TD><xsl:apply-templates select="text"/></TR-->
+    </table>
+    </xsl:if>
+    
+  </xsl:template>
+
+  <!-- ******************************************************** -->
+  <!-- Defines style for date                                   -->
+  <xsl:template name="mydate">
+    <xsl:param name="isodate"/>
+    <xsl:variable name="day" select="substring($isodate, 9, 2)"/>
+    <xsl:variable name="month" select="substring($isodate, 6, 2)"/>
+    <xsl:variable name="year" select="substring($isodate, 1, 4)"/>
+    <xsl:variable name="linkdir" select="substring-after(substring-after(dirpath, $logroot), $datapath)"/>
+    <xsl:choose>
+      <xsl:when test="$date_fmt='MM/dd/yyyy'">
+        <a target="_top" title="Use right mouse 'copy link location' for ref. to this entry" href="{$host}{$logroot}/show.jsp?dir={$linkdir}&amp;pos={$isodate}T{time}"><xsl:value-of select="concat($month, '/', $day, '/', $year)"/></a>
+      </xsl:when>
+      <xsl:when test="$date_fmt='dd.MM.yyyy'">
+        <a target="_top" title="Use right mouse 'copy link location' for ref. to this entry" href="{$host}{$logroot}/show.jsp?dir={$linkdir}&amp;pos={$isodate}T{time}"><xsl:value-of select="concat($day, '.', $month, '.', $year)"/></a>
+      </xsl:when>
+      <xsl:when test="$date_fmt='yyyy-MM-dd'">
+        <a target="_top" title="Use right mouse 'copy link location' for ref. to this entry" href="{$host}{$logroot}/show.jsp?dir={$linkdir}&amp;pos={$isodate}T{time}"><xsl:value-of select="$isodate"/></a>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="XSL_Error">
+          <xsl:with-param name="error_code" select="$error_msg"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <!-- ******************************************************** -->
+  <!-- Defines handling for category                            -->
+  <xsl:template match="category">
+    <!-- Detect if file is rel. to docroot or plain filename  -->
+    <xsl:variable name="metainfo">
+      <xsl:choose>
+        <!-- if file starts with IFS it is path rel. to docroot -->
+        <xsl:when test="starts-with(../metainfo, $fileseparatorChar)">
+          <xsl:value-of select="../metainfo"/>
+        </xsl:when>
+        <!-- else it is file in local elog -->
+        <xsl:otherwise>
+          <xsl:value-of select="concat(../dirpath, $fileseparatorChar, ../metainfo)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+  <xsl:choose>
+    <xsl:when test=".='SYSLOG'">
+      <img src="{$imagedir}/log.gif"/>
+    </xsl:when>
+    <xsl:when test=".='USERLOG'">
+      <a href="{$host}{$edit_servlet}?file=/{$metainfo}&amp;xsl={$edit_xsl}&amp;mode=edit"><img border="0" src="{$imagedir}/meta.gif" alt="change this entry"/></a>
+    </xsl:when>
+    <xsl:when test=".='HELP'">
+      <a href="{$host}{$edit_servlet}?file=/{$metainfo}&amp;xsl={$edit_xsl}&amp;mode=edit" target="list_frame"><img border="0" src="{$imagedir}/help.gif" alt="change this entry"/></a>
+    </xsl:when>
+    <xsl:when test=".='UNKNOWN'">
+      <a href="{$host}{$edit_servlet}?file=/{$metainfo}&amp;xsl={$edit_xsl}&amp;mode=edit" target="list_frame"><img border="0" src="{$imagedir}/unknown.gif" alt="update existing logbook entry" /></a>
+    </xsl:when>
+    <xsl:when test=".='DIR'">
+      <img src="{$imagedir}/dir.gif"/>
+    </xsl:when>
+    <xsl:when test=".='IMAGE'">
+      <img border="0" src="{$imagedir}/null.gif"/>
+    </xsl:when>
+    <xsl:when test=".='IMAGE_HAS_PS'">
+      <img border="0" src="{$imagedir}/null.gif"/>
+    </xsl:when>
+    <xsl:when test=".='ERROR'">
+      <a href="{$host}{$edit_servlet}?file=/{$metainfo}&amp;xsl={$edit_xsl}&amp;mode=edit" target="list_frame"><img border="0" src="{$imagedir}/error.gif" alt="change this entry"/></a>
+    </xsl:when>
+    <xsl:otherwise>?<xsl:value-of select="."/>?</xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+  <!-- ******************************************************** -->
+  <!-- Defines handling for title                               -->
+  <xsl:template match="title">
+    <!-- Detect if metainfo is rel. to docroot or plain filename  -->
+    <xsl:variable name="metainfo">
+      <xsl:choose>
+        <!-- if metainfo starts with IFS it is path rel. to docroot -->
+        <xsl:when test="starts-with(../metainfo, $fileseparatorChar)">
+          <xsl:value-of select="../metainfo"/>
+        </xsl:when>
+        <!-- else it is file in local elog -->
+        <xsl:otherwise>
+          <xsl:value-of select="concat(../dirpath, $fileseparatorChar, ../metainfo)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <!-- Detect if file is rel. to docroot or plain filename  -->
+    <xsl:variable name="filename">
+      <xsl:choose>
+        <!-- if file starts with IFS it is path rel. to docroot -->
+        <xsl:when test="starts-with(../filename, $fileseparatorChar)">
+          <xsl:value-of select="../filename"/>
+        </xsl:when>
+        <!-- else it is file in local elog -->
+        <xsl:otherwise>
+          <xsl:value-of select="concat(../dirpath, $fileseparatorChar, ../filename)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="linkname">
+      <xsl:choose>
+        <!-- if link starts with IFS it is path rel. to docroot -->
+        <xsl:when test="starts-with(../link, $fileseparatorChar)">
+          <xsl:value-of select="../link"/>
+        </xsl:when>
+        <!-- else it is file in local elog -->
+        <xsl:otherwise>
+          <xsl:value-of select="concat(../dirpath, $fileseparatorChar, ../link)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="../category='DIR'">
+        <a href="{$host}{$view_servlet}?file={$filename}&amp;xsl={$view_xsl}&amp;picture=true" target="list_frame">
+          <xsl:value-of select="."/>
+        </a>
+      </xsl:when>
+      <xsl:when test="../category='IMAGE'">
+        <a href="{$host}{$view_servlet}?file={$filename}" target="list_frame">
+          <img src="{$filename}"/>
+        </a>
+      </xsl:when>
+      <xsl:when test="../category='IMAGE_HAS_PS'">
+        <a href="{$linkname}" target="list_frame"><img src="{$metainfo}"/></a>
+      </xsl:when>
+      <xsl:otherwise>
+        <b><xsl:value-of select="."/></b>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <!-- ******************************************************** -->
+  <!-- Overrides text import rules                              -->
+  <xsl:template match="text">
+    <TD BGCOLOR="#ffffff" colspan="3">
+      <PRE width="90">
+        <xsl:apply-templates/>
+      </PRE>
+    </TD>
+  </xsl:template>
+  
+  <!-- ******************************************************** -->
+  <!-- Define style for author                                  -->
+  <xsl:template match="author">
+      <xsl:value-of select="."/>
+  </xsl:template>
+
+  <!-- ******************************************************** -->
+  <!-- For loop to create links to next/prev matches            -->
+  <xsl:template name="for-loop">
+    <xsl:param name="testValue"/>
+    <xsl:param name="i"/>
+    <xsl:param name="k"/>
+    <xsl:param name="p" select="sparam"/>
+    <xsl:param name="entp" select="entries"/>
+       
+    <xsl:variable name="testPassed">
+      <xsl:if test="$i &lt; $testValue">
+        <xsl:text>true</xsl:text>
+      </xsl:if>
+    </xsl:variable>
+
+    <xsl:variable name="adr1" select="concat($host, '/elog/results.jsp?')"/>
+
+    <xsl:if test="$testPassed='true'">
+      <td width="16" align="center">
+	<xsl:choose>
+	  <xsl:when test="($i * $entp) = start">
+	  	<b><xsl:value-of select="$i"/></b>
+	  </xsl:when>
+	  <xsl:otherwise>
+            <a href="{$adr1}{$p}&amp;start={$k}" target="_self">
+	    	         <xsl:value-of select="$i"/></a>
+	  </xsl:otherwise>
+	</xsl:choose>
+      </td>
+
+      <xsl:call-template name="for-loop">
+        <xsl:with-param name="i"         select="$i + 1"/>
+    	<xsl:with-param name="k"	 select="$k + $entp"/>
+        <xsl:with-param name="testValue" select="$testValue"/>
+      </xsl:call-template>
+    </xsl:if> 
+  </xsl:template>
+
+</xsl:stylesheet>

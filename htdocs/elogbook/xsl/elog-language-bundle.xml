@@ -1,0 +1,191 @@
+<?xml version="1.0"?>
+<dictionary>
+  <bundle language="en">
+    <!-- List view -->
+    <term key="LabelChangeEntry">change this entry</term>
+    <term key="LabelNewEntry">Insert a new elogbook entry</term>
+    <term key="LabelNewFolder">Create a new folder</term>
+    <term key="LabelPrevShift">Previous shift</term>
+    <term key="LabelNextShift">Next shift</term>
+    <term key="LabelCreatePDF">Print page as PDF (with pictures)</term>
+    <term key="LabelCreatePDFNoImg">Print page as PDF (without pictures)</term>
+    <term key="LabelSortAsc">Ascending order</term>
+    <term key="LabelSortDes">Descending order</term>
+
+    <!-- Entry form -->
+    <term key="LabelDate">Date Time</term>
+    <term key="LabelAuthor">Author</term>
+    <term key="LabelKeyword">Keyword</term>
+    <term key="LabelSeverity">Severity</term>
+    <term key="LabelText">Text</term>
+    <term key="LabelTitle">Title</term>
+    <term key="LabelLocation">Location</term>
+    <term key="LabelEntry">Editing elogbook entry</term>
+    <term key="LabelSaveEntry">Save entry</term>
+    <term key="LabelUpload">File upload</term>
+    <term key="LabelImgName">Attached image name:</term>
+    <term key="LabelChooseImgKey">Choose image file</term>
+    <term key="LabelChooseImgKeyComment">(standard image types like: jpg, ps, png, ...)</term>
+    <term key="LabelSpellcheckOption">Spellchecker Options</term>
+    <term key="LabelMarkupHelp">Wiki markup help</term>
+    <term key="LabelMailToExpert">Mail to expert</term>
+    <term key="LabelMailToExpertTopic">Topic:</term>
+    <term key="LabelMailToExpertExperts">Experts:</term>
+
+    <!-- Search results -->
+    <term key="LabelSearchResults">Search result:</term>
+    <term key="LabelSearchHeader">match(es)</term>
+    <term key="LabelSearchResultPage">Page:</term>
+    <term key="LabelSearchResultPageOf">of:</term>
+    <term key="LabelSearchFor">For:</term>
+    <term key="LabelSearchWords">words</term>
+    <term key="LabelSearchAllWords">all words</term>
+    <term key="LabelSearchAnyWord">any word</term>
+    <term key="LabelSearchWithoutWord">without word</term>
+    <term key="LabelSearchPhrase">phrase</term>
+    <term key="LabelSearchKeyword">keyword</term>
+    <term key="LabelSearchAuthor">author</term>
+    <term key="LabelSearchLocation">location</term>
+    <term key="LabelSearchSeverity">severity</term>
+    <term key="LabelSearchStartDate">start date</term>
+    <term key="LabelSearchEndDate">end date</term>
+
+    <term key="LabelFile">File:</term>
+    <term key="LabelUnknownAuthor">Author: unknow</term>
+
+    <!-- Severities -->
+    <term key="SeverityNone">NONE</term>
+    <term key="SeverityFatal">FATAL</term>
+    <term key="SeverityError">ERROR</term>
+    <term key="SeverityWarn">WARN</term>
+    <term key="SeverityInfo">INFO</term>
+    <term key="SeverityIdea">IDEA</term>
+    <term key="SeverityDocu">DOCU</term>
+    <term key="SeverityMeasure">MEASURE</term>
+    <term key="SeverityTodo">TODO</term>
+    <term key="SeverityDone">DONE</term>
+    <term key="SeverityFixed">FIXED</term>
+    <term key="SeveritySuper">WOW</term>
+    <term key="SeverityDeleted">DELETE</term>
+
+    <term key="DateMonday">Monday</term>
+    <term key="DateTuesday">Tuesday</term>
+    <term key="DateWednesday">Wednesday</term>
+    <term key="DateThursday">Thursday</term>
+    <term key="DateFriday">Friday</term>
+    <term key="DateSaturday">Saturday</term>
+    <term key="DateSunday">Sunday</term>
+    <term key="DateJanuary">January</term>
+    <term key="DateFebruary">February</term>
+    <term key="DateMarch">March</term>
+    <term key="DateApril">April</term>
+    <term key="DateMay">May</term>
+    <term key="DateJune">June</term>
+    <term key="DateJuly">July</term>
+    <term key="DateAugust">August</term>
+    <term key="DateSeptember">September</term>
+    <term key="DateOctober">October</term>
+    <term key="DateNovember">November</term>
+    <term key="DateDecember">December</term>
+    <term key="DateMorning">Morning</term>
+    <term key="DateAfternoon">Afternoon</term>
+    <term key="DateNight">Night</term>
+    <term key="DateWeek">Week</term>
+
+  </bundle>    
+
+  <bundle language="de">
+    <!-- List view -->
+    <term key="LabelChangeEntry">Diesen Eintrag aendern</term>
+    <term key="LabelNewEntry">Einen neuen Eintrag erstellen</term>
+    <term key="LabelNewFolder">Einen neuen Ordner erzeugen</term>
+    <term key="LabelPrevShift">Letzte Schicht</term>
+    <term key="LabelNextShift">Naechste Schicht</term>
+    <term key="LabelCreatePDF">Drucke Seite als PDF mit Bildern</term>
+    <term key="LabelCreatePDFNoImg">Drucke Seite als PDF ohne Bildern</term>
+    <term key="LabelSortAsc">Aufsteigende Sortierreihenfolge</term>
+    <term key="LabelSortDes">Absteigende Sortierreihenfolge</term>
+
+    <!-- Entry form -->
+    <term key="LabelDate">Datum Zeit</term>
+    <term key="LabelAuthor">Autor</term>
+    <term key="LabelKeyword">Rubrik</term>
+    <term key="LabelSeverity">Kennung</term>
+    <term key="LabelText">Text</term>
+    <term key="LabelTitle">Titel</term>
+    <term key="LabelLocation">Anlage</term>
+    <term key="LabelEntry">Logbuch Eintrag editieren</term>
+    <term key="LabelSaveEntry">Eintrag speichern</term>
+    <term key="LabelUpload">Datei upload</term>
+    <term key="LabelImgName">Angehangenes Bild:</term>
+    <term key="LabelChooseImgKey">Waehle Bilddatei</term>
+    <term key="LabelChooseImgKeyComment">(standard Bidtypen wie: jpg, ps, png, ...)</term>
+    <term key="LabelSpellcheckOption">Rechtschreibpruefung Optionen</term>
+    <term key="LabelMarkupHelp">Wiki Formatierung Hilfe</term>
+    <term key="LabelMailToExpert">Mail an Experten</term>
+    <term key="LabelMailToExpertTopic">Bereich:</term>
+    <term key="LabelMailToExpertExperts">Experten:</term>
+
+    <!-- Search results -->
+    <term key="LabelSearchResults">Suchergebnisse:</term>
+    <term key="LabelSearchHeader">Treffer</term>
+    <term key="LabelSearchResultPage">Seite:</term>
+    <term key="LabelSearchResultPageOf">von:</term>
+    <term key="LabelSearchFor">Fuer:</term>
+    <term key="LabelSearchWords">Woerter</term>
+    <term key="LabelSearchAllWords">alle Woerter</term>
+    <term key="LabelSearchAnyWord">jedes (Wort)</term>
+    <term key="LabelSearchWithoutWord">ohne (Wort)</term>
+    <term key="LabelSearchPhrase">Phrase</term>
+    <term key="LabelSearchKeyword">Rubrik</term>
+    <term key="LabelSearchAuthor">Autor</term>
+    <term key="LabelSearchLocation">Anlage</term>
+    <term key="LabelSearchSeverity">Kennung</term>
+    <term key="LabelSearchStartDate">Start Datum</term>
+    <term key="LabelSearchEndDate">End Datum</term>
+
+    <term key="LabelFile">Datei:</term>
+    <term key="LabelUnknownAuthor">Autor: unbekannt</term>
+
+    <!-- Severities -->
+    <term key="SeverityNone">Keine</term>
+    <term key="SeverityFatal">Stoerfall</term>
+    <term key="SeverityError">Fehler</term>
+    <term key="SeverityWarn">Warnung</term>
+    <term key="SeverityInfo">Mitteilung</term>
+    <term key="SeverityIdea">Vorschlag</term>
+    <term key="SeverityDocu">Dokumentation</term>
+    <term key="SeverityMeasure">Messung</term>
+    <term key="SeverityTodo">Zu bearbeiten</term>
+    <term key="SeverityDone">Erledigt</term>
+    <term key="SeverityFixed">Repariert</term>
+    <term key="SeveritySuper">Super</term>
+    <term key="SeverityDeleted">Geloescht</term>
+
+    <term key="DateMonday">Montag</term>
+    <term key="DateTuesday">Dienstag</term>
+    <term key="DateWednesday">Mittwoch</term>
+    <term key="DateThursday">Donnerstag</term>
+    <term key="DateFriday">Freitag</term>
+    <term key="DateSaturday">Samstag</term>
+    <term key="DateSunday">Sonntag</term>
+    <term key="DateJanuary">Januar</term>
+    <term key="DateFebruary">Februar</term>
+    <term key="DateMarch">Maerz</term>
+    <term key="DateApril">April</term>
+    <term key="DateMay">Mai</term>
+    <term key="DateJune">Juni</term>
+    <term key="DateJuly">Juli</term>
+    <term key="DateAugust">August</term>
+    <term key="DateSeptember">September</term>
+    <term key="DateOctober">Oktober</term>
+    <term key="DateNovember">November</term>
+    <term key="DateDecember">Dezember</term>
+    <term key="DateMorning">Morgen</term>
+    <term key="DateAfternoon">Nachmittag</term>
+    <term key="DateNight">Nacht</term>
+    <term key="DateWeek">Woche</term>
+
+  </bundle>
+
+</dictionary>

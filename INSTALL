@@ -1,0 +1,44 @@
+Description of the automatic installation of the e-Logbook
+----------------------------------------------------------
+
+GENERAL:
+--------
+This INSTALL is describing the basic steps needed to do a set up of
+the eLogBook. In case of trouble during the installation, consult the
+README file (also in this directory) for details about the indiviual
+parts of the installation.
+
+LICENSE:
+--------
+For all license related issues see the file: LICENSE file in this directory.
+
+AUTOMATIC INSTALLATION:
+-----------------------
+1. You need to have a running JAVA servlet container. The eLogBook
+   has been developed using Apache Tomcat 4.x, 5.x but it might also be
+   possible to run it on other servlet engines (please report this back
+   to us to include this information for future releases).
+
+2. To have the optimal performance you should also have a web server
+   for serving the static content of the eLogBook. We developed the
+   eLogBook on Apache's httpd server (1.3.x and 2.0.x).
+
+3. Assuming you have already unpacked the tar file holding all
+   eLogBook files, just change to the newly created directory (eLogBook
+   called in the following).
+4. Execute the script 'install.sh' giving the name of a first eLogBook 
+   you want to have created (you can easily add more later on), e.g.
+	./install.sh MY
+5. The script will ask you about a number of paths, names etc (NOTE:
+   you can quit the script at any point, since the final installation is
+   only done at the very end).
+6. After successfull running the script, you will have to restart
+   Apache httpd and tomcat to get the newly created web applications into 
+   operation.
+7. After this you should now be able to reach the new eLogBook at:
+	http://localhost/MYelog
+
+If this installation fails, consult the README file and/or the widely
+available documentation on the web (e.g. www.apache.org/httpd in case
+of problems concerning Apache httpd) or you may contact us
+(doocsweb@sun52a.desy.de).

@@ -1,0 +1,64 @@
+body {
+	font-family: Arial;
+	font-size: 10pt;
+	color: black;
+	background-color: #f0f0f0;
+}
+
+div.logbook-header {
+	font-family: Arial;
+	font-size: 16pt;
+	font-weight: bold;
+	margin-top: 10pt;
+	margin-bottom: 10pt;
+}
+
+div.shift-header {
+	font-family: Arial;
+	font-size: 20pt;
+	font-weight: bold;
+	margin-top: 10pt;
+	padding-top: 10pt;
+	padding-bottom: 10pt;
+	background-color: #ffffd0;
+	text-align: center;
+	/*text-decoration: underline;*/
+	border-width: 2pt;
+	border-color: red;
+	border-style: solid;
+
+}
+
+table.entry-table {
+	width: 100%;
+	margin-top: 0pt;
+	border: 0;	
+}
+
+tr.entry-header {
+	font-family: Times;
+	font-size: 12pt;
+	background-color: #c0f0f0;
+}
+
+tr.entry-text {
+	font-family: courier
+	font-size: 12pt;
+	background-color: #f0f0f0;
+}
+
+td.entry-author {
+	width: 30em;
+}
+
+td.entry-title {
+	width: 100em;
+}
+
+td.entry-icon {
+	width: 20px;
+}
+
+td.entry-date {
+	width: 16em;
+}

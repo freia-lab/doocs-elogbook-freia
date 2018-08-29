@@ -1,0 +1,79 @@
+#!/usr/bin/perl
+#
+use Cwd;
+use Cwd 'chdir';
+use File::Path;
+use POSIX qw(strftime);
+
+require "getopts.pl";
+&Getopts('f:h');
+if ($#ARGV < 0 || $opt_h) {
+  die (" Creates a folder in the electronic logbook data tree.",
+       "\n Further the pagetitle is set to either the name of",
+       "\n the created folder or some free string.",
+       "\nUsage:",
+       "\n mkelogfolder [-h] <foldername>",
+       "\n <foldername> is the name of the folder to be created",
+       "\n -h view this help");
+}
+
+$newfolder=$ARGV[0];
+$pwd = cwd();
+$newdir = "$pwd/$newfolder";
+$folderfile = "$pwd/$newfolder.xml";
+$initfile = "$newdir/init.xml";
+
+$isodate = strftime "%Y-%m-%d", localtime;
+$time = strftime "%H:%M:%S", localtime;
+
+if ( !open( FOLDERFILE, ">$folderfile" ) ) {
+  print STDERR "Can`t create folder index file (exit)\n";
+  exit;
+}
+
+my $ask_for_title;
+
+if ( -f $newdir ) {
+  print "A folder with name $newfolder exists already!\n";
+}
+elsif ( ! -d  $newdir ) {
+  mkpath([$newdir], 0, 0711);
+  print "Created new directory: $newfolder\n";
+  print FOLDERFILE "<category>DIR</category><isodate>$isodate</isodate><time>$time</time><author>Script</author><keywords></keywords><title>$newfolder</title><text></text><severity>NONE</severity><file>$newfolder</file><metainfo>$newfolder.xml</metainfo>";
+  print "Created folder index file.\n";
+  if( ask_for_title($ask_for_title) ) {
+    print " Folder title: ";
+    $pagetitle = <STDIN>;
+    chomp($pagetitle);
+  }
+  else {
+    $pagetitle = $newfolder;
+  }
+  open(INITFILE, ">$initfile") or die "Can't create init file (exit)\n";
+  print INITFILE "<metainfo></metainfo><pagetitle>$pagetitle</pagetitle>";
+  print "Created init file with title: $pagetitle\n";
+}
+elsif ( -d $newdir ) {
+  print "Folder: $newfolder already exists!\n";
+}
+else { print "ERROR: Unknown error?!\n"; }
+
+sub ask_for_title
+  {
+    my $ask_for_title = @_;
+    print " Title for the folder = name of folder? [y/n] ";
+    my $a = "d";
+    while($a ne "y" && $a ne "n" && $a ne "\n") {
+      $a=getc;
+      if ( $a ne "\n") {
+	$muell = getc; # Eat up the CR
+      }
+      return 0 if ($a eq "y" || $a eq "\n");
+      return 1 if ($a eq "n");
+    }
+  }
+
+__END__
+
+
+

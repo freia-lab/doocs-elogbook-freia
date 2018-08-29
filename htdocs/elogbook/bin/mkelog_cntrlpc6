@@ -1,0 +1,361 @@
+#!/bin/bash
+###############################################################################
+# Shell script for creation of electronic logbooks
+#
+# This script is ment to be used in combination with an already existing
+# logbook structure, or in combination with an eLogBook package.
+#
+# Author: Raimund Kammering (raimund.kammering@desy.de)
+#
+PRG="${0##*/}"
+USE="\a USAGE:\
+ \n\t $PRG [options] <logbook name>\
+ \nOptions:
+    -f: Force creation of already existing folders/files
+    -u: Ubuntu 9.04
+    -h: Print this help screen\n"
+
+###############################################################################
+# Parse the options
+while getopts "hfu" opt; do
+  case $opt in
+    h ) echo -en "$USE"; exit 0;;
+    f ) OPT_FORCE=1;;
+    u ) OPT_UBUNTU=1
+	  CATALINA_HOME=/usr/share/tomcat6
+	  CATALINA_BASE=/var/lib/tomcat6
+	  JAVA_HOME=/usr/lib/jvm/default-java;;
+    * ) echo "Unknown option \"$1\" (STOP)"
+          echo -en "$USE"; exit 1;;
+  esac
+done
+shift $(($OPTIND - 1))
+
+# We need to work locally
+cd `dirname "$0"`
+
+###############################################################################
+# Intial checks
+if [ -z $1 ]; then
+  echo "ERROR: Need a name for the logbook to create (exit)!"
+  echo -en "$USE"
+  exit 1
+fi
+
+###############################################################################
+# Set some defaults (these are derived from a Debian (sarge) installation)
+WORKDIR=`pwd`
+JAVA_HOME=`echo $JAVA_HOME`
+CATALINA_HOME=`echo $CATALINA_HOME`
+CATALINA_BASE=`echo $CATALINA_BASE`
+ELOG_SERVER=`uname -n`
+SERVER_DOCROOT=/var/www
+WEBAPP_DIR=$CATALINA_BASE/webapps
+ELOG_DIR=$1elog
+ELOG_NAME=$ELOG_DIR
+ELOG_SOURCE=../../template
+ELOG_TITLE=$ELOG_NAME
+ELOG_PERIODE=W
+ELOG_LANG=en
+ELOG_TITLESTR="%B %Y Week %V"
+ELOG_DATEFMT=yyyy-MM-dd
+ELOG_COLOR=CCFFCC
+ans="" # temp for holding input
+
+###############################################################################
+# Start requesting values from user
+
+####################
+# General server information
+echo "Automated electronic logbook creation started for $1elog logbook"
+echo -en "\nGeneral server related information:\n"
+# Compose full server name
+DOMAIN=`dnsdomainname 2>/dev/null`
+[ `echo $?` != "0" ] &&  echo "Warning: 'dnsdomainname' not available using 'domainname' instead!" && DOMAIN=`domainname 2>/dev/null`
+ELOG_SERVER=$ELOG_SERVER.$DOMAIN
+echo -en "  Logbook server name <return> for $ELOG_SERVER? "
+read ans </dev/tty || exit 1
+[ -n "$ans" ] && ELOG_SERVER=$ans
+
+echo -en "  http Server DocumentRoot (see httpd.conf) <return> for $SERVER_DOCROOT? "
+read ans </dev/tty || exit 1
+[ -n "$ans" ] && SERVER_DOCROOT=$ans
+
+# Check if directory with standard logbook name exists 
+if [ -d $SERVER_DOCROOT/$ELOG_DIR -a "$OPT_FORCE" == "1" ]; then
+  echo "Warning: Directory with name $SERVER_DOCROOT/$ELOG_DIR already exists - will be removed (-f selected)!"
+  `rm -r $SERVER_DOCROOT/$ELOG_DIR`
+elif [ -e $SERVER_DOCROOT/ELOG_DIR -a "$OPT_FORCE" == "1" ]; then
+  echo "Warning: File with name $SERVER_DOCROOT/$ELOG_DIR exists - will be removed (-f selected)!"
+  `rm $SERVER_DOCROOT/ELOG_DIR`
+elif [ -e $SERVER_DOCROOT/ELOG_DIR ]; then
+  echo "ERROR: File with name $SERVER_DOCROOT/$ELOG_DIR exists (exit)!"
+  exit 1
+elif [ -d $SERVER_DOCROOT/$ELOG_DIR ]; then
+  echo "ERROR: Directory with name $SERVER_DOCROOT/$ELOG_DIR already exists (exit)!"
+  exit 1
+fi
+
+CATALINA_HOME_OK="false"
+while [ $CATALINA_HOME_OK != "true" ]; do
+  if [ -z $CATALINA_HOME ]; then
+    echo -en "  Path to CATALINA_HOME? "
+    read ans </dev/tty || exit 1
+    [ -n "$ans" ] && CATALINA_HOME=$ans
+  else
+    while [ "$ans" != "y" -a "$ans" != "n" ]; do
+      echo -en "  Use $CATALINA_HOME as Tomcat's installation directory (CATALINA_HOME) <return> for yes (y/n)? "
+      read ans </dev/tty || exit 1
+      [ -z "$ans" ] && ans=y ## answer defaults to yes
+    done
+    if [ $ans == "n" ]; then
+      echo -en "  Path to CATALINA_HOME? "
+      read ans </dev/tty || exit 1
+      [ -n "$ans" ] && CATALINA_HOME=$ans
+    fi
+  fi   
+  if [ ! -d $CATALINA_HOME ]; then
+      echo -en "   Specified path dosn't exist!\n"
+      unset CATALINA_HOME
+  else
+      CATALINA_HOME_OK="true"
+   fi
+done
+if [ $OPT_UBUNTU ]; then
+    SERVLET_COMMON=$CATALINA_HOME/lib
+else
+    SERVLET_COMMON=$CATALINA_HOME/common/lib
+fi
+
+CATALINA_BASE_OK="false"
+ans=""
+while [ $CATALINA_BASE_OK != "true" ]; do
+  if [ -z $CATALINA_BASE ]; then
+    echo -en "  Path to CATALINA_BASE? "
+    read ans </dev/tty || exit 1
+    [ -n "$ans" ] && CATALINA_BASE=$ans
+  else
+    while [ "$ans" != "y" -a "$ans" != "n" ]; do
+      echo -en "  Use $CATALINA_BASE as servlet engine base directory (CATALINA_BASE) <return> for yes (y/n)? "
+      read ans </dev/tty || exit 1
+      [ -z "$ans" ] && ans=y ## answer defaults to yes
+    done
+    if [ $ans == "n" ]; then
+      echo -en "  Path to CATALINA_BASE? "
+      read ans </dev/tty || exit 1
+      [ -n "$ans" ] && CATALINA_BASE=$ans
+    fi
+  fi   
+  if [ ! -d $CATALINA_BASE ]; then
+      echo -en "   Specified path dosn't exist!\n"
+      unset CATALINA_BASE
+  else
+      CATALINA_BASE_OK="true"
+   fi
+done
+WEBAPP_DIR=$CATALINA_BASE/webapps
+
+echo -en "  Java SDK path <return> for $JAVA_HOME? "
+read ans </dev/tty || exit 1
+[ -n "$ans" ] && JAVA_HOME=$ans
+if [ ! -d $JAVA_HOME ]; then
+  echo -en "   Specified path dosn't exist? - this will cause problems!\n"
+  while [ "$ans" != "y" -a "$ans" != "n" ]; do
+    echo -en "   Select different path <return> for yes (y/n)? "
+    read ans </dev/tty || exit 1
+    [ -z "$ans" ] && ans=y ## answer defaults to yes
+  done
+  if [ $ans == "y" ]; then
+    echo -en "  Java SDK path <return> for $JAVA_HOME? "
+    read ans </dev/tty || exit 1
+    [ -n "$ans" ] && JAVA_HOME=$ans
+    if [ ! -d $JAVA_HOME ]; then
+      echo -en "   Specified path still dosn't exist? - continuing!\n"
+    fi
+  else
+    echo -en "   Let's see if this works... - continuing!\n"
+  fi
+fi
+
+####################
+# Information for the elogbook
+echo -en "\nInformation for the $ELOG_NAME logbook:\n"
+echo -en "  Logbook title <return> for $ELOG_NAME? "
+read ans </dev/tty || exit 1
+[ -n "$ans" ] && ELOG_NAME=$ans
+
+echo -en "  Folder creation periode <return> for $ELOG_PERIODE (Y=year, M=month, W=week, D=day, 3=3 shifts/day)? "
+read ans </dev/tty || exit 1
+[ -n "$ans" ] && ELOG_PERIODE=$ans
+case $ELOG_PERIODE in
+  Y)
+    INIT_DIR=`date +%Y` ;;
+  M)
+    INIT_DIR=`date +%Y/%m` ;;
+  W)
+    INIT_DIR=`date +%Y/%W` ;;
+  D)
+    INIT_DIR=`date +%Y/%m/%d` ;;
+  3)
+    INIT_DIR=`date +%Y/%W/%d.%m_M` ;;
+esac
+
+echo -en "  Logbook language <return> for $ELOG_LANG (en/de)? "
+read ans </dev/tty || exit 1
+if [ -n "$ans" ]; then
+  ELOG_LANG=$ans
+  case $ELOG_LANG in
+    en) ELOG_DATEFMT=MM/dd/yyyy;;
+    de) ELOG_DATEFMT=dd.MM.yyyy;;
+    *) echo "ERROR: Something bad happend (exit)!" && exit 1;;
+  esac
+fi
+
+while [ "$create_printer" != "y" -a "$create_printer" != "n" ]; do
+  echo -en "  Use virtual printer <return> for yes (y/n)? "
+  read create_printer </dev/tty || exit 1
+  [ -z "$create_printer" ] && create_printer=y ## answer defaults to yes
+done
+if [ $create_printer == "y" ]; then
+  ELOG_PRINTER=`echo ${ELOG_NAME%%elog} | tr -s '[:upper:]' '[:lower:]'`log
+  echo -en "   will create virtual printer queue: ${ELOG_PRINTER}\n"
+else
+  echo -en "  No virtual elog printer defined\n"
+fi
+
+echo -en "  Logbook date format (MM/dd/yyyy, yyyy-MM-dd, dd.MM.yyyy) <return> for $ELOG_DATEFMT? "
+read ans </dev/tty || exit 1
+[ -n "$ans" ] && ELOG_DATEFMT=$ans
+
+echo -en "  Logbook frame color <return> for $ELOG_COLOR (6 digit hex RGB code)? "
+read ans </dev/tty || exit 1
+[ -n "$ans" ] && ELOG_COLOR=$ans
+
+echo -en "\n All needed information has been collected!\n"
+while [ "$ans" != "y" -a "$ans" != "n" ]; do
+  echo -en "\n Start installation and deployment <return> for yes (y/n)? "
+  read ans </dev/tty || exit 1
+  [ -z "$ans" ] && ans=y ## answer defaults to yes
+done
+if [ $ans == "y" ]; then
+  echo -en " Starting installation... \n"
+else
+  echo -en " Installation aborted! (exiting)\n"
+  exit 1
+fi
+
+###############################################################################
+# Create and write all data to disk
+# create folder structures ...
+echo -en "\n Creating elog folders... "
+if [ ! $opt_dryrun ]; then
+  `mkdir $SERVER_DOCROOT/$ELOG_DIR`
+  `cp -rp $ELOG_SOURCE/* $SERVER_DOCROOT/$ELOG_DIR`
+  cat $SERVER_DOCROOT/$ELOG_DIR/bin/search-index | sed s,TOMCAT_DIR,$CATALINA_BASE,g > $SERVER_DOCROOT/$ELOG_DIR/bin/search-index_tmp
+  cat $SERVER_DOCROOT/$ELOG_DIR/bin/search-index_tmp | sed s,JAVA_DIR,$JAVA_HOME,g > $SERVER_DOCROOT/$ELOG_DIR/bin/search-index_tmp2
+  cat $SERVER_DOCROOT/$ELOG_DIR/bin/search-index_tmp2 | sed s,HTDOCS_DIR,$SERVER_DOCROOT,g > $SERVER_DOCROOT/$ELOG_DIR/bin/search-index
+  `rm -f $SERVER_DOCROOT/$ELOG_DIR/bin/search-index_tmp*`
+  cat $SERVER_DOCROOT/$ELOG_DIR/bin/reader | sed s,TOMCAT_DIR,$CATALINA_BASE,g > $SERVER_DOCROOT/$ELOG_DIR/bin/reader_tmp
+  cat $SERVER_DOCROOT/$ELOG_DIR/bin/reader_tmp | sed s,JAVA_DIR,$JAVA_HOME,g > $SERVER_DOCROOT/$ELOG_DIR/bin/reader_tmp2
+  cat $SERVER_DOCROOT/$ELOG_DIR/bin/reader_tmp2 | sed s,HTDOCS_DIR,$SERVER_DOCROOT,g > $SERVER_DOCROOT/$ELOG_DIR/bin/reader
+  `rm -f $SERVER_DOCROOT/$ELOG_DIR/bin/reader_tmp*`
+fi
+echo -en "\t\t\t\t\tdone!\n"
+
+# create link within servlet engine webapp space
+echo -en " Creating link in web app. of servlet engine... "
+if [ ! $opt_dryrun ]; then
+  `ln -s $SERVER_DOCROOT/$ELOG_DIR/jsp $WEBAPP_DIR/$ELOG_DIR`
+fi
+echo -en "\t\tdone!\n"
+
+# copy JAR files to servlet engine common directory
+echo -en " Coping JAR files to $SERVLET_COMMON... "
+if [ ! $opt_dryrun ]; then
+  `cd ../../../tomcat/common/lib; tar -cf - ./*.jar | (cd $SERVLET_COMMON; tar -xf -)`
+fi
+echo -en "\t\tdone!\n"
+
+# Copy servlets to tomcat web app directory
+echo -en " Deploying 'elogbook web applications' to: $WEBAPP_DIR... "
+if [ ! $opt_dryrun ]; then
+  `cp -rp ../../../tomcat/webapps/elog $WEBAPP_DIR`
+  # We need the 'docroot' context parameter
+  `cat ../../../tomcat/webapps/elog/WEB-INF/web.xml | sed s,DOCROOT,$SERVER_DOCROOT, > $WEBAPP_DIR/elog/WEB-INF/web.xml`
+  `cp -p ../../../tomcat/webapps/elogbookManager.war $WEBAPP_DIR`
+fi
+echo -en "\tdone!\n"
+
+# copy common files to http DocumentRoot directory
+echo -en " Coping common files to: $SERVER_DOCROOT/elogbook... "
+if [ ! $opt_dryrun ]; then
+  `cp -rp ../../elogbook $SERVER_DOCROOT`
+  # Add collected path info to elogenv.sh
+  `cat ./elogenv.sh | sed s,ELOGBINPATH,$SERVER_DOCROOT/elogbook/bin, > $SERVER_DOCROOT/elogbook/bin/elogenv.sh_tmp`
+  `cat $SERVER_DOCROOT/elogbook/bin/elogenv.sh_tmp | sed s,HTDOCS_DIR,$SERVER_DOCROOT,g > $SERVER_DOCROOT/elogbook/bin/elogenv.sh`
+  `cat $SERVER_DOCROOT/elogbook/bin/elogenv.sh | sed s,JAVA_DIR,$JAVA_HOME, > $SERVER_DOCROOT/elogbook/bin/elogenv.sh_tmp`
+  `cat $SERVER_DOCROOT/elogbook/bin/elogenv.sh_tmp | sed s,TOMCAT_HOME,$CATALINA_HOME, > $SERVER_DOCROOT/elogbook/bin/elogenv.sh_tmp1`
+  `cat $SERVER_DOCROOT/elogbook/bin/elogenv.sh_tmp1 | sed s,TOMCAT_DIR,$CATALINA_HOME, > $SERVER_DOCROOT/elogbook/bin/elogenv.sh`
+  `rm -f $SERVER_DOCROOT/elogbook/bin/elogenv.sh_tmp*`
+  # Add collected path info to GetXMLElement
+  `cat ./GetXMLElement | sed s,SERVLETCOMMON,$SERVLET_COMMON, > $SERVER_DOCROOT/elogbook/bin/GetXMLElement_tmp`
+  `cat $SERVER_DOCROOT/elogbook/bin/GetXMLElement_tmp | sed s,JAVA_DIR,$JAVA_HOME, > $SERVER_DOCROOT/elogbook/bin/GetXMLElement`
+  `rm $SERVER_DOCROOT/elogbook/bin/GetXMLElement_tmp`
+fi
+echo -en "\t\t\tdone!\n"
+
+# create printer queue
+if [ $create_printer == "y" ]; then
+  echo -en " Creating virtual printer queue: ${ELOG_PRINTER}... "
+  `cd $SERVER_DOCROOT/$ELOG_DIR; mknod ${ELOG_PRINTER} p; chmod go+w ${ELOG_PRINTER}`
+#
+# Uncomment thise line below if you want to use original lplisten file
+#  `cd $SERVER_DOCROOT/$ELOG_DIR; mkdir -m +rwx pipes; mknod ${ELOG_PRINTER} p; chmod go+w ${ELOG_PRINTER}`
+  echo -en "\t\t\tdone!\n"
+fi
+# create index file (index.html)
+echo -en " Creating index.html file... "
+INDEX_HTML="<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\"><html><head><title>$ELOG_NAME</title></head><body><script language=\"javascript\">top.location.href=\"http://$ELOG_SERVER/$ELOG_DIR/index.jsp\"</script></body></html>"
+[ ! $opt_dryrun ] && echo $INDEX_HTML > $SERVER_DOCROOT/$ELOG_DIR/index.html
+echo -en "\t\t\t\t\tdone!\n"
+
+# create XML configuration file (conf.xml - check if still up to date)
+echo -en " Creating logbook configuration file... "
+CONF_FILE="<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n<logbook>\n<!-- define version of this configuration file -->\n<version>1.3.1</version>\n\n<!-- define the root for the eLogBook application-->\n<docroot>$SERVER_DOCROOT</docroot>\n\n<!-- eLogBook specific variables -->\n<!-- define the name of the logbook, displayed on each page-->\n<name>$ELOG_NAME e-Logbook</name>\n\n<!-- base dir of logbook, relative to eLogBook root (docroot)-->\n<logroot>/$ELOG_DIR</logroot>\n\n<!-- base dir of logbook data as absolute dir path -->\n<datapath>/data</datapath>\n\n<!-- name of this host for http requests-->\n<host>http://$ELOG_SERVER</host>\n\n<!-- period to create a new shift -->\n<!-- formats are: Y = year, M = month, W = week, D = day, 3 = 3 shifts a day -->\n<new_shift>$ELOG_PERIODE</new_shift>\n\n<!-- language code, possible values: en, de -->\n<lang_code>$ELOG_LANG</lang_code>\n\n<!-- date formatting, posssible formats are: -->\n<!--date_fmt>MM/dd/yyyy</date_fmt-->\n<!--date_fmt>yyyy-MM-dd</date_fmt-->\n<date_fmt>$ELOG_DATEFMT</date_fmt>\n\n<!-- Shall text be 'above' or 'beside' the images -->\n<text_pos>above</text_pos>\n<!--text_pos>beside</text_pos-->\n\n<!-- Name of the printer to insert pictures into the logbook -->\n<printer>$ELOG_PRINTER</printer>\n\n<!-- rel. URL of the user feedback page-->\n<commentdir>/comments</commentdir>\n\n<!-- rel. URL of the news page -->\n<newsdir>/news</newsdir>\n\n<!-- URL of the common image dir. (rel. to docroot) -->\n<imagedir>/elogbook/images</imagedir>\n\n<!-- URL of the docu page (left frame Links) -->\n<docudir>http://tesla.desy.de/doocs/elogbook</docudir>\n\n<!-- Background color for overall style of the HTML pages (standard rgb notation) -->\n<bgcolor>$ELOG_COLOR</bgcolor>\n\n<!-- Variables for servlets, search engine and tree applet -->\n<!-- Servlet for view of eLogBook (rel. to servlet engine docroot!!) -->\n<view_servlet>/elog/servlet/XMLlist</view_servlet>\n\n<!-- Servlet for editing eLogBook entries (rel. to servlet engine docroot!!) -->\n<edit_servlet>/elog/servlet/FileEdit</edit_servlet>\n\n<!-- Servlet for PDF creation (rel. servlet engine docroot!!) -->\n<pdf_servlet>/elog/servlet/XMLlist</pdf_servlet>\n\n<!-- Defintion of the XSL files used for transformations -->\n<!-- XSL for main view (rel. to docroot) -->\n<view_xsl>/elogbook/xsl/elog.xsl</view_xsl>\n\n<!-- XSL for list view (rel. to docroot) -->\n<list_xsl>/elogbook/xsl/elog.xsl</list_xsl>\n\n<!-- XSL used for editing an entry (rel. to docroot) -->\n<edit_xsl>/elogbook/xsl/elog-fileform.xsl</edit_xsl>\n\n<!-- XSL used for search window (rel. to docroot) -->\n<search_xsl>/elogbook/xsl/search-lucene.xsl</search_xsl>\n\n<!-- XSL used for search window (rel. to docroot) -->\n<search2_xsl>/elogbook/xsl/search-lucene2.xsl</search2_xsl>\n\n<!-- XSL for trafo. to PDF (rel. to docroot) -->\n<pdf_xsl>/elogbook/xsl/elog2pdf.xsl</pdf_xsl>\n\n<!--Location of the index for search engine-->\n<srch_index>/work/index</srch_index>\n\n<!-- Servlet serving the tree data --><tree_servlet>/elogbookManager/Manager</tree_servlet>\n\n<!-- Define elogbook specific keywords. The uppermost is the default-->\n<keyword_list>\n  <keyword>not set</keyword>\n</keyword_list>\n\n<!-- Define elogbook specific locations. Set enabled to false to switch of locations-->\n<location_list enabled=\"not_true\">\n  <location>not set</location>\n</location_list>\n\n<!-- To enable/disable the spellchecker tool -->\n<spellchecker enabled=\"false\"/>\n\n<!-- Activate mail to expert -->\n<mail2expert enabled=\"true\">\n<list name=\"/elogbook/expert-lists/expert.xml\"/>\n</mail2expert>\n\n<!-- Activate history view for entries -->\n<view_history enabled=\"true\"/>\n\n<!--job_list>\n<job>\n<time>30 1 1 1 1 ?</time>\n<target>/PATH_TO_SCRIPT/cronjob_top.sh</target>\n</job>\n</job_list-->\n\n</logbook>\n"
+[ ! $opt_dryrun ] && echo -en $CONF_FILE > $SERVER_DOCROOT/$ELOG_DIR/jsp/conf.xml
+echo -en "\t\t\tdone!\n" #creation of conf.xml
+
+# create initial folders, applet index and work.xml file
+init_logbook=y
+if [ $init_logbook == "y" ]; then
+  echo -en " Creating initial folders and indexes... "
+  WORK_XML="<?xml version='1.0' encoding='ISO-8859-1' ?><work><act_dir>$INIT_DIR</act_dir></work>"
+  [ ! $opt_dryrun ] && echo $WORK_XML > $SERVER_DOCROOT/$ELOG_DIR/jsp/work.xml
+  `. $SERVER_DOCROOT/elogbook/bin/elogenv.sh && $SERVER_DOCROOT/$ELOG_DIR/bin/cronjob_top.sh 2>&1 > $SERVER_DOCROOT/$ELOG_DIR/log/cronjob_top.log`
+  echo -en "\t\t\tdone!\n"
+fi
+
+
+# start search server
+echo -en " Creating inital index for search server... "
+`cat $CATALINA_BASE/webapps/elog/search.jsp | sed s,HOST,$ELOG_SERVER, > $CATALINA_BASE/webapps/elog/search.jsp.tmp`
+`mv $CATALINA_BASE/webapps/elog/search.jsp.tmp $CATALINA_BASE/webapps/elog/search.jsp`
+`cat $CATALINA_BASE/webapps/elog/search_adv.jsp | sed s,HOST,$ELOG_SERVER, > $CATALINA_BASE/webapps/elog/search_adv.jsp.tmp`
+`mv $CATALINA_BASE/webapps/elog/search_adv.jsp.tmp $CATALINA_BASE/webapps/elog/search_adv.jsp`
+
+`mkdir $SERVER_DOCROOT/$ELOG_DIR/work/index`
+`cd $SERVER_DOCROOT/$ELOG_DIR/bin; . $SERVER_DOCROOT/elogbook/bin/elogenv.sh && ./search-index start 3>&1 > $SERVER_DOCROOT/$ELOG_DIR/log/search.log`
+`cd $WORKDIR`
+echo -en "\t\t\tdone!\n"
+
+####################
+# This is the end
+echo -en "\nDone with logbook creation!\n\n"
+echo -en "Please restart tomcat and you should be able to see the electronic logbook at:\n\n"
+echo -en "\thttp://$ELOG_SERVER/$ELOG_DIR\n\n"
+echo -en "(You might need to add additional mappings from apache to tomcat - see README)\n"
+echo -en "Further you might need to change the ownership of $SERVER_DOCROOT/$ELOG_DIR to allow\n"
+echo -en "saving of entries (since folders have been created by root)!\n"
+echo -en "To setup the initial shift folders and get all services running call:\n"
+echo -en "\thttp://$ELOG_SERVER:8080/elogbookManager:\n\n"
+echo -en "Enjoy the electronic logbook - For comments etc. contact doocsadm@sun52a.desy.de\n\n"

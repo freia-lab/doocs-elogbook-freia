@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+  <subject name="FREIA All">
+    <person>
+      <l_name>staff</l_name>
+      <f_name>All</f_name>
+      <expert></expert>
+      <mail>allfreia@localhost</mail>
+    </person>
+    <person>
+      <l_name>Dancila</l_name>
+      <f_name>Dragos</f_name>
+      <expert>SSA, Microwaves</expert>
+      <mail>dragos.dancila@angstrom.uu.se</mail>
+    </person>
+    <person>
+      <l_name>Ekelöf</l_name>
+      <f_name>Tord</f_name>
+      <expert>Physics</expert>
+      <mail>tord.ekelof@physics.uu.se</mail>
+    </person>
+    <person>
+      <l_name>Gajewski</l_name>
+      <f_name>Konrad</f_name>
+      <expert>Controls</expert>
+      <mail>Konrad.Gajewski@tsl.uu.se</mail>
+    </person>
+    <person>
+      <l_name>Goryashko</l_name>
+      <f_name>Vitaliy</f_name>
+      <expert>Physics, RF</expert>
+      <mail>vitaliy.goryashko@physics.uu.se</mail>
+    </person>
+    <person>
+      <l_name>Hermansson</l_name>
+      <f_name>Lars</f_name>
+      <expert>Proj. management, facilities</expert>
+      <mail>lars.hermansson@physics.uu.se</mail>
+    </person>
+    <person>
+      <l_name>Jacewicz</l_name>
+      <f_name>Marek</f_name>
+      <expert>Physics</expert>
+      <mail>marek.jacewicz@physics.uu.se</mail>
+    </person>
+    <person>
+      <l_name>Johansson</l_name>
+      <f_name>Niklas</f_name>
+      <expert>Mechanics, CAD</expert>
+      <mail>a_niklas.johansson@physics.uu.se</mail>
+    </person>
+    <person>
+      <l_name>Lofnes</l_name>
+      <f_name>Tor</f_name>
+      <expert>RF</expert>
+      <mail>tor.lofnes@tsl.uu.se</mail>
+    </person>
+    <person>
+      <l_name>Noor</l_name>
+      <f_name>Masih</f_name>
+      <expert>Mechanics, CAD</expert>
+      <mail>masih.noor@physics.uu.se</mail>
+    </person>
+    <person>
+      <l_name>Ruber</l_name>
+      <f_name>Roger</f_name>
+      <expert>Cryo</expert>
+      <mail>roger.ruber@physics.uu.se</mail>
+    </person>
+    <person>
+      <l_name>Rydberg</l_name>
+      <f_name>Anders</f_name>
+      <expert>SSA, Microwaves</expert>
+      <mail>anders.rydberg@angstrom.uu.se</mail>
+    </person>
+    <person>
+      <l_name>Santiago Kern</l_name>
+      <f_name>Rocio</f_name>
+      <expert>Electronics, vacuum</expert>
+      <mail>rocio.santiago_kern@physics.uu.se</mail>
+    </person>
+    <person>
+      <l_name>Wedberg</l_name>
+      <f_name>Rolf</f_name>
+      <expert>RF, Power supplies</expert>
+      <mail>Rolf.Wedberg@tsl.uu.se</mail>
+    </person>
+    <person>
+      <l_name>Yogi</l_name>
+      <f_name>Rutambhara</f_name>
+      <expert>RF - power distribution</expert>
+      <mail>rutambhara.yogi@physics.uu.se</mail>
+    </person>
+  </subject>
+  <subject name="Cryogenics">
+    <person>
+      <l_name>Ruber</l_name>
+      <f_name>Roger</f_name>
+      <expert>Cryo</expert>
+      <mail>roger.ruber@physics.uu.se</mail>
+    </person>
+    <person>
+      <l_name>Santiago Kern</l_name>
+      <f_name>Rocio</f_name>
+      <expert>Electronics, vacuum</expert>
+      <mail>rocio.santiago_kern@physics.uu.se</mail>
+    </person>
+  </subject>
+  <subject name="RF Power">
+    <person>
+      <l_name>Santiago Kern</l_name>
+      <f_name>Rocio</f_name>
+      <expert>Electronics, vacuum</expert>
+      <mail>rocio.santiago_kern@physics.uu.se</mail>
+    </person>
+     <person>
+      <l_name>Wedberg</l_name>
+      <f_name>Rolf</f_name>
+      <expert>RF, Power supplies</expert>
+      <mail>Rolf.Wedberg@tsl.uu.se</mail>
+    </person>
+   <person>
+      <l_name>Yogi</l_name>
+      <f_name>Rutambhara</f_name>
+      <expert>RF - power distribution</expert>
+      <mail>rutambhara.yogi@physics.uu.se</mail>
+    </person>
+  </subject>
+  <subject name="LLRF">
+    <person>
+      <l_name>Goryashko</l_name>
+      <f_name>Vitaliy</f_name>
+      <expert>Physics, RF</expert>
+      <mail>vitaliy.goryashko@physics.uu.se</mail>
+    </person>
+    <person>
+      <l_name>Lofnes</l_name>
+      <f_name>Tor</f_name>
+      <expert>RF</expert>
+      <mail>tor.lofnes@tsl.uu.se</mail>
+    </person>
+  </subject>
+  <subject name="Solid State ampl.">
+    <person>
+      <l_name>Dancila</l_name>
+      <f_name>Dragos</f_name>
+      <expert>SSA, Microwaves</expert>
+      <mail>dragos.dancila@angstrom.uu.se</mail>
+    </person>
+    <person>
+      <l_name>Rydberg</l_name>
+      <f_name>Anders</f_name>
+      <expert>SSA, Microwaves</expert>
+      <mail>anders.rydberg@angstrom.uu.se</mail>
+    </person>
+  </subject>
+</list>

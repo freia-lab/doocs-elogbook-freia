@@ -1,0 +1,294 @@
+Short description of the eLogBook software:
+-------------------------------------------
+
+GENERAL:
+--------
+This README is not meant as a full installation instruction. The purpose of
+file is to give an overview of the various parts of the eLogBook package. Some
+of the subdirectories contain further README files describing the content of
+these directories and some pointers on how to use the files within these
+directories.
+
+LICENSE:
+--------
+For all license related issues see the file: LICENSE file in this directory.
+
+MANUAL INSTALLATION:
+-------------
+1. You need to have a running JAVA servlet container. The eLogBook
+   has been developed using Apache Tomcat 4.x, 5.x but it might also be
+   possible to run it on other servlet engines (please report this back
+   to us to include this information for future releases).
+
+2. To have the optimal performance you should also have a web server
+   for serving the static content of the eLogBook. We developed the
+   eLogBook on Apache's httpd server (1.3.x and 2.0.x).
+
+3. Unpacking the eLogBook tar package will create the following
+   directory structure:
+
+   README	this file
+   LICENSE	Overall eLogBook license
+
+   htdocs/template
+			lplisten	script for piping data into logbook
+	
+   htdocs/template/jsp
+			conf.xml	configuration of this logbook
+			work.xml	name of the current and previous
+					directory names
+			index.jsp	main page of the logbook
+			left.jsp	left side of the main logbook view
+			top.jsp		top of the main logbook view
+			list.jsp	main area of the logbook
+			logo.jsp	logo uppermost left corner
+			search.jsp	search page of the logbook
+			status.xml	dynamic data for status in top.jsp
+
+   htdocs/template/work			dir with temp file of lplisten and 
+					data for applet and search engine
+   htdocs/template/log			dir with log files of the logbook
+
+   htdocs/template/data			data dir for the logbook (all XML
+					data within this directory is shown
+					in the logbook)
+
+   htdocs/template/images		local images of this logbook
+
+   htdocs/template/bad_files		incorrect XML files are stored here
+
+   htdocs/elogbook/xsl			all XSL files used for all logbooks
+
+   htdocs/elogbook/bin			scripts for various logbook tasks
+
+   htdocs/elogbook/help			help file(s) in English and German 
+
+   htdocs/elogbook/applets		common applets (tree, spell checker)
+
+   htdocs/elogbook/images		all commonly used images
+
+   htdocs/elogbook/search		search engine files
+		
+   tomcat/common/lib			additional JAR files (JSTL, FOP, ...)
+
+   tomcat/webapps/elog/WEB-INF
+			web.xml		web deployment descriptor for the
+					elog web context
+			c.tld		JAVA taglib (core)
+			x.tld		JAVA taglib (xml)
+   
+   tomcat/webapps/elog/WEB-INF/classes
+			XMLlist		Servlet for viewing an logbook entry
+			FileEdit	Servlet for editing an logbook entry
+			Search		Interface to the search engine
+			XMLSingle	For viewing a single logbook entry
+			Simple		Just for testing
+
+4. Copy the directories from "htdocs" to your httpd docubase directory and the
+   directories from "tomcat" to the corresponding directories of your servlet
+   engine.
+
+5. The "htdocs/template" directory is the template for creation of your own
+   customized logbook. So you should make a full copy of the template logbook
+   to the name you would like to be able to reach it later on your logbook
+   server. E.g.:
+	cp -rp ./template MYelog
+
+6. Add a entry to announce the "elog" web context to the servlet engine. For
+   Apache's Tomcat it should look like:
+
+   <Context path="/elog" docBase="tomcat/webapps/elog"
+                 displayName="Electronic logbook context"
+                 debug="0" reloadable="false" crossContext="false"/>
+
+7. Add an entry for announcing the logbook context to the servlet engine. E.g.:
+
+   <Context path="/MYelog" docBase="tomcat/webapps/MYelog"
+                 displayName="MYelog logbook context"
+                 debug="0" reloadable="false" crossContext="false"/>
+
+8. To allow the servlet engine to reach the logbook directory as a full web
+   context, you have to create a symbolic link from the web application
+   root to the "jsp" directory of the new logbook e.g. (assuming you got
+   the standard directory structure provided by the Apache httpd server and the
+   tomcat servlet engine):
+
+	cd tomcat/webapps		     # Change to web application rootdir.
+	ln -s ../../htdocs/MYelog/jsp MYelog # Link JSP context to servlet engine
+
+   Edit the value of the "docroot" parameter (on the top) of the file:
+	
+	tomcat/webapps/elog/WEB-INF/web.xml
+   
+   to point the DocumentRoot of the Apache httpd server (see e.g. httpd.conf).
+   You have to include the DocumentRoot here, so e.g. assuming DocumentRoot
+   is set to: /web/myserver/htdocs it should be set to:
+
+	<docroot>/web/myserver/htdocs</docroot>
+
+   NOTE: The proper working of the steps 6-8 is depending on the interplay
+   of httpd server and the servlet engine. Assuming you are running Apache's
+   httpd and Apache's Tomcat you should run the "mod_jk2" connector to connect
+   them. In this case one should map all "*.jsp" and all "/servlet/*" requests
+   to Tomcat. If unsure about the connector settings, the following mappings
+   might be used:
+
+   File workers2.properties:
+	# Example socket channel, explicitly set port and host.
+	[channel.socket:myserver.mydomain.de:8009]
+	port=8009
+	host=myserver.mydomain.de
+	# now define a worker
+	[ajp13:myserver.mydomain.de:8009]
+
+	# URI mapping
+	[uri:/servlet/*]
+	worker=ajp13:myserver.mydomain.de:8009
+	[uri:/*.jsp]
+	worker=ajp13:myserver.mydomain.de:8009
+	[uri:/elog/*]
+	worker=ajp13:myserver.mydomain.de:8009
+
+   File httpd.conf:
+	-----
+	# Send all Servlet and JSP requests to the worker
+	# (syntax: JkMount <URI> <worker>)
+	JkMount /servlet/* ajp13:localhost:8009
+	JkMount /*.jsp ajp13:localhost:8009
+	JkMount /elog/* ajp13:localhost:8009
+	-----
+
+9. Now one has to restart the httpd server and the servlet engine to get all
+   changes recognized and do a first test by calling:
+
+	http://<your_server>/elog/servlet/Simple
+  
+   what should bring up a page showing some environment values.
+
+   If this fails one should check if the "elog" context can be called directly
+   by calling:
+	
+	http://<your_server:8080>/elog/servlet/Simple
+
+   (assuming the servlet engine is running on port "8080"). If this brings up
+   the correct page, it is most likely that there is some problem with the
+   connection between httpd server and servlet engine.
+
+10. Assuming the above mentioned steps have been successfully done, one now has
+    to configure the new logbook by editing the values in the file:
+
+	htdocs/MYelog/jsp/conf.xml
+
+    and adjust the paths in the:
+
+	htdocs/elogbook/bin/elogenv.sh,csh
+
+    to reflect your system settings.
+
+11. Now you should be able to reach the new eLogBook page you created at:
+
+	http://<your_server>/MYelog
+
+    NOTE: If the "applet" (the area below the logo image) is only showing a
+    grey area, you might have to create a new index (this is used by the
+    applet to show the structure of your eLogBook data). To do this you have
+    to:
+	
+	cd MYelog/bin
+	./reader
+
+    This should create/update the file:
+
+	MYelog/work/template.txt	# don't change this name!
+
+    After this you should do a reload in the web browser (be aware that most
+    browsers will cache this internal!) and should see a tree like structure
+    in the formerly grey area.
+
+12. AUTOMATION BY cron JOBS
+    -----------------------
+    If all the steps above where successfully done, you can now create a "cron"
+    job to automate the creation of new shifts and to index them. There is a
+    script for doing this at:
+
+	MYelog/bin/cronjob.sh
+
+    This script is reading the settings from the MYelog/jsp/conf.xml file
+    and creating new directories according to the value set in the config
+    file.
+
+13. SEARCH ENGINE
+    -------------
+    The logbook data can be searched by use of an included search engine. To
+    start it on has to execute the script:
+
+	MYelog/bin/srch_start
+
+    this creates an search index: MYelog/work/search.xml which can be updated
+    by use of:
+
+	MYelog/bin/srch_update
+
+    (To stop the search engine use: srch_stop).
+
+14. VIRTUAL PRINTER QUEUE
+    ---------------------
+    To allow input into the logbook via use of the virtual printer port, one
+    has to do the following steps on a SUN Solaris system:
+
+    a) Create a pipe by typing (assuming the printer port is named "myelog"):
+	cd MYelog
+	mknod myelog p; chmod go+w myelog
+
+    b) In the /etc/lp directory create a new printer for the logbook using
+       admintool, or simply from the command line with lpadmin command. The
+       new printer has to have a configuration like the following:
+	Banner: off
+	Content types: simple
+	Device: <path to MYelog>/myelog
+	Interface: /usr/lib/lp/model/standard
+	Printer type: unknown
+	Modules:
+	Options:
+
+       This can be done with the following commands, for example:
+	lpset -a bsdaddr=myserver,myelog -a description="Logbook queue" myelog
+
+       This creates an entry for the new printer "myelog" in the
+       /etc/printers.conf file.
+
+       The next command below creates a new printer directory "myelog" under
+       /etc/lp/printers with the configuration file content given above:
+	lpadmin -p myelog -D "Logbook queue" -v <path to MYelog>/myelog \
+	-m standard -I simple -T unknown -o nobanner=never
+
+    c) Set the filters table in /etc/lp with the lpfilter command.
+	cd /etc/lp/fd
+	for filter in *.fd;do name=`basename $filter .fd`;
+	   lpfilter -f $name -F $filter;
+	done
+       This will create a filter.table file for the printers. If you have
+       already this table set, use "lpfilter -f $name -F $filter" command
+       to add single necessary filters for your printer.
+
+    d) To enable the printing use:
+	accept printer_name
+	enable printer_name 
+
+    e) Now one has to start the script "lplisten" which is receiving the
+       the jobs from the printer queue. To do this type:
+	cd <path to MYelog>
+	./lplisten >> log/lplisten.log &
+
+    The virtual printer mechanism is now running and one can test it by:
+	echo "Test of virtual logbook printer" | lpr -Pmyelog
+
+    which should create an new entry in the current shift showing the
+    text of the echo command.
+
+Most of the above mentioned steps will be hard if one is completely new to the
+web application business. So if you are running into trouble you can consult
+the widely available documentation on the web (e.g.: www.apache.org) or contact
+us (doocsweb@sun52a.desy.de).
+
+Enjoy the eLogBook - the DOOCS logbook team!  

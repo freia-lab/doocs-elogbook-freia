@@ -1,0 +1,71 @@
+/************************************************************ BODY *******************/
+.main_body { 
+
+		background-color:#d0d0d0;
+		padding-top:0px;
+		padding-left:0px;
+		padding-bottom:5px;
+		margin-left:5px;
+		margin-top:5px;
+}
+
+/************************************************************ HEADER *****************/
+.header { 
+		font-weight:bold;
+		margin-bottom:10px;
+		margin-top:10px;
+		margin-left:10px;
+		font-size:18px;
+}
+
+
+/************************************************************ TABLE FOR DATE ... *****/
+.t_top { 
+		margin-top:11px;
+		margin-bottom:5px;
+		border-bottom-width:1px;
+		border-bottom-color:#222222;		
+}
+
+
+/************************************************************ TABLE FOR AUTHOR ... ***/
+.t_bottom { 
+		margin-top:0px;
+		margin-bottom:10px;
+}
+
+/************************************************************ FAT TEXT LEFT SPACE ****/
+.fat_l {
+		padding-left:10px;
+		font-weight:bold;
+}
+
+/************************************************************ FAT TEXT RIGHT SPACE ***/
+.fat_r {
+		padding-right:10px;
+		font-weight:bold;
+}
+
+/************************************************************ FAT TEXT ***************/
+.fat {
+		font-weight:bold;
+}
+
+
+/************************************************************ SPACER *****************/
+.spacer { 
+		padding-left:0px; 
+		padding-right:0px;
+		width:100%;
+}
+
+.button { 
+          background-color:#aaa;
+          color:#fff;
+          width:200px;
+          border:6px solid #ddd;
+          }
+
+.savebutton { 
+              font-weight:bold;
+          }

@@ -1,0 +1,87 @@
+#!/bin/bash
+# Creates a jpeg file "file_name.jpeg" from an image file "file_name.*".
+# The jpeg file is used as a thumbnail in the logbook
+#
+# Last modified 2004-06-18 (R. Kammering)
+#
+FILE=$1
+FILEO=${FILE%.*}
+JPEGFILE=$FILEO.jpeg
+FACTOR="-geometry 300x400>"
+CROP="-trim"
+
+if [ -f "$JPEGFILE" ] ; then
+    /bin/rm $JPEGFILE
+    #mv $JPEGFILE "$FILEO".jpg
+    #FILE=`echo "$FILEO"`.jpg 
+fi
+
+# Test if file is readable
+if [ -f "$FILE" ] ; then
+    # Check if it is an IslandDraw postscript file
+    RES=`grep IslandDraw $FILE`
+    RTN=`echo $?`
+    if [ "$RTN" != 1 ] ; then
+	# Check if it has "IslandDraw bug"
+        RES2=`grep "90 rotate" $FILE`
+	RTN=`echo $?`
+	if [ "$RTN" != 1 ] ; then
+	    echo "IslandDraw bug: the last two values in %%BoundingBox: should be: x-size y-size"
+	    echo "please check that y-size is greater than x-size:"
+	    echo `grep "%%BoundingBox:" $FILE`
+	    echo if wrong: change in $FILE and re-run $0 $FILE
+        fi
+    fi
+    
+    # PDF needs special handling
+    if [ -f "$FILEO.pdf" ] || [ -f "$FILEO.PDF" ] ; then
+	# Page size is of form: <x-size> x <y-size>
+	IMGX=`pdfinfo $FILE | grep "Page size:" | awk '{print $3}'`
+	IMGY=`pdfinfo $FILE | grep "Page size:" | awk '{print $5}'`
+	# Needed since x,y-size might not be integer
+	IMGX=${IMGX%%.*}
+	IMGY=${IMGY%%.*}
+	IMGSIZE=${IMGX}x${IMGY}
+	# Producer is of form: <Company> <Productname> <Version>
+	PRODUCER=`pdfinfo $FILE | grep "Producer:" | awk '{print $3}'`
+	# Do special handling for Ghostscript and Distiller producers
+	if [ x$PRODUCER == "xGhostscript" ] || [ x$PRODUCER == "xDistiller" ]; then
+	  # Check if there is a "Rotate" directive
+	  `strings $FILE | grep "Rotate" 2>&1 > /dev/null`
+	  # If we grepped an rotate (there might be one per page) -> rotate 90 deg
+	  if [ `echo $?` == 0 ]; then
+	    IMGSIZE=${IMGY}x${IMGX}
+	  fi
+	fi
+	# Now orientation should be fine: do the transformation
+	cat $FILE | acroread -toPostScript -start 1 -end 1 -size $IMGSIZE -shrink | convert - $CROP $FACTOR $FILEO.jpeg	  
+
+    # else it must be one of the following formats
+    elif [ -f "$FILEO.ps" ]   || [ -f "$FILEO.PS" ]   || 
+         [ -f "$FILEO.eps" ]  || [ -f "$FILEO.EPS" ]  || 
+         [ -f "$FILEO.epsi" ] || [ -f "$FILEO.EPSI" ] || 
+         [ -f "$FILEO.jpg" ]  || [ -f "$FILEO.JPG" ]  ||
+         [ -f "$FILEO.jpeg" ] || [ -f "$FILEO.JPEG" ] || 
+         [ -f "$FILEO.png" ]  || [ -f "$FILEO.PNG" ]  || 
+         [ -f "$FILEO.gif" ]  || [ -f "$FILEO.GIF" ]  || 
+         [ -f "$FILEO.tiff" ] || [ -f "$FILEO.TIFF" ] || 
+         [ -f "$FILEO.tif" ]  || [ -f "$FILEO.TIF" ]  ||
+         [ -f "$FILEO.rs" ]   || [ -f "$FILEO.RS" ]   || 
+         [ -f "$FILEO.bmp" ]  || [ -f "$FILEO.BMP" ] ; then
+        CONVRTN=`convert $CROP $FACTOR $FILE $JPEGFILE`
+	RTN=`echo $?`
+	if [ "$RTN" != 1 ] ; then
+	  echo "ERROR convert returned $CONVRTN"
+	fi
+    else
+	echo "ERROR in $0: Wrong mime-type. Supported mime-types are: pdf, ps, eps, jpg, png, gif, tiff, rs, bmp"
+    fi
+else
+    echo "ERROR in $0: $FILE is not readable"
+fi
+
+# keep one file = one page only:
+if [ -f "$JPEGFILE.0" ] ; then
+    mv $JPEGFILE.0 $JPEGFILE
+    /bin/rm $JPEGFILE.*
+fi

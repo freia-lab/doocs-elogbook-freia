@@ -8,6 +8,12 @@
       <mail>allfreia@localhost</mail>
     </person>
     <person>
+      <l_name>Bhattacharyya</l_name>
+      <f_name>Anirban</f_name>
+      <expert>Physics, RF</expert>
+      <mail>anirban.bhattacharyya@physics.uu.se</mail>
+    </person>
+    <person>
       <l_name>Dancila</l_name>
       <f_name>Dragos</f_name>
       <expert>SSA, Microwaves</expert>
@@ -19,11 +25,17 @@
       <expert>Physics</expert>
       <mail>tord.ekelof@physics.uu.se</mail>
     </person>
+     <person>
+      <l_name>Fransson</l_name>
+      <f_name>Kjell</f_name>
+      <expert>Controls</expert>
+      <mail>Kjell.Fransson@physics.uu.se</mail>
+    </person>
     <person>
       <l_name>Gajewski</l_name>
       <f_name>Konrad</f_name>
       <expert>Controls</expert>
-      <mail>Konrad.Gajewski@tsl.uu.se</mail>
+      <mail>Konrad.Gajewski@physics.uu.se</mail>
     </person>
     <person>
       <l_name>Goryashko</l_name>
@@ -50,16 +62,22 @@
       <mail>a_niklas.johansson@physics.uu.se</mail>
     </person>
     <person>
+      <l_name>Li</l_name>
+      <f_name>Han</f_name>
+      <expert>Physics, RF</expert>
+      <mail>han.li@physics.uu.se</mail>
+    </person>
+    <person>
       <l_name>Lofnes</l_name>
       <f_name>Tor</f_name>
       <expert>RF</expert>
-      <mail>tor.lofnes@tsl.uu.se</mail>
+      <mail>tor.lofnes@physics.uu.se</mail>
     </person>
     <person>
-      <l_name>Noor</l_name>
-      <f_name>Masih</f_name>
-      <expert>Mechanics, CAD</expert>
-      <mail>masih.noor@physics.uu.se</mail>
+      <l_name>Olvegård</l_name>
+      <f_name>Maja</f_name>
+      <expert>Physics</expert>
+      <mail>maja.olvegard@physics.uu.se</mail>
     </person>
     <person>
       <l_name>Ruber</l_name>
@@ -83,17 +101,23 @@
       <l_name>Wedberg</l_name>
       <f_name>Rolf</f_name>
       <expert>RF, Power supplies</expert>
-      <mail>Rolf.Wedberg@tsl.uu.se</mail>
-    </person>
-    <person>
-      <l_name>Yogi</l_name>
-      <f_name>Rutambhara</f_name>
-      <expert>RF - power distribution</expert>
-      <mail>rutambhara.yogi@physics.uu.se</mail>
+      <mail>Rolf.Wedberg@physics.uu.se</mail>
     </person>
   </subject>
   <subject name="Cryogenics">
     <person>
+      <l_name>Hermansson</l_name>
+      <f_name>Lars</f_name>
+      <expert>Proj. management, facilities</expert>
+      <mail>lars.hermansson@physics.uu.se</mail>
+    </person>
+     <person>
+      <l_name>Jönsson</l_name>
+      <f_name>Åke</f_name>
+      <expert>Cryo</expert>
+      <mail>ake.jonsson@angstrom.uu.se</mail>
+    </person>
+   <person>
       <l_name>Ruber</l_name>
       <f_name>Roger</f_name>
       <expert>Cryo</expert>
@@ -117,16 +141,16 @@
       <l_name>Wedberg</l_name>
       <f_name>Rolf</f_name>
       <expert>RF, Power supplies</expert>
-      <mail>Rolf.Wedberg@tsl.uu.se</mail>
-    </person>
-   <person>
-      <l_name>Yogi</l_name>
-      <f_name>Rutambhara</f_name>
-      <expert>RF - power distribution</expert>
-      <mail>rutambhara.yogi@physics.uu.se</mail>
+      <mail>Rolf.Wedberg@physics.uu.se</mail>
     </person>
   </subject>
   <subject name="LLRF">
+    <person>
+      <l_name>Bhattacharyya</l_name>
+      <f_name>Anirban</f_name>
+      <expert>Physics, RF</expert>
+      <mail>anirban.bhattacharyya@physics.uu.se</mail>
+    </person>
     <person>
       <l_name>Goryashko</l_name>
       <f_name>Vitaliy</f_name>
@@ -137,7 +161,7 @@
       <l_name>Lofnes</l_name>
       <f_name>Tor</f_name>
       <expert>RF</expert>
-      <mail>tor.lofnes@tsl.uu.se</mail>
+      <mail>tor.lofnes@physics.uu.se</mail>
     </person>
   </subject>
   <subject name="Solid State ampl.">

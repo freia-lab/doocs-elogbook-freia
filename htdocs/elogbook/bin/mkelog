@@ -31,8 +31,8 @@ while getopts "hfu" opt; do
     h ) echo -en "$USE"; exit 0;;
     f ) OPT_FORCE=1;;
     u ) OPT_UBUNTU=1
-	  CATALINA_HOME=/usr/share/tomcat6
-	  CATALINA_BASE=/var/lib/tomcat6
+	  CATALINA_HOME=/usr/share/tomcat7
+	  CATALINA_BASE=/var/lib/tomcat7
 	  JAVA_HOME=/usr/lib/jvm/default-java;;
     * ) echo "Unknown option \"$1\" (STOP)"
           echo -en "$USE"; exit 1;;
@@ -62,10 +62,10 @@ uname -a | grep -q Ubuntu
 if [ $? == 0 ]; then 
     OPT_UBUNTU=1
     . /etc/lsb-release
-    CATALINA_HOME=/usr/share/tomcat6
-    CATALINA_BASE=/var/lib/tomcat6
+    CATALINA_HOME=/usr/share/tomcat7
+    CATALINA_BASE=/var/lib/tomcat7
     JAVA_HOME=/usr/lib/jvm/default-java
-    TOMCAT_USER=tomcat6
+    TOMCAT_USER=tomcat7
      echo "Your system is detected as Linux "$DISTRIB_DESCRIPTION" - codename: $DISTRIB_CODENAME."
 fi
 SERVER_DOCROOT=/var/www
@@ -396,7 +396,7 @@ if [ ! $OPT_UBUNTU ]; then
     echo -en "Further you might need to change the ownership of $SERVER_DOCROOT/$ELOG_DIR to allow\n"
     echo -en "saving of entries (since folders have been created by root)!\n"
 else
-    echo -en "You might need to add additional permissions to elogbook application (see /etc/tomcat6/policy.d)\n"
+    echo -en "You might need to add additional permissions to elogbook application (see /etc/tomcat7/policy.d)\n"
     if [ $create_printer == "y" ]; then
 	echo -en "You need to create a printer queue ${ELOG_PRINTER} and start the listener program\n"  
 	echo -en "by typing:\n\tsudo /etc/init.d/${ELOG_PRINTER} start\n"

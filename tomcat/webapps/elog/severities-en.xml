@@ -32,6 +32,12 @@
 		<icon></icon>
 	</severity>
 	<severity>
+		<name>DOCU</name>
+		<value>DOCU</value>
+		<description></description>
+		<icon></icon>
+	</severity>
+	<severity>
 		<name>IDEA</name>
 		<value>IDEA</value>
 		<description></description>

@@ -1170,8 +1170,12 @@ public class FileEdit extends HttpServlet {
                         else {
                             String tmp2 = file_param.substring(file_param.indexOf("data")+4, file_param.length()-4);
 			    System.out.println ("DEBUG: tmp2: " + tmp2 + "  file_param: " + file_param); ////////////////// debug
-                            String date = tmp2.substring(0, tmp2.indexOf("/",11));
-                            String timestamp = tmp2.substring(tmp2.indexOf("/",11)+1, tmp2.length());
+			    int ind = tmp2.indexOf("/",11);
+			    if (ind < 0) { // probably the unit is week or month and we have passed the beginning of the date
+				ind = tmp2.indexOf("/",6);
+			    }
+                            String date = tmp2.substring(0, ind);
+                            String timestamp = tmp2.substring(ind+1, tmp2.length());
                             //http://ttfinfo.desy.de/TTFelog/show.jsp?dir=/2005/43/26.10_M&pos=2005-10-26T08:04:26
                             String backedit = tmp + logbookname +"/show.jsp?dir="+date+"&pos="+timestamp;
                             if (imagetemp.equals("")) postMail("", to, mcount, etitletext, etemptext, "", backedit);

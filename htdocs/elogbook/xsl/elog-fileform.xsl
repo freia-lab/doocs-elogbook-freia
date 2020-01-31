@@ -48,7 +48,7 @@
         <script language="JavaScript" src="/elogbook/javascript/mail2expert.js" type="text/javascript"></script>
       </xsl:if>
       <xsl:variable name="mailfunc">
-        <xsl:if test="$mail2expert!='false'">importXML('<xsl:value-of select="$mail2expert"/>',startFunction)</xsl:if>
+        <xsl:if test="$mail2expert!='false'">importXML('<xsl:value-of select="$mail2expert"/>')</xsl:if>
       </xsl:variable>
       <body BGCOLOR="#c0c0c0" onLoad="{$mailfunc}">
         <base href="{$host}"/>

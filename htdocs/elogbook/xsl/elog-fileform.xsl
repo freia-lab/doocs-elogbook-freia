@@ -146,7 +146,7 @@
                 <!-- Mail to experts -->
                 <td valign="top" colspan="2">
                   <fieldset><legend><b><xsl:value-of select="$dictionary/term[@key='LabelMailToExpert']"/></b></legend>
-                    <table><tr><td><input name="experts" type="text" style="background-color: #E0E0E0" readonly="readonly"/><input name="email" type="HIDDEN" value=""/></td><td><input type="button" name="clear" value="clear" onClick="clearExpert()"/></td></tr></table>
+                    <table><tr><td><input name="experts" type="text" style="background-color: #E0E0E0" readonly="readonly"/><input name="email" type="HIDDEN" value=""/></td><td><input type="button" name="clear" value="clear" onClick="clearExpert()"/><input type="button" name="add" value="add" onClick="addFreeEmail()"/><input name="femail" type="text" size="35"/></td></tr></table>
                     <table><tr><td valign="top"><xsl:value-of select="$dictionary/term[@key='LabelMailToExpertTopic']"/><br></br><select name="topic" onChange="createList()"></select></td></tr><tr><td><xsl:value-of select="$dictionary/term[@key='LabelMailToExpertExperts']"/><br></br><select name="expertlist" onchange="addExpert()"></select></td></tr></table>
                   </fieldset>
                 </td>

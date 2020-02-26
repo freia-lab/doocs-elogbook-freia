@@ -8,12 +8,6 @@
       <mail>allfreia@localhost</mail>
     </person>
     <person>
-      <l_name>Bhattacharyya</l_name>
-      <f_name>Anirban</f_name>
-      <expert>Physics, RF</expert>
-      <mail>anirban.bhattacharyya@physics.uu.se</mail>
-    </person>
-    <person>
       <l_name>Dancila</l_name>
       <f_name>Dragos</f_name>
       <expert>SSA, Microwaves</expert>
@@ -78,6 +72,12 @@
       <f_name>Maja</f_name>
       <expert>Physics</expert>
       <mail>maja.olvegard@physics.uu.se</mail>
+    </person>
+    <person>
+      <l_name>Pepitone</l_name>
+      <f_name>Kevin</f_name>
+      <expert>Physics, magnets</expert>
+      <mail>kevin.pepitone@physics.uu.se</mail>
     </person>
     <person>
       <l_name>Ruber</l_name>
@@ -145,12 +145,6 @@
     </person>
   </subject>
   <subject name="LLRF">
-    <person>
-      <l_name>Bhattacharyya</l_name>
-      <f_name>Anirban</f_name>
-      <expert>Physics, RF</expert>
-      <mail>anirban.bhattacharyya@physics.uu.se</mail>
-    </person>
     <person>
       <l_name>Goryashko</l_name>
       <f_name>Vitaliy</f_name>

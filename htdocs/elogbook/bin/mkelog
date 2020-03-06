@@ -31,9 +31,9 @@ while getopts "hfu" opt; do
     h ) echo -en "$USE"; exit 0;;
     f ) OPT_FORCE=1;;
     u ) OPT_UBUNTU=1
-	  CATALINA_HOME=/usr/share/tomcat7
-	  CATALINA_BASE=/var/lib/tomcat7
-	  JAVA_HOME=/usr/lib/jvm/default-java;;
+	  CATALINA_HOME=/usr/share/tomcat9
+	  CATALINA_BASE=/var/lib/tomcat9
+	  JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64;;
     * ) echo "Unknown option \"$1\" (STOP)"
           echo -en "$USE"; exit 1;;
   esac
@@ -62,10 +62,10 @@ uname -a | grep -q Ubuntu
 if [ $? == 0 ]; then 
     OPT_UBUNTU=1
     . /etc/lsb-release
-    CATALINA_HOME=/usr/share/tomcat7
-    CATALINA_BASE=/var/lib/tomcat7
-    JAVA_HOME=/usr/lib/jvm/default-java
-    TOMCAT_USER=tomcat7
+    CATALINA_HOME=/usr/share/tomcat9
+    CATALINA_BASE=/var/lib/tomcat9
+    TOMCAT_USER=tomcat
+    JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
      echo "Your system is detected as Linux "$DISTRIB_DESCRIPTION" - codename: $DISTRIB_CODENAME."
 fi
 SERVER_DOCROOT=/var/www
@@ -269,8 +269,9 @@ fi
 echo -en "\n Creating elog folders... "
 if [ ! $opt_dryrun ]; then
   `mkdir $SERVER_DOCROOT/$ELOG_DIR`
-  `mkdir $SERVER_DOCROOT/$ELOG_DIR/bad_files`
   `cp -rp $ELOG_SOURCE/* $SERVER_DOCROOT/$ELOG_DIR`
+  `mkdir $SERVER_DOCROOT/$ELOG_DIR/bad_files`
+  `mkdir $SERVER_DOCROOT/$ELOG_DIR/log`
   cat $SERVER_DOCROOT/$ELOG_DIR/bin/search-index | sed s,TOMCAT_DIR,$CATALINA_BASE,g > $SERVER_DOCROOT/$ELOG_DIR/bin/search-index_tmp
   cat $SERVER_DOCROOT/$ELOG_DIR/bin/search-index_tmp | sed s,JAVA_DIR,$JAVA_HOME,g > $SERVER_DOCROOT/$ELOG_DIR/bin/search-index_tmp2
   cat $SERVER_DOCROOT/$ELOG_DIR/bin/search-index_tmp2 | sed s,HTDOCS_DIR,$SERVER_DOCROOT,g > $SERVER_DOCROOT/$ELOG_DIR/bin/search-index
@@ -348,7 +349,7 @@ echo -en "\t\t\tdone!\n" #creation of conf.xml
 # create initial folders, applet index and work.xml file
 init_logbook=y
 if [ $init_logbook == "y" ]; then
-  echo -en " Creating initial folders and indexes... "
+    echo -en " Creating initial folders and indexes... "    
   WORK_XML="<?xml version='1.0' encoding='ISO-8859-1' ?><work><act_dir>$INIT_DIR</act_dir></work>"
   [ ! $opt_dryrun ] && echo $WORK_XML > $SERVER_DOCROOT/$ELOG_DIR/jsp/work.xml
   `. $SERVER_DOCROOT/elogbook/bin/elogenv.sh && $SERVER_DOCROOT/$ELOG_DIR/bin/cronjob_top.sh 2>&1 > $SERVER_DOCROOT/$ELOG_DIR/log/cronjob_top.log`
@@ -375,7 +376,7 @@ echo -en " Creating inital index for search server... "
 `cat $CATALINA_BASE/webapps/elog/search_adv.jsp | sed s,HOST,$ELOG_SERVER, > $CATALINA_BASE/webapps/elog/search_adv.jsp.tmp`
 `mv $CATALINA_BASE/webapps/elog/search_adv.jsp.tmp $CATALINA_BASE/webapps/elog/search_adv.jsp`
 
-`mkdir $SERVER_DOCROOT/$ELOG_DIR/work/index`
+`mkdir -p $SERVER_DOCROOT/$ELOG_DIR/work/index`
 `cd $SERVER_DOCROOT/$ELOG_DIR/bin; . $SERVER_DOCROOT/elogbook/bin/elogenv.sh && ./search-index start 3>&1 > $SERVER_DOCROOT/$ELOG_DIR/log/search.log`
 `cd $WORKDIR`
 echo -en "\t\t\tdone!\n"

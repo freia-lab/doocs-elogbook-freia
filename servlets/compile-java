@@ -1,0 +1,2 @@
+#!/bin/sh
+javac -Xlint -cp /usr/share/java/*:../tomcat/common/lib/*:../tomcat/webapps/elog/WEB-INF/lib/* *.java

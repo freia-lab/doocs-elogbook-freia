@@ -1,0 +1,2 @@
+#!/bin/sh
+cp -p *.class ../tomcat/webapps/elog/WEB-INF/classes

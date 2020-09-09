@@ -68,10 +68,22 @@
       <mail>tor.lofnes@physics.uu.se</mail>
     </person>
     <person>
+      <l_name>Miyazaki</l_name>
+      <f_name>Akira</f_name>
+      <expert>RF,Physics</expert>
+      <mail>akira.miyazaki@physics.uu.se</mail>
+    </person>
+    <person>
       <l_name>Olvegård</l_name>
       <f_name>Maja</f_name>
       <expert>Physics</expert>
       <mail>maja.olvegard@physics.uu.se</mail>
+    </person>
+    <person>
+      <l_name>Pehlivan</l_name>
+      <f_name>Esat</f_name>
+      <expert>Cryogenics, gases</expert>
+      <mail>esat.pehlivan@physics.uu.se</mail>
     </person>
     <person>
       <l_name>Pepitone</l_name>
@@ -109,6 +121,12 @@
       <expert>Electronics, cryo</expert>
       <mail>rocio.santiago_kern@physics.uu.se</mail>
     </person>
+    <person>
+      <l_name>Zhovner</l_name>
+      <f_name>Mykhailo</f_name>
+      <expert>RF, Electronics</expert>
+      <mail>mykhailo.zhovner@physics.uu.se</mail>
+    </person>
   </subject>
   <subject name="Cryogenics">
     <person>
@@ -121,7 +139,13 @@
       <l_name>Jönsson</l_name>
       <f_name>Åke</f_name>
       <expert>Cryo</expert>
-      <mail>ake.jonsson@angstrom.uu.se</mail>
+      <mail>ake.jonsson@physics.uu.se</mail>
+    </person>
+    <person>
+      <l_name>Pehlivan</l_name>
+      <f_name>Esat</f_name>
+      <expert>Cryogenics, gases</expert>
+      <mail>esat.pehlivan@physics.uu.se</mail>
     </person>
    <person>
       <l_name>Ruber</l_name>
@@ -154,6 +178,12 @@
       <f_name>Rolf</f_name>
       <expert>RF, Power supplies</expert>
       <mail>Rolf.Wedberg@physics.uu.se</mail>
+    </person>
+    <person>
+      <l_name>Zhovner</l_name>
+      <f_name>Mykhailo</f_name>
+      <expert>RF, Electronics</expert>
+      <mail>mykhailo.zhovner@physics.uu.se</mail>
     </person>
   </subject>
   <subject name="LLRF">

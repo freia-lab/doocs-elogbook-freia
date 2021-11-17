@@ -116,6 +116,12 @@
       <mail>rocio.santiago_kern@physics.uu.se</mail>
     </person>
     <person>
+      <l_name>Svanberg</l_name>
+      <f_name>Carl</f_name>
+      <expert>Cryo, electronics, vacuum</expert>
+      <mail>carl.svanberg@physics.uu.se</mail>
+    </person>
+    <person>
       <l_name>Wedberg</l_name>
       <f_name>Rolf</f_name>
       <expert>RF, Power supplies</expert>
@@ -158,6 +164,12 @@
       <f_name>Profatilova</f_name>
       <expert>Physics, cryo</expert>
       <mail>iaroslava.profatilova@physics.uu.se</mail>
+    </person>
+    <person>
+      <l_name>Svanberg</l_name>
+      <f_name>Carl</f_name>
+      <expert>Cryo, electronics, vacuum</expert>
+      <mail>carl.svanberg@physics.uu.se</mail>
     </person>
     <person>
       <l_name>Ruber</l_name>

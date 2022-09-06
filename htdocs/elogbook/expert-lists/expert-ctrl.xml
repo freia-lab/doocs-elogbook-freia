@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+<subject name="Control system">
+  <person>
+    <l_name>Fransson</l_name>
+    <f_name>Kjell</f_name>
+    <expert>Controls, Radiation protection</expert>
+    <mail>kjell.fransson@physics.uu.se</mail>
+  </person>
+  <person>
+    <l_name>Gajewski</l_name>
+    <f_name>Konrad</f_name>
+    <expert>Epics, PLC</expert>
+    <mail>konrad.gajewski@physics.uu.se</mail>
+  </person>
+  <person>
+    <l_name>Jacewicz</l_name>
+    <f_name>Marek</f_name>
+    <expert>Controls, LabView</expert>
+    <mail>marek.jacewicz@physics.uu.se</mail>
+  </person>
+  <person>
+    <l_name>Kammering</l_name>
+    <f_name>Raimund</f_name>
+    <expert>eLogbook</expert>
+    <mail>Raimund.Kammering@desy.de</mail>
+  </person>
+</subject>
+<subject name="High Power RF">
+  <person>
+    <l_name>Doe</l_name>
+    <f_name>John</f_name>
+    <expert>Good in doing nothing</expert>
+    <mail>John,Doe@foobar.org</mail>
+  </person>
+  <person>
+    <l_name>Mustermann</l_name>
+    <f_name>Michaela</f_name>
+    <expert>Good in doing UVW</expert>
+    <mail>Michaela.Mustermann@desy.de</mail>
+  </person>
+</subject>
+</list>
+

@@ -8,12 +8,6 @@
       <mail>allfreia@localhost</mail>
     </person>
     <person>
-      <l_name>Chulkov</l_name>
-      <f_name>Ruslan</f_name>
-      <expert>Lasers</expert>
-      <mail>ruslan.chulkov@physics.uu.se</mail>
-    </person>
-    <person>
       <l_name>Dancila</l_name>
       <f_name>Dragos</f_name>
       <expert>SSA, Microwaves</expert>
@@ -108,12 +102,6 @@
       <f_name>Rocio</f_name>
       <expert>Cryo, electronics, vacuum</expert>
       <mail>rocio.santiago_kern@physics.uu.se</mail>
-    </person>
-    <person>
-      <l_name>Shokeen</l_name>
-      <f_name>Vishal</f_name>
-      <expert>Lasers</expert>
-      <mail>vishal.shokeen@physics.uu.se</mail>
     </person>
     <person>
       <l_name>Svanberg</l_name>

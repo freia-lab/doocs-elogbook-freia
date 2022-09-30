@@ -8,6 +8,12 @@
       <mail>allfreia@localhost</mail>
     </person>
     <person>
+      <l_name>Chulkov</l_name>
+      <f_name>Ruslan</f_name>
+      <expert>Lasers</expert>
+      <mail>ruslan.chulkov@physics.uu.se</mail>
+    </person>
+    <person>
       <l_name>Dancila</l_name>
       <f_name>Dragos</f_name>
       <expert>SSA, Microwaves</expert>
@@ -38,22 +44,10 @@
       <mail>vitaliy.goryashko@physics.uu.se</mail>
     </person>
     <person>
-      <l_name>Hermansson</l_name>
-      <f_name>Lars</f_name>
-      <expert>Proj. management, facilities</expert>
-      <mail>lars.hermansson@physics.uu.se</mail>
-    </person>
-    <person>
       <l_name>Jacewicz</l_name>
       <f_name>Marek</f_name>
       <expert>Physics</expert>
       <mail>marek.jacewicz@physics.uu.se</mail>
-    </person>
-    <person>
-      <l_name>Johansson</l_name>
-      <f_name>Niklas</f_name>
-      <expert>Mechanics, CAD</expert>
-      <mail>a_niklas.johansson@physics.uu.se</mail>
     </person>
     <person>
       <l_name>Li</l_name>
@@ -68,16 +62,34 @@
       <mail>tor.lofnes@physics.uu.se</mail>
     </person>
     <person>
+      <l_name>Miyazaki</l_name>
+      <f_name>Akira</f_name>
+      <expert>RF,Physics</expert>
+      <mail>akira.miyazaki@physics.uu.se</mail>
+    </person>
+    <person>
       <l_name>Olvegård</l_name>
       <f_name>Maja</f_name>
       <expert>Physics</expert>
       <mail>maja.olvegard@physics.uu.se</mail>
     </person>
     <person>
+      <l_name>Pehlivan</l_name>
+      <f_name>Esat</f_name>
+      <expert>Cryogenics, gases</expert>
+      <mail>esat.pehlivan@physics.uu.se</mail>
+    </person>
+    <person>
       <l_name>Pepitone</l_name>
       <f_name>Kevin</f_name>
       <expert>Physics, magnets</expert>
       <mail>kevin.pepitone@physics.uu.se</mail>
+    </person>
+    <person>
+      <l_name>Iaroslava</l_name>
+      <f_name>Profatilova</f_name>
+      <expert>Physics, cryo</expert>
+      <mail>iaroslava.profatilova@physics.uu.se</mail>
     </person>
     <person>
       <l_name>Ruber</l_name>
@@ -94,8 +106,20 @@
     <person>
       <l_name>Santiago Kern</l_name>
       <f_name>Rocio</f_name>
-      <expert>Electronics, vacuum</expert>
+      <expert>Cryo, electronics, vacuum</expert>
       <mail>rocio.santiago_kern@physics.uu.se</mail>
+    </person>
+    <person>
+      <l_name>Shokeen</l_name>
+      <f_name>Vishal</f_name>
+      <expert>Lasers</expert>
+      <mail>vishal.shokeen@physics.uu.se</mail>
+    </person>
+    <person>
+      <l_name>Svanberg</l_name>
+      <f_name>Carl</f_name>
+      <expert>Cryo, electronics, vacuum</expert>
+      <mail>carl.svanberg@physics.uu.se</mail>
     </person>
     <person>
       <l_name>Wedberg</l_name>
@@ -103,21 +127,33 @@
       <expert>RF, Power supplies</expert>
       <mail>Rolf.Wedberg@physics.uu.se</mail>
     </person>
+    <person>
+      <l_name>Zhovner</l_name>
+      <f_name>Mykhailo</f_name>
+      <expert>RF, Electronics</expert>
+      <mail>mykhailo.zhovner@physics.uu.se</mail>
+    </person>
   </subject>
   <subject name="Cryogenics">
     <person>
-      <l_name>Hermansson</l_name>
-      <f_name>Lars</f_name>
-      <expert>Proj. management, facilities</expert>
-      <mail>lars.hermansson@physics.uu.se</mail>
+      <l_name>Pehlivan</l_name>
+      <f_name>Esat</f_name>
+      <expert>Cryogenics, gases</expert>
+      <mail>esat.pehlivan@physics.uu.se</mail>
     </person>
-     <person>
-      <l_name>Jönsson</l_name>
-      <f_name>Åke</f_name>
-      <expert>Cryo</expert>
-      <mail>ake.jonsson@angstrom.uu.se</mail>
+    <person>
+      <l_name>Iaroslava</l_name>
+      <f_name>Profatilova</f_name>
+      <expert>Physics, cryo</expert>
+      <mail>iaroslava.profatilova@physics.uu.se</mail>
     </person>
-   <person>
+    <person>
+      <l_name>Svanberg</l_name>
+      <f_name>Carl</f_name>
+      <expert>Cryo, electronics, vacuum</expert>
+      <mail>carl.svanberg@physics.uu.se</mail>
+    </person>
+    <person>
       <l_name>Ruber</l_name>
       <f_name>Roger</f_name>
       <expert>Cryo</expert>
@@ -128,6 +164,12 @@
       <f_name>Rocio</f_name>
       <expert>Electronics, vacuum</expert>
       <mail>rocio.santiago_kern@physics.uu.se</mail>
+    </person>
+    <person>
+      <l_name>Wedberg</l_name>
+      <f_name>Rolf</f_name>
+      <expert>RF, Power supplies</expert>
+      <mail>Rolf.Wedberg@physics.uu.se</mail>
     </person>
   </subject>
   <subject name="RF Power">
@@ -143,6 +185,12 @@
       <expert>RF, Power supplies</expert>
       <mail>Rolf.Wedberg@physics.uu.se</mail>
     </person>
+    <person>
+      <l_name>Zhovner</l_name>
+      <f_name>Mykhailo</f_name>
+      <expert>RF, Electronics</expert>
+      <mail>mykhailo.zhovner@physics.uu.se</mail>
+    </person>
   </subject>
   <subject name="LLRF">
     <person>
@@ -156,6 +204,20 @@
       <f_name>Tor</f_name>
       <expert>RF</expert>
       <mail>tor.lofnes@physics.uu.se</mail>
+    </person>
+  </subject>
+  <subject name="Laser Lab.">
+    <person>
+      <l_name>Chulkov</l_name>
+      <f_name>Ruslan</f_name>
+      <expert>Lasers</expert>
+      <mail>ruslan.chulkov@physics.uu.se</mail>
+    </person>
+    <person>
+      <l_name>Shokeen</l_name>
+      <f_name>Vishal</f_name>
+      <expert>Lasers</expert>
+      <mail>vishal.shokeen@physics.uu.se</mail>
     </person>
   </subject>
   <subject name="Solid State ampl.">

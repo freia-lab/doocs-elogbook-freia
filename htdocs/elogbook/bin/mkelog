@@ -22,14 +22,16 @@ USE="\a USAGE:\
  \nOptions:
     -f: Force creation of already existing folders/files
     -u: Ubuntu 12.04
+    -a: Add anly a new logbook. Don't touch common content.
     -h: Print this help screen\n"
 
 ###############################################################################
 # Parse the options
-while getopts "hfu" opt; do
+while getopts "hfua" opt; do
   case $opt in
     h ) echo -en "$USE"; exit 0;;
     f ) OPT_FORCE=1;;
+    a ) OPT_ADDONLY=1;;
     u ) OPT_UBUNTU=1
 	  CATALINA_HOME=/usr/share/tomcat7
 	  CATALINA_BASE=/var/lib/tomcat7
@@ -289,40 +291,46 @@ if [ ! $opt_dryrun ]; then
 fi
 echo -en "\t\tdone!\n"
 
-# copy JAR files to servlet engine common directory
-echo -en " Coping JAR files to $SERVLET_COMMON... "
-if [ ! $opt_dryrun ]; then
-  `cd ../../../tomcat/common/lib; tar -cf - ./*.jar | (cd $SERVLET_COMMON; tar -xf -)`
+if [ "$OPT_ADDONLY" == "1" ]; then
+    echo -en " Skipping coping JAR files to $SERVLET_COMMON... \n"    
+    echo -en " Skipping deploying 'elogbook web applications' to: $WEBAPP_DIR... \n"
+    echo -en " Skipping coping common files to: $SERVER_DOCROOT/elogbook... \n"
+else
+    # copy JAR files to servlet engine common directory
+    echo -en " Coping JAR files to $SERVLET_COMMON... "
+    if [ ! $opt_dryrun ]; then
+	`cd ../../../tomcat/common/lib; tar -cf - ./*.jar | (cd $SERVLET_COMMON; tar -xf -)`
+    fi
+    echo -en "\t\tdone!\n"
+    
+    # Copy servlets to tomcat web app directory
+    echo -en " Deploying 'elogbook web applications' to: $WEBAPP_DIR... "
+    if [ ! $opt_dryrun ]; then
+	`cp -rp ../../../tomcat/webapps/elog $WEBAPP_DIR`
+	# We need the 'docroot' context parameter
+	`cat ../../../tomcat/webapps/elog/WEB-INF/web.xml | sed s,DOCROOT,$SERVER_DOCROOT, > $WEBAPP_DIR/elog/WEB-INF/web.xml`
+	`cp -p ../../../tomcat/webapps/elogbookManager.war $WEBAPP_DIR`
+    fi
+    echo -en "\tdone!\n"
+    # copy common files to http DocumentRoot directory
+    echo -en " Coping common files to: $SERVER_DOCROOT/elogbook... "
+    if [ ! $opt_dryrun ]; then
+	`cp -rp ../../elogbook $SERVER_DOCROOT`
+	# Add collected path info to elogenv.sh
+	`cat ./elogenv.sh | sed s,ELOGBINPATH,$SERVER_DOCROOT/elogbook/bin, > $SERVER_DOCROOT/elogbook/bin/elogenv.sh_tmp`
+	`cat $SERVER_DOCROOT/elogbook/bin/elogenv.sh_tmp | sed s,HTDOCS_DIR,$SERVER_DOCROOT,g > $SERVER_DOCROOT/elogbook/bin/elogenv.sh`
+	`cat $SERVER_DOCROOT/elogbook/bin/elogenv.sh | sed s,JAVA_DIR,$JAVA_HOME, > $SERVER_DOCROOT/elogbook/bin/elogenv.sh_tmp`
+	`cat $SERVER_DOCROOT/elogbook/bin/elogenv.sh_tmp | sed s,TOMCAT_HOME,$CATALINA_HOME, > $SERVER_DOCROOT/elogbook/bin/elogenv.sh_tmp1`
+	`cat $SERVER_DOCROOT/elogbook/bin/elogenv.sh_tmp1 | sed s,TOMCAT_DIR,$CATALINA_HOME, > $SERVER_DOCROOT/elogbook/bin/elogenv.sh`
+	`rm -f $SERVER_DOCROOT/elogbook/bin/elogenv.sh_tmp*`
+	# Add collected path info to GetXMLElement
+	`cat ./GetXMLElement | sed s,SERVLETCOMMON,$SERVLET_COMMON, > $SERVER_DOCROOT/elogbook/bin/GetXMLElement_tmp`
+	`cat $SERVER_DOCROOT/elogbook/bin/GetXMLElement_tmp | sed s,JAVA_DIR,$JAVA_HOME, > $SERVER_DOCROOT/elogbook/bin/GetXMLElement`
+	`rm $SERVER_DOCROOT/elogbook/bin/GetXMLElement_tmp`
+    fi
+    echo -en "\t\t\tdone!\n"
 fi
-echo -en "\t\tdone!\n"
 
-# Copy servlets to tomcat web app directory
-echo -en " Deploying 'elogbook web applications' to: $WEBAPP_DIR... "
-if [ ! $opt_dryrun ]; then
-  `cp -rp ../../../tomcat/webapps/elog $WEBAPP_DIR`
-  # We need the 'docroot' context parameter
-  `cat ../../../tomcat/webapps/elog/WEB-INF/web.xml | sed s,DOCROOT,$SERVER_DOCROOT, > $WEBAPP_DIR/elog/WEB-INF/web.xml`
-  `cp -p ../../../tomcat/webapps/elogbookManager.war $WEBAPP_DIR`
-fi
-echo -en "\tdone!\n"
-
-# copy common files to http DocumentRoot directory
-echo -en " Coping common files to: $SERVER_DOCROOT/elogbook... "
-if [ ! $opt_dryrun ]; then
-  `cp -rp ../../elogbook $SERVER_DOCROOT`
-  # Add collected path info to elogenv.sh
-  `cat ./elogenv.sh | sed s,ELOGBINPATH,$SERVER_DOCROOT/elogbook/bin, > $SERVER_DOCROOT/elogbook/bin/elogenv.sh_tmp`
-  `cat $SERVER_DOCROOT/elogbook/bin/elogenv.sh_tmp | sed s,HTDOCS_DIR,$SERVER_DOCROOT,g > $SERVER_DOCROOT/elogbook/bin/elogenv.sh`
-  `cat $SERVER_DOCROOT/elogbook/bin/elogenv.sh | sed s,JAVA_DIR,$JAVA_HOME, > $SERVER_DOCROOT/elogbook/bin/elogenv.sh_tmp`
-  `cat $SERVER_DOCROOT/elogbook/bin/elogenv.sh_tmp | sed s,TOMCAT_HOME,$CATALINA_HOME, > $SERVER_DOCROOT/elogbook/bin/elogenv.sh_tmp1`
-  `cat $SERVER_DOCROOT/elogbook/bin/elogenv.sh_tmp1 | sed s,TOMCAT_DIR,$CATALINA_HOME, > $SERVER_DOCROOT/elogbook/bin/elogenv.sh`
-  `rm -f $SERVER_DOCROOT/elogbook/bin/elogenv.sh_tmp*`
-  # Add collected path info to GetXMLElement
-  `cat ./GetXMLElement | sed s,SERVLETCOMMON,$SERVLET_COMMON, > $SERVER_DOCROOT/elogbook/bin/GetXMLElement_tmp`
-  `cat $SERVER_DOCROOT/elogbook/bin/GetXMLElement_tmp | sed s,JAVA_DIR,$JAVA_HOME, > $SERVER_DOCROOT/elogbook/bin/GetXMLElement`
-  `rm $SERVER_DOCROOT/elogbook/bin/GetXMLElement_tmp`
-fi
-echo -en "\t\t\tdone!\n"
 
 # create printer queue
 if [ $create_printer == "y" ]; then
@@ -335,13 +343,13 @@ if [ $create_printer == "y" ]; then
 fi
 # create index file (index.html)
 echo -en " Creating index.html file... "
-INDEX_HTML="<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\"><html><head><title>$ELOG_NAME</title></head><body><script language=\"javascript\">top.location.href=\"http://$ELOG_SERVER/$ELOG_DIR/index.jsp\"</script></body></html>"
+INDEX_HTML="<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\"><html><head><title>$ELOG_NAME</title></head><body><script language=\"javascript\">top.location.href=\"https://$ELOG_SERVER/$ELOG_DIR/index.jsp\"</script></body></html>"
 [ ! $opt_dryrun ] && echo $INDEX_HTML > $SERVER_DOCROOT/$ELOG_DIR/index.html
 echo -en "\t\t\t\t\tdone!\n"
 
 # create XML configuration file (conf.xml - check if still up to date)
 echo -en " Creating logbook configuration file... "
-CONF_FILE="<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n<logbook>\n<!-- define version of this configuration file -->\n<version>1.3.1</version>\n\n<!-- define the root for the eLogBook application-->\n<docroot>$SERVER_DOCROOT</docroot>\n\n<!-- eLogBook specific variables -->\n<!-- define the name of the logbook, displayed on each page-->\n<name>$ELOG_NAME e-Logbook</name>\n\n<!-- base dir of logbook, relative to eLogBook root (docroot)-->\n<logroot>/$ELOG_DIR</logroot>\n\n<!-- base dir of logbook data as absolute dir path -->\n<datapath>/data</datapath>\n\n<!-- name of this host for http requests-->\n<host>http://$ELOG_SERVER</host>\n\n<!-- period to create a new shift -->\n<!-- formats are: Y = year, M = month, W = week, D = day, 3 = 3 shifts a day -->\n<new_shift>$ELOG_PERIODE</new_shift>\n\n<!-- language code, possible values: en, de -->\n<lang_code>$ELOG_LANG</lang_code>\n\n<!-- date formatting, posssible formats are: -->\n<!--date_fmt>MM/dd/yyyy</date_fmt-->\n<!--date_fmt>yyyy-MM-dd</date_fmt-->\n<date_fmt>$ELOG_DATEFMT</date_fmt>\n\n<!-- Shall text be 'above' or 'beside' the images -->\n<text_pos>above</text_pos>\n<!--text_pos>beside</text_pos-->\n\n<!-- Name of the printer to insert pictures into the logbook -->\n<printer>$ELOG_PRINTER</printer>\n\n<!-- rel. URL of the user feedback page-->\n<commentdir>/comments</commentdir>\n\n<!-- rel. URL of the news page -->\n<newsdir>/news</newsdir>\n\n<!-- URL of the common image dir. (rel. to docroot) -->\n<imagedir>/elogbook/images</imagedir>\n\n<!-- URL of the docu page (left frame Links) -->\n<docudir>http://tesla.desy.de/doocs/elogbook</docudir>\n\n<!-- Background color for overall style of the HTML pages (standard rgb notation) -->\n<bgcolor>$ELOG_COLOR</bgcolor>\n\n<!-- Variables for servlets, search engine and tree applet -->\n<!-- Servlet for view of eLogBook (rel. to servlet engine docroot!!) -->\n<view_servlet>/elog/servlet/XMLlist</view_servlet>\n\n<!-- Servlet for editing eLogBook entries (rel. to servlet engine docroot!!) -->\n<edit_servlet>/elog/servlet/FileEdit</edit_servlet>\n\n<!-- Servlet for PDF creation (rel. servlet engine docroot!!) -->\n<pdf_servlet>/elog/servlet/XMLlist</pdf_servlet>\n\n<!-- Defintion of the XSL files used for transformations -->\n<!-- XSL for main view (rel. to docroot) -->\n<view_xsl>/elogbook/xsl/elog.xsl</view_xsl>\n\n<!-- XSL for list view (rel. to docroot) -->\n<list_xsl>/elogbook/xsl/elog.xsl</list_xsl>\n\n<!-- XSL used for editing an entry (rel. to docroot) -->\n<edit_xsl>/elogbook/xsl/elog-fileform.xsl</edit_xsl>\n\n<!-- XSL used for search window (rel. to docroot) -->\n<search_xsl>/elogbook/xsl/search-lucene.xsl</search_xsl>\n\n<!-- XSL used for search window (rel. to docroot) -->\n<search2_xsl>/elogbook/xsl/search-lucene2.xsl</search2_xsl>\n\n<!-- XSL for trafo. to PDF (rel. to docroot) -->\n<pdf_xsl>/elogbook/xsl/elog2pdf.xsl</pdf_xsl>\n\n<!--Location of the index for search engine-->\n<srch_index>/work/index</srch_index>\n\n<!-- Servlet serving the tree data --><tree_servlet>/elogbookManager/Manager</tree_servlet>\n\n<!-- Define elogbook specific keywords. The uppermost is the default-->\n<keyword_list>\n  <keyword>not set</keyword>\n</keyword_list>\n\n<!-- Define elogbook specific locations. Set enabled to false to switch of locations-->\n<location_list enabled=\"not_true\">\n  <location>not set</location>\n</location_list>\n\n<!-- To enable/disable the spellchecker tool -->\n<spellchecker enabled=\"false\"/>\n\n<!-- Activate mail to expert -->\n<mail2expert enabled=\"true\">\n<list name=\"/elogbook/expert-lists/expert.xml\"/>\n</mail2expert>\n\n<!-- Activate history view for entries -->\n<view_history enabled=\"true\"/>\n\n<!--job_list>\n<job>\n<time>30 1 1 1 1 ?</time>\n<target>/PATH_TO_SCRIPT/cronjob_top.sh</target>\n</job>\n</job_list-->\n\n<!-- Link connected to the logo -->\n<logo_link>http://$ELOG_SERVER</logo_link>\n\n</logbook>\n"
+CONF_FILE="<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n<logbook>\n<!-- define version of this configuration file -->\n<version>1.3.1</version>\n\n<!-- define the root for the eLogBook application-->\n<docroot>$SERVER_DOCROOT</docroot>\n\n<!-- eLogBook specific variables -->\n<!-- define the name of the logbook, displayed on each page-->\n<name>$ELOG_NAME e-Logbook</name>\n\n<!-- base dir of logbook, relative to eLogBook root (docroot)-->\n<logroot>/$ELOG_DIR</logroot>\n\n<!-- base dir of logbook data as absolute dir path -->\n<datapath>/data</datapath>\n\n<!-- name of this host for http requests-->\n<host>https://$ELOG_SERVER</host>\n\n<!-- period to create a new shift -->\n<!-- formats are: Y = year, M = month, W = week, D = day, 3 = 3 shifts a day -->\n<new_shift>$ELOG_PERIODE</new_shift>\n\n<!-- language code, possible values: en, de -->\n<lang_code>$ELOG_LANG</lang_code>\n\n<!-- date formatting, posssible formats are: -->\n<!--date_fmt>MM/dd/yyyy</date_fmt-->\n<!--date_fmt>yyyy-MM-dd</date_fmt-->\n<date_fmt>$ELOG_DATEFMT</date_fmt>\n\n<!-- Shall text be 'above' or 'beside' the images -->\n<text_pos>above</text_pos>\n<!--text_pos>beside</text_pos-->\n\n<!-- Name of the printer to insert pictures into the logbook -->\n<printer>$ELOG_PRINTER</printer>\n\n<!-- rel. URL of the user feedback page-->\n<commentdir>/comments</commentdir>\n\n<!-- rel. URL of the news page -->\n<newsdir>/news</newsdir>\n\n<!-- URL of the common image dir. (rel. to docroot) -->\n<imagedir>/elogbook/images</imagedir>\n\n<!-- URL of the docu page (left frame Links) -->\n<docudir>http://tesla.desy.de/doocs/elogbook</docudir>\n\n<!-- Background color for overall style of the HTML pages (standard rgb notation) -->\n<bgcolor>$ELOG_COLOR</bgcolor>\n\n<!-- Variables for servlets, search engine and tree applet -->\n<!-- Servlet for view of eLogBook (rel. to servlet engine docroot!!) -->\n<view_servlet>/elog/servlet/XMLlist</view_servlet>\n\n<!-- Servlet for editing eLogBook entries (rel. to servlet engine docroot!!) -->\n<edit_servlet>/elog/servlet/FileEdit</edit_servlet>\n\n<!-- Servlet for PDF creation (rel. servlet engine docroot!!) -->\n<pdf_servlet>/elog/servlet/XMLlist</pdf_servlet>\n\n<!-- Defintion of the XSL files used for transformations -->\n<!-- XSL for main view (rel. to docroot) -->\n<view_xsl>/elogbook/xsl/elog.xsl</view_xsl>\n\n<!-- XSL for list view (rel. to docroot) -->\n<list_xsl>/elogbook/xsl/elog.xsl</list_xsl>\n\n<!-- XSL used for editing an entry (rel. to docroot) -->\n<edit_xsl>/elogbook/xsl/elog-fileform.xsl</edit_xsl>\n\n<!-- XSL used for search window (rel. to docroot) -->\n<search_xsl>/elogbook/xsl/search-lucene.xsl</search_xsl>\n\n<!-- XSL used for search window (rel. to docroot) -->\n<search2_xsl>/elogbook/xsl/search-lucene2.xsl</search2_xsl>\n\n<!-- XSL for trafo. to PDF (rel. to docroot) -->\n<pdf_xsl>/elogbook/xsl/elog2pdf.xsl</pdf_xsl>\n\n<!--Location of the index for search engine-->\n<srch_index>/work/index</srch_index>\n\n<!-- Servlet serving the tree data --><tree_servlet>/elogbookManager/Manager</tree_servlet>\n\n<!-- Define elogbook specific keywords. The uppermost is the default-->\n<keyword_list>\n  <keyword>not set</keyword>\n</keyword_list>\n\n<!-- Define elogbook specific locations. Set enabled to false to switch of locations-->\n<location_list enabled=\"not_true\">\n  <location>not set</location>\n</location_list>\n\n<!-- To enable/disable the spellchecker tool -->\n<spellchecker enabled=\"false\"/>\n\n<!-- Activate mail to expert -->\n<mail2expert enabled=\"true\">\n<list name=\"/elogbook/expert-lists/expert.xml\"/>\n</mail2expert>\n\n<!-- Activate history view for entries -->\n<view_history enabled=\"true\"/>\n\n<!--job_list>\n<job>\n<time>30 1 1 1 1 ?</time>\n<target>/PATH_TO_SCRIPT/cronjob_top.sh</target>\n</job>\n</job_list-->\n\n<!-- Link connected to the logo -->\n<logo_link>https://$ELOG_SERVER</logo_link>\n\n</logbook>\n"
 [ ! $opt_dryrun ] && echo -en $CONF_FILE > $SERVER_DOCROOT/$ELOG_DIR/jsp/conf.xml
 echo -en "\t\t\tdone!\n" #creation of conf.xml
 
@@ -368,17 +376,27 @@ if [ $init_logbook == "y" ]; then
   fi
 fi
 
-# start search server
-echo -en " Creating inital index for search server... "
-`cat $CATALINA_BASE/webapps/elog/search.jsp | sed s,HOST,$ELOG_SERVER, > $CATALINA_BASE/webapps/elog/search.jsp.tmp`
-`mv $CATALINA_BASE/webapps/elog/search.jsp.tmp $CATALINA_BASE/webapps/elog/search.jsp`
-`cat $CATALINA_BASE/webapps/elog/search_adv.jsp | sed s,HOST,$ELOG_SERVER, > $CATALINA_BASE/webapps/elog/search_adv.jsp.tmp`
-`mv $CATALINA_BASE/webapps/elog/search_adv.jsp.tmp $CATALINA_BASE/webapps/elog/search_adv.jsp`
+if [ "$OPT_ADDONLY" == "1" ]; then
+    echo -en " Skipping creating inital index for search server... \n"
+    echo -en " Creating a ajp proxy file for $ELOG_DIR... "
+    PROXY_AJP="<IfModule proxy_ajp_module>\nProxyPass \"/$ELOG_DIR/images/\" !\nProxyPass \"/$ELOG_DIR/data/\" !\nProxyPass \"/$ELOG_DIR\" \"ajp://localhost:8009/$ELOG_DIR\"\n</IfModule>\n"
+    echo -en $PROXY_AJP > /etc/apache2/mods-enabled/proxy_${ELOG_DIR}_ajp.conf
 
+else
+    # start search server
+    echo -en " Creating inital index for search server... \n"
+    `cat $CATALINA_BASE/webapps/elog/search.jsp | sed s,HOST,$ELOG_SERVER, > $CATALINA_BASE/webapps/elog/search.jsp.tmp`
+    `mv $CATALINA_BASE/webapps/elog/search.jsp.tmp $CATALINA_BASE/webapps/elog/search.jsp`
+    `cat $CATALINA_BASE/webapps/elog/search_adv.jsp | sed s,HOST,$ELOG_SERVER, > $CATALINA_BASE/webapps/elog/search_adv.jsp.tmp`
+    `mv $CATALINA_BASE/webapps/elog/search_adv.jsp.tmp $CATALINA_BASE/webapps/elog/search_adv.jsp`
+fi
+
+echo -en " Starting search server... \n"
 `mkdir $SERVER_DOCROOT/$ELOG_DIR/work/index`
 `cd $SERVER_DOCROOT/$ELOG_DIR/bin; . $SERVER_DOCROOT/elogbook/bin/elogenv.sh && ./search-index start 3>&1 > $SERVER_DOCROOT/$ELOG_DIR/log/search.log`
 `cd $WORKDIR`
 echo -en "\t\t\tdone!\n"
+
 
 if [ $OPT_UBUNTU ]; then
 echo -en " Changing ownership of $SERVER_DOCROOT/$ELOG_DIR to $TOMCAT_USER:$TOMCAT_USER... "
@@ -389,8 +407,8 @@ fi
 ####################
 # This is the end
 echo -en "\nDone with logbook creation!\n\n"
-echo -en "Please restart tomcat and you should be able to see the electronic logbook at:\n\n"
-echo -en "\thttp://$ELOG_SERVER/$ELOG_DIR\n\n"
+echo -en "Please restart tomcat and apache2 and you should be able to see the electronic logbook at:\n\n"
+echo -en "\thttps://$ELOG_SERVER/$ELOG_DIR\n\n"
 echo -en "(You might need to add additional mappings from apache to tomcat - see README)\n"
 if [ ! $OPT_UBUNTU ]; then
     echo -en "Further you might need to change the ownership of $SERVER_DOCROOT/$ELOG_DIR to allow\n"

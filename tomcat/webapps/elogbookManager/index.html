@@ -1,0 +1,22 @@
+<html>
+<head>
+<title>elogbook Manager</title>
+<link title="Standard" href="include/stylesheet.css" type="text/css" rel="stylesheet">
+<link title="Big" href="include/stylesheet-big.css" type="text/css" rel="Alternate stylesheet">
+<!--link rel="stylesheet" type="text/css" href="include/stylesheet.css"-->
+<script src="include/bl.js" type="text/javascript"></script>
+<script src="include/prototype-1.6.0.3.js" type="text/javascript"></script>
+</head>
+<body onload="init()" bgcolor="#f7f7f7">
+<div class="header">elogbook Manager <span id="time"></span></div>
+<!--a href="javascript:showDebug();">debug</a-->
+
+<form id="passwordForm" action="" onsubmit="return login();">
+  <p style="text-align:center;">Password<br>
+      <input id="pwd" name="pwd" type="password" size="12" maxlength="12">
+  </p>
+</form>
+ <div id="root">
+</div>
+</body>
+</html>

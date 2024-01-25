@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+    <description>Manages the elogbook context.</description>
+    <display-name>elogbook Manager</display-name>
+    <context-param>
+        <description>Apache DocumentRoot</description>
+        <param-name>docroot</param-name>
+        <param-value>/export/web/htdocs</param-value>
+    </context-param>
+    <servlet>
+        <servlet-name>Manager</servlet-name>
+        <servlet-class>controller.Manager</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>XMLlist</servlet-name>
+        <servlet-class>oldServlets.XMLlist</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Zeit</servlet-name>
+        <servlet-class>Zeit</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Zeit2</servlet-name>
+        <servlet-class>Zeit2</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>IE_Workaround_Servlet</servlet-name>
+        <servlet-class>controller.IE_Workaround_Servlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Manager</servlet-name>
+        <url-pattern>/Manager</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>XMLlist</servlet-name>
+        <url-pattern>/XMLlist</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Zeit</servlet-name>
+        <url-pattern>/Zeit</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Zeit2</servlet-name>
+        <url-pattern>/Zeit2</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>IE_Workaround_Servlet</servlet-name>
+        <url-pattern>/IE_Workaround_Servlet</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+</web-app>

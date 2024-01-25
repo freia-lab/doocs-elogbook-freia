@@ -1,0 +1,46 @@
+<html>
+<head>
+<title>Create new Logbook</title>
+<script src="include/createLogbookBL.js" type="text/javascript"></script>
+<script src="include/prototype-1.6.0.3.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="include/createLogbookStylesheet.css">
+</head>
+<body bgcolor="#f7f7f7" onload="init()">
+
+<div class="header">Enter data to create a new logbook:</div>
+<div class="main">
+<form name="logbookForm">
+	<div class="entry">
+		<div class="title">Name</div><input class="edit" name="logbookName" type="text" size="30" maxlength="30">
+	</div>
+	
+	<div class="entry">
+		<div class="title">Path</div><input class="edit" name="logbookPath" type="file" size="50" accept="*">
+	</div>
+	
+	<div class="entry">
+		<div class="title">Shift</div>
+		<SELECT onchange="shiftChanged();" class="edit" name="shift"> 
+		<OPTION SELECTED value="Y">Year
+		<OPTION value="M">Month
+		<OPTION value="W">Week
+		<OPTION value="D">Day
+		<OPTION value="3">3 shifts/day
+		<OPTION value="Other">Other...
+		</SELECT>
+	</div>
+		
+	<div id="otherShift" class="entry">
+		<div class="title">Other</div>
+		<input class="edit" name="otherShift" type="text" size="30" maxlength="30">
+	</div>
+	
+	<div id="emptyEntry" class="emptyEntry">&nbsp</div>
+	
+	<div class="buttonSpacer">
+	<a class="button" href="javascript:send();">Create the new logbook now !</a>
+	</div>
+</form>
+</div>
+</body>
+</html>

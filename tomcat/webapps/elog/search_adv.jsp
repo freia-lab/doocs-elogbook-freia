@@ -11,7 +11,7 @@
 <fmt:setLocale value="${lang_code}"/> 
 <fmt:setBundle basename="de.desy.logbook.i18n.SearchBundle" />
 
-<c:import url="http://HOST/elog/severities-${lang_code}.xml" var="severities_xml" />
+<c:import url="https://HOST/elog/severities-${lang_code}.xml" var="severities_xml" />
 <x:parse xml="${severities_xml}" var="severities" />
 
 <c:import url="http://HOST:8080/${param.elog}/keywords.xml" var="keywords_xml" />

@@ -1,0 +1,62 @@
+
+.main {
+	white-space : nowrap;
+	overflow : auto;
+	background-color : #ffffff;
+	font-family : sans-serif;	
+	border-style : solid;
+	border-color : #888888;
+	border-width : 1px;
+	padding : 15px;
+	margin-top : 15px;
+}
+
+.entry {
+	white-space : nowrap;
+	border-style : solid;
+	border-color : #888888;
+	border-width : 0px;
+	border-top-width : 0px;
+	padding : 10px;
+	margin : 20px;
+}
+
+.edit {
+	font-family : sans-serif;
+	font-size : 14px;
+	background-color : #f7f7f7;
+	border-style : solid;
+	border-color : #888888;
+	border-width : 1px;
+}
+
+.button {
+	font-family : sans-serif;
+	text-decoration : none;
+	border-style : solid;
+	border-color : #000000;
+	background-color :#eeeeee;
+	color :#000000;
+	border-width : 3px;
+	padding : 7px;
+}
+
+.buttonSpacer {
+	margin-top : 60px;	
+	margin-left : 20px;
+	margin-bottom : 30px;
+}
+
+.emptyEntry {
+	height : 41px;
+}
+
+.header{
+	font-size : 20px;
+	margin: 15px;
+}
+
+.title {
+	float : left;
+	min-width : 65px;
+}

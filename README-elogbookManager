@@ -1,0 +1,10 @@
+Updating elogbookManager.war
+
+1. Edit the *.java files in tomcat/webapps/elogbookManager/WEB-INF/classes/*
+2. Compile the java programs:
+   a) change to tomcat/webapps/elogbookManager/WEB-INF/classes directory
+   b) javac -Xlint -cp ../lib/*:/usr/share/tomcat7/lib/*:. */*.java
+3. Update the elogbookManager.war application
+   a) change to tomcat/webapps/elogbookManager directory
+   b) jar uvf ../elogbookManager.war -C . .
+

@@ -1,0 +1,36 @@
+For the logbooks to work with apache2 and be accessible via https (port 443) the following set-up is needed:
+
+* Standard setup for ssl (valid certificates)
+
+SSLCertificateFile	/etc/ssl/certs/freia_physics_uu_se.pem
+SSLCertificateKeyFile /etc/ssl/private/freia_physics_uu_se.key
+
+The relevant files in /etc/apache2/sites-enabled:
+000-default.conf
+default-ssl.conf
+tomcat-ssl.conf
+
+The relevant files in /etc/apache2/mods-enabled (proxy_ajp and rewrite modules MUST be enabled; a2enmod command)
+proxy_<logbook_name>elog_ajp.conf
+proxy_elog_ajp.conf
+
+proxy_<logbook_name>elog_ajp.conf:
+==================================
+<IfModule proxy_ajp_module>
+ProxyPass "/<logbook_name>elog/images/" !
+ProxyPass "/<logbook_name>elog/data/" !
+ProxyPass "/<logbook_name>elog" "ajp://localhost:8009/<logbook_name>elog"
+</IfModule>
+
+proxy_elog_ajp.conf:
+====================
+<IfModule proxy_ajp_module>
+ProxyPass "/elog" "ajp://localhost:8009/elog"
+ProxyPassReverse "/elog" "ajp://localhost:8009/elog"
+ProxyPass "/elogbookManager" "ajp://localhost:8009/elogbookManager"
+ProxyPass "/*.jsp" "ajp://localhost:8009/*.jsp"
+ProxyPassReverse "/*.jsp" "ajp://localhost:8009/*.jsp"
+ProxyPass "/*/servlet" "ajp://localhost:8009/servlet"
+ProxyPassReverse "/*/servlet" "ajp://localhost:8009/servlet"
+</IfModule>
+

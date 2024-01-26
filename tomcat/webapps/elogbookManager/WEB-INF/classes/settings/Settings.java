@@ -131,7 +131,7 @@ public class Settings
     public static int MAX_TREE_TO_STRING_LENGTH = 2000;
 
     /** Password for the manager (not very secure) */
-    public static String MANAGER_PASSWORD = "topsecret2";
+    public static String MANAGER_PASSWORD = "***********";
 
     /** Optimization times for all indexes */
     public static String [] OPTIMIZE_TIMES = {"06:00", "14:00", "22:00"};
